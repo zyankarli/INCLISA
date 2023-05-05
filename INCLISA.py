@@ -8,8 +8,8 @@ st.markdown('# Climate justice')
 st.sidebar.markdown('# Climate justice')
 
 #import images
-image1 = Image.open(r"C:\Users\scheifinger\OneDrive - IIASA\Interactive Tool Demo\pages\p1_Climate Justice.png")
-image2 = Image.open(r"C:\Users\scheifinger\OneDrive - IIASA\Interactive Tool Demo\pages\p2_Justice Dimensions.png")
+image1 = Image.open("pages/p1_Climate Justice.png")
+image2 = Image.open("pages/p2_Justice Dimensions.png")
 
 
 st.image(image1, width=750)
