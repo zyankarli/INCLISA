@@ -1,4 +1,4 @@
-pyam-iamc
+pyam
 PIL
 plotly
 streamlit_survey
