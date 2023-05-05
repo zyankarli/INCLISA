@@ -1,6 +1,6 @@
 #Import libraries
 import streamlit as st
-import pyam
+import pyam-iamc
 import plotly.express as px
 import streamlit_survey as ss
 
