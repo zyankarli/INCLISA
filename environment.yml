@@ -11,8 +11,8 @@ dependencies:
   - setuptools=66.0.0
   - sqlite=3.41.2
   - tk=8.6.12
-  - vc=14.2
-  - vs2015_runtime=14.27.29016
+  - vc
+  - vs2015_runtime
   - wheel=0.38.4
   - xz=5.4.2
   - zlib=1.2.13
