@@ -1,4 +1,4 @@
-pyam
-PIL
-plotly
-streamlit_survey
+pyam-iamc==1.8.0
+pillow==9.5.0
+plotly====5.14.1
+streamlit_survey==0.1.0
