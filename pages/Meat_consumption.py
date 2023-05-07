@@ -43,7 +43,7 @@ scenarios_ = ["EN_NPi2020_500", "SusDev_SDP-PkBudg1000"]
 #selection = df[(df['scenario'].isin(scenarios_)) & (df["region"].isin(regions_))]
 
 ### IMPORT CSV DATA
-selection = pd.read_csv(r"https://github.com/zyankarli/INCLISA/blob/main/pages/scenario_data.csv", index_col=0, sep=",", on_bad_lines='skip')
+selection = pd.read_csv(r"https://github.com/zyankarli/INCLISA/blob/main/pages/scenario_data.csv",sep=",", on_bad_lines='skip')
 
 #PLOTLY
 ##first attempt: two seperate figures
