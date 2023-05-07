@@ -3,6 +3,7 @@ import streamlit as st
 #import pyam
 import plotly.express as px
 import streamlit_survey as ss
+import pandas as pd
 
 st.markdown('# Meat consumption patterns')
 st.sidebar.markdown('# Meat consumption patterns')
