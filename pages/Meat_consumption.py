@@ -55,7 +55,7 @@ selection = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarl
 #second attempt to combine figures
 ##get one large data sheet
 
-fig3 = px.line(selection, x='year', y="value", color="region", facet_col='scenario',
+fig3 = px.line(selection, x='year', y="value\r", color="region", facet_col='scenario',
                 labels={
                      "year": "Year",
                      "value": "Livestock Food Demand",
