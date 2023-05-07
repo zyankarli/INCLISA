@@ -1,6 +1,6 @@
 #Import libraries
 import streamlit as st
-import pyam
+#import pyam
 import plotly.express as px
 import streamlit_survey as ss
 
@@ -31,7 +31,7 @@ def get_data():
     #return data format of df
     return df.data
 
-df = get_data()
+#df = get_data()
 
 #selecting subset
 regions_ = ["Asian countries except Japan", 
@@ -39,8 +39,10 @@ regions_ = ["Asian countries except Japan",
             "Countries of the Middle East and Africa", 
             "OECD90 and EU (and EU candidate) countries"]
 scenarios_ = ["EN_NPi2020_500", "SusDev_SDP-PkBudg1000"]
-selection = df[(df['scenario'].isin(scenarios_)) & (df["region"].isin(regions_))]
+#selection = df[(df['scenario'].isin(scenarios_)) & (df["region"].isin(regions_))]
 
+### IMPORT CSV DATA
+selection = pd.read_csv("scenario_data.csv")
 
 #PLOTLY
 ##first attempt: two seperate figures
