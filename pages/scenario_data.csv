@@ -1,4 +1,4 @@
-,model,scenario,region,variable,unit,year,value
+index,model,scenario,region,variable,unit,year,value
 0,REMIND-MAgPIE 2.1-4.2,EN_NPi2020_500,Asian countries except Japan,Agricultural Demand|Livestock|Food,million t DM/yr,2005,69.9787
 1,REMIND-MAgPIE 2.1-4.2,EN_NPi2020_500,Asian countries except Japan,Agricultural Demand|Livestock|Food,million t DM/yr,2010,86.2117
 2,REMIND-MAgPIE 2.1-4.2,EN_NPi2020_500,Asian countries except Japan,Agricultural Demand|Livestock|Food,million t DM/yr,2015,111.0238
