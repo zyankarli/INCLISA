@@ -18,7 +18,7 @@ connection = connect(":memory:",
 def insert_new_row(conn, sheet_url):
 
     insert = f"""
-            INSERT INTO "{sheet_url}"
+            INSERT INTO "{sheet_url}"(A, B, C, D, E)
             VALUES ("{name}", "{email}", "{q1a1}", "{q1a2}", "{q1a3}")
             """
     conn.execute(insert)
