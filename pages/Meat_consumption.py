@@ -4,7 +4,7 @@ import streamlit as st
 import plotly.express as px
 import streamlit_survey as ss
 import pandas as pd
-#from shillelagh.backends.apsw.db import connect
+from shillelagh.backends.apsw.db import connect
 import time
 #connect google sheet
 '''connection = connect(":memory:",
@@ -148,6 +148,17 @@ survey_df = pd.read_json(json)
 st.write(survey_df)'''
 '''Possible workflow: Store data as JSON -> convert to dataframe -> append to google sheet'''
 
+
+
+
+
+
+# Perform SQL query on the Google Sheet.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+#@st.cache_data(ttl=600) TODO: caching makes streamlit crash
+#THis works but I can only read, not write
+
+'''
 from google.oauth2 import service_account
 from gsheetsdb import connect
 
@@ -158,12 +169,9 @@ credentials = service_account.Credentials.from_service_account_info(
         "https://www.googleapis.com/auth/spreadsheets",
     ],
 )
-conn = connect(credentials=credentials)
+conn = connect(credentials=credentials)'''
 
-# Perform SQL query on the Google Sheet.
-# Uses st.cache_data to only rerun when the query changes or after 10 min.
-#@st.cache_data(ttl=600)
-def run_query(query):
+'''def run_query(query):
     rows = conn.execute(query, headers=1)
     rows = rows.fetchall()
     return rows
@@ -174,7 +182,7 @@ rows = run_query(f'SELECT * FROM "{sheet_url}"')
 # Print results.
 for row in rows:
     st.write(f"{row.name} has a :{row.pet}:")
-
+'''
 #TODO: find way to save data
 #Google sheets: https://medium.com/nyu-ds-review/how-to-create-a-python-web-app-to-securely-collect-and-store-user-information-cb8f36921988
 #https://medium.com/@jb.ranchana/write-and-append-dataframes-to-google-sheets-in-python-f62479460cf0
