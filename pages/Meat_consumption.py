@@ -132,7 +132,7 @@ from pydrive.drive import GoogleDrive
 scopes = ['https://www.googleapis.com/auth/spreadsheets',
           'https://www.googleapis.com/auth/drive']
 
-credentials = Credentials.from_service_account_file("inclisa_access.json", scopes=scopes)
+credentials = Credentials.from_service_account_file(r"C:\Users\scheifinger\OneDrive - IIASA\Interactive Tools\inclisa_access.json", scopes=scopes)
 
 gc = gspread.authorize(credentials)
 
