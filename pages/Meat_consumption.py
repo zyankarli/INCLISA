@@ -124,9 +124,13 @@ survey.radio("Which scenario do you personally find to be more just, based on th
 survey.text_input("Please briefly explain why you found one scenario to be more just compared to the other and if possible explain which concept of justice did you apply to derive your answer.")
 
 json = survey.to_json()
-st.json(json)
+survey_df = pd.read_json(json)
+
+st.write(survey_df)
+'''Possible workflow: Store data as JSON -> convert to dataframe -> append to google sheet'''
 
 #TODO: find way to save data
 #Google sheets: https://medium.com/nyu-ds-review/how-to-create-a-python-web-app-to-securely-collect-and-store-user-information-cb8f36921988
+#https://medium.com/@jb.ranchana/write-and-append-dataframes-to-google-sheets-in-python-f62479460cf0
 #trubrics: https://trubrics.github.io/trubrics-sdk/streamlit/
 ##account: inclisa@inclisa.iam.gserviceaccount.com
