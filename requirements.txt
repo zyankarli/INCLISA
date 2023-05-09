@@ -8,4 +8,4 @@ gspread
 google
 pydrive
 gspread_dataframe
-gsheetsdb==x.x.x
+gsheetsdb
