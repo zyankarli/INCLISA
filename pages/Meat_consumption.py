@@ -15,16 +15,21 @@ connection = connect(":memory:",
                                         }
                         )
 
-def insert_new_row(conn, sheet_url):
 
-    insert = f"""
-            INSERT INTO "{sheet_url}" (name, pet, test)
-            VALUES ("{1}", "{2}", "{3}")
-            """
-    conn.execute(insert)
-    
-sheet_url = st.secrets["private_gsheets_url"]
-insert_new_row(connection, sheet_url)
+with st.form("contest_entry_form"):
+    name = st.text_input("Your name")
+    email = st.text_input("Your email address")
+    accepted_answers = ["aaa", "bbb", "ccc"]
+    q1a1 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers)
+    q1a2 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers)
+    q1a3 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers)
+    submitted = st.form_submit_button("Submit your entry!")
+    if submitted:
+        cursor = connection.cursor()
+        sheet_url = st.secrets["private_gsheets_url"]
+        query = f'INSERT INTO "{sheet_url}" VALUES ("{name}", "{email}", "{q1a1}", "{q1a2}", "{q1a3}")'
+        cursor.execute(query)
+
 
 
 #Header
