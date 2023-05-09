@@ -10,7 +10,7 @@ import time
 connection = connect(":memory:",
                      adapter_kwargs = {
                             "gsheetsapi": { 
-                            "service_account_info":  st.secrets["gcp_service_account"]["type"] 
+                            "service_account_info":  st.secrets["gcp_service_account"]
                                     }
                                         }
                         )
