@@ -3,16 +3,9 @@ pillow==9.5.0
 plotly==5.14.1
 streamlit_survey==0.1.0
 shillelagh
-datasetteapi
-genericjsonapi
-githubapi
-genericjsonapi
-s3selectapi
-socrataapi
-systemapi
-weatherapi
 google-auth>=1.23.0,<2
 gspread
 google
 pydrive
 gspread_dataframe
+gsheetsdb==x.x.x

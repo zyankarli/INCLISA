@@ -148,6 +148,33 @@ survey_df = pd.read_json(json)
 st.write(survey_df)'''
 '''Possible workflow: Store data as JSON -> convert to dataframe -> append to google sheet'''
 
+from google.oauth2 import service_account
+from gsheetsdb import connect
+
+# Create a connection object.
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=[
+        "https://www.googleapis.com/auth/spreadsheets",
+    ],
+)
+conn = connect(credentials=credentials)
+
+# Perform SQL query on the Google Sheet.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+@st.cache_data(ttl=600)
+def run_query(query):
+    rows = conn.execute(query, headers=1)
+    rows = rows.fetchall()
+    return rows
+
+sheet_url = st.secrets["private_gsheets_url"]
+rows = run_query(f'SELECT * FROM "{sheet_url}"')
+
+# Print results.
+for row in rows:
+    st.write(f"{row.name} has a :{row.pet}:")
+
 #TODO: find way to save data
 #Google sheets: https://medium.com/nyu-ds-review/how-to-create-a-python-web-app-to-securely-collect-and-store-user-information-cb8f36921988
 #https://medium.com/@jb.ranchana/write-and-append-dataframes-to-google-sheets-in-python-f62479460cf0
