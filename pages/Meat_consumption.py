@@ -4,7 +4,19 @@ import streamlit as st
 import plotly.express as px
 import streamlit_survey as ss
 import pandas as pd
+from shillelagh.backends.apsw.db import connect
 
+#connect google sheet
+connection = connect(":memory:",
+                     adapter_kwargs = {
+                            "gsheetsapi": { 
+                            "service_account_info":  st.secrets["gcp_service_account"] 
+                                    }
+                                        }
+                        )
+
+
+#Header
 st.markdown('# Meat consumption patterns')
 st.sidebar.markdown('# Meat consumption patterns')
 
