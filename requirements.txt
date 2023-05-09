@@ -7,3 +7,4 @@ google-auth>=1.23.0,<2
 gspread
 google
 pydrive
+gspread_dataframe
