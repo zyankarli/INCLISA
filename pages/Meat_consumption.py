@@ -123,10 +123,31 @@ survey.radio("Which scenario do you personally find to be more just, based on th
 
 survey.text_input("Please briefly explain why you found one scenario to be more just compared to the other and if possible explain which concept of justice did you apply to derive your answer.")
 
+#Establish connection to google spreadsheet
+import gspread
+from gspread_dataframe import set_with_dataframe
+from google.oauth2.service_account import Credentials
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+scopes = ['https://www.googleapis.com/auth/spreadsheets',
+          'https://www.googleapis.com/auth/drive']
+
+credentials = Credentials.from_service_account_file('C:\Users\scheifinger\OneDrive - IIASA\Interactive Tools\JSON_credentials.txt', scopes=scopes)
+
+gc = gspread.authorize(credentials)
+
+gauth = GoogleAuth()
+drive = GoogleDrive(gauth)
+
+# open a google sheet
+gs = gc.open_by_key('a7214ba5fb97380ed391832d330a2e15dfdf20f4')
+# select a work sheet from its name
+worksheet1 = gs.worksheet('Sheet1')
+
 #attempt via st.forms
 #https://discuss.streamlit.io/t/get-user-input-and-store-in-a-database-table/31115
-def store_in_db(data: dict):
-    st.write(data) 
+def store_in_db(data: dict): 
+    return pd.DataFrame(data)
 
 form = st.form(key="match")
 with form:
@@ -135,8 +156,10 @@ with form:
     timestamp = time.time()
     submit = st.form_submit_button("Submit")
     if submit:
-        store_in_db({"name": name, "matched": matched, "timestamp": timestamp})
-
+        worksheet1.clear()
+        df = store_in_db({"name": name, "matched": matched, "timestamp": timestamp})
+        set_with_dataframe(worksheet=worksheet1, dataframe=df, include_index=False, include_column_header=True, resize=True)
+        
 #Attempt via streamlit_survey
 '''json = survey.to_json()
 survey_df = pd.read_json(json)
