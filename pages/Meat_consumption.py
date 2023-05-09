@@ -5,27 +5,34 @@ import plotly.express as px
 import streamlit_survey as ss
 import pandas as pd
 from shillelagh.backends.apsw.db import connect
+from google.oauth2 import service_account
 import time
 #connect google sheet
-connection = connect(":memory:",
-                     adapter_kwargs = {
-                            "gsheetsapi": { 
-                            "service_account_info":  {
-                                "type": st.secrets["gcp_service_account"]
-                            }    
-                                    }
-                                        }
-                        )
-
-def insert_new_row(conn, sheet_url):
-
-    insert = f"""
-            INSERT INTO "{sheet_url}"(A, B, C, D, E)
-            VALUES ("{name}", "{email}", "{q1a1}", "{q1a2}", "{q1a3}")
-            """
-    conn.execute(insert)
 
 sheet_url = st.secrets["private_gsheets_url"]
+
+def create_connection():
+        credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"], 
+        scopes=["https://www.googleapis.com/auth/spreadsheets",],)
+        connection = connect(":memory:", adapter_kwargs={
+            "gsheetsapi" : { 
+            "service_account_info" : {
+                "type" : st.secrets["gcp_service_account"]["type"],
+                "project_id" : st.secrets["gcp_service_account"]["project_id"],
+                "private_key_id" : st.secrets["gcp_service_account"]["private_key_id"],
+                "private_key" : st.secrets["gcp_service_account"]["private_key"],
+                "client_email" : st.secrets["gcp_service_account"]["client_email"],
+                "client_id" : st.secrets["gcp_service_account"]["client_id"],
+                "auth_uri" : st.secrets["gcp_service_account"]["auth_uri"],
+                "token_uri" : st.secrets["gcp_service_account"]["token_uri"],
+                "auth_provider_x509_cert_url" : st.secrets["gcp_service_account"]["auth_provider_x509_cert_url"],
+                "client_x509_cert_url" : st.secrets["gcp_service_account"]["client_x509_cert_url"],
+                }
+            },
+        })
+        return connection.cursor()
+
 
 
 with st.form("contest_entry_form"):
@@ -37,11 +44,9 @@ with st.form("contest_entry_form"):
     q1a3 = st.selectbox("Question 1, Answer 3", ["PASS"] + accepted_answers, key=3)
     submitted = st.form_submit_button("Submit your entry!")
     if submitted:
-        #cursor = connection.cursor()
-        #sheet_url = st.secrets["private_gsheets_url"]
-        #query = f'INSERT INTO "{sheet_url}" VALUES ("{name}", "{email}", "{q1a1}", "{q1a2}", "{q1a3}")'
-        #cursor.execute(query)
-        insert_new_row(connection, sheet_url)
+        cursor = create_connection()
+        query = f'INSERT INTO "{sheet_url}" VALUES ("{name}", "{email}", "{q1a1}", "{q1a2}", "{q1a3}")'
+        cursor.execute(query)
 
 
 
