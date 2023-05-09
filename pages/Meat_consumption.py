@@ -7,13 +7,13 @@ import pandas as pd
 from shillelagh.backends.apsw.db import connect
 import time
 #connect google sheet
-'''connection = connect(":memory:",
+connection = connect(":memory:",
                      adapter_kwargs = {
                             "gsheetsapi": { 
                             "service_account_info":  st.secrets["gcp_service_account"] 
                                     }
                                         }
-                        )'''
+                        )
 
 
 #Header
@@ -123,33 +123,14 @@ survey.radio("Which scenario do you personally find to be more just, based on th
 
 survey.text_input("Please briefly explain why you found one scenario to be more just compared to the other and if possible explain which concept of justice did you apply to derive your answer.")
 
-#Establish connection to google spreadsheet
-import gspread
-from gspread_dataframe import set_with_dataframe
-from google.oauth2.service_account import Credentials
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
-scopes = ['https://www.googleapis.com/auth/spreadsheets',
-          'https://www.googleapis.com/auth/drive']
 
-credentials = Credentials.from_service_account_file(r"C:\Users\scheifinger\OneDrive - IIASA\Interactive Tools\inclisa_access.json", scopes=scopes)
-
-gc = gspread.authorize(credentials)
-
-gauth = GoogleAuth()
-drive = GoogleDrive(gauth)
-
-# open a google sheet
-gs = gc.open_by_key('a7214ba5fb97380ed391832d330a2e15dfdf20f4')
-# select a work sheet from its name
-worksheet1 = gs.worksheet('Sheet1')
 
 #attempt via st.forms
 #https://discuss.streamlit.io/t/get-user-input-and-store-in-a-database-table/31115
 def store_in_db(data: dict): 
     return pd.DataFrame(data)
 
-form = st.form(key="match")
+'''form = st.form(key="match")
 with form:
     name = st.text_input("User name")
     matched = st.selectbox("Choose label", ("Match", "Mismatch"))
@@ -158,7 +139,7 @@ with form:
     if submit:
         worksheet1.clear()
         df = store_in_db({"name": name, "matched": matched, "timestamp": timestamp})
-        set_with_dataframe(worksheet=worksheet1, dataframe=df, include_index=False, include_column_header=True, resize=True)
+        set_with_dataframe(worksheet=worksheet1, dataframe=df, include_index=False, include_column_header=True, resize=True)'''
         
 #Attempt via streamlit_survey
 '''json = survey.to_json()
