@@ -5,7 +5,7 @@ import plotly.express as px
 import streamlit_survey as ss
 import pandas as pd
 from shillelagh.backends.apsw.db import connect
-
+import time
 #connect google sheet
 '''connection = connect(":memory:",
                      adapter_kwargs = {
@@ -123,10 +123,25 @@ survey.radio("Which scenario do you personally find to be more just, based on th
 
 survey.text_input("Please briefly explain why you found one scenario to be more just compared to the other and if possible explain which concept of justice did you apply to derive your answer.")
 
-json = survey.to_json()
+#attempt via st.forms
+#https://discuss.streamlit.io/t/get-user-input-and-store-in-a-database-table/31115
+def store_in_db(data: dict):
+    st.write(data) 
+
+form = st.form(key="match")
+with form:
+    name = st.text_input("User name")
+    matched = st.selectbox("Choose label", ("Match", "Mismatch"))
+    timestamp = time.time()
+    submit = st.form_submit_button("Submit")
+    if submit:
+        store_in_db({"name": name, "matched": matched, "timestamp": timestamp})
+
+#Attempt via streamlit_survey
+'''json = survey.to_json()
 survey_df = pd.read_json(json)
 
-st.write(survey_df)
+st.write(survey_df)'''
 '''Possible workflow: Store data as JSON -> convert to dataframe -> append to google sheet'''
 
 #TODO: find way to save data
