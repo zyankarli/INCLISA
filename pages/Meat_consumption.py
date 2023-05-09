@@ -15,6 +15,17 @@ connection = connect(":memory:",
                                         }
                         )
 
+def insert_new_row(conn, sheet_url):
+
+    insert = f"""
+            INSERT INTO "{sheet_url}" (name, pet, test)
+            VALUES ("{1}", "{2}", "{3}")
+            """
+    conn.execute(insert)
+    
+sheet_url = st.secrets["private_gsheets_url"]
+insert_new_row(connection, sheet_url)
+
 
 #Header
 st.markdown('# Meat consumption patterns')
