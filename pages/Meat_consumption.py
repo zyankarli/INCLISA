@@ -7,13 +7,13 @@ import pandas as pd
 from shillelagh.backends.apsw.db import connect
 import time
 #connect google sheet
-connection = connect(":memory:",
+'''connection = connect(":memory:",
                      adapter_kwargs = {
                             "gsheetsapi": { 
                             "service_account_info":  st.secrets["gcp_service_account"] 
                                     }
                                         }
-                        )
+                        )'''
 
 
 #Header
