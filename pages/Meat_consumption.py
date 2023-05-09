@@ -47,7 +47,8 @@ with st.form("contest_entry_form"):
         cursor = create_connection()
         query = f'INSERT INTO "{sheet_url}" VALUES ("{name}", "{email}", "{q1a1}", "{q1a2}", "{q1a3}")'
         cursor.execute(query)
-
+#https://discuss.streamlit.io/t/solved-issue-of-pulling-private-google-sheet-into-a-streamlit-app-using-gspread-instead-of-gsheetsdb/39056/4
+#https://discuss.streamlit.io/t/sending-data-to-private-google-sheet-authentication-st-secrets/31420
 
 
 #Header
