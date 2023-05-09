@@ -123,6 +123,8 @@ survey.radio("Which scenario do you personally find to be more just, based on th
 
 survey.text_input("Please briefly explain why you found one scenario to be more just compared to the other and if possible explain which concept of justice did you apply to derive your answer.")
 
+json = survey.to_json()
+st.json(json)
 
 #TODO: find way to save data
 #Google sheets: https://medium.com/nyu-ds-review/how-to-create-a-python-web-app-to-securely-collect-and-store-user-information-cb8f36921988
