@@ -20,9 +20,9 @@ with st.form("contest_entry_form"):
     name = st.text_input("Your name")
     email = st.text_input("Your email address")
     accepted_answers = ["aaa", "bbb", "ccc"]
-    q1a1 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers)
-    q1a2 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers)
-    q1a3 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers)
+    q1a1 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers, key=1)
+    q1a2 = st.selectbox("Question 1, Answer 2", ["PASS"] + accepted_answers, key=2)
+    q1a3 = st.selectbox("Question 1, Answer 3", ["PASS"] + accepted_answers, key=3)
     submitted = st.form_submit_button("Submit your entry!")
     if submitted:
         cursor = connection.cursor()
