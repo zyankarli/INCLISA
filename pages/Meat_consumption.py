@@ -7,13 +7,13 @@ import pandas as pd
 from shillelagh.backends.apsw.db import connect
 
 #connect google sheet
-connection = connect(":memory:",
+'''connection = connect(":memory:",
                      adapter_kwargs = {
                             "gsheetsapi": { 
                             "service_account_info":  st.secrets["gcp_service_account"] 
                                     }
                                         }
-                        )
+                        )'''
 
 
 #Header
@@ -29,7 +29,7 @@ st.markdown("The first scenario assumes a continuation of current trends of live
 #Model to use: REMIND-MAgPIE 2.1-4.2
 
 #create funciton and cache it to save on compuation
-@st.cache_data
+'''@st.cache_data
 def get_data():
     #connect to iiasa server 
     conn = pyam.iiasa.Connection('ar6-public')
@@ -43,7 +43,7 @@ def get_data():
     )
     #return data format of df
     return df.data
-
+'''
 #df = get_data()
 
 #selecting subset
