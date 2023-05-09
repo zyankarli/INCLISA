@@ -4,7 +4,7 @@ import streamlit as st
 import plotly.express as px
 import streamlit_survey as ss
 import pandas as pd
-from shillelagh.backends.apsw.db import connect
+#from shillelagh.backends.apsw.db import connect
 import time
 #connect google sheet
 '''connection = connect(":memory:",
