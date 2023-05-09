@@ -107,7 +107,7 @@ survey = ss.StreamlitSurvey("Survey Example")
 
 
 survey.radio("Which scenario do you personally find to be more just, based on the graph above?",
-             options=["Scenario A", "Scenario B"], horizontal=True)
+             options=["Scenario A", "Scenario B", "Scenario C"], horizontal=True)
 
 survey.text_input("Please briefly explain why you found one scenario to be more just compared to the other and if possible explain which concept of justice did you apply to derive your answer.")
 
@@ -115,3 +115,4 @@ survey.text_input("Please briefly explain why you found one scenario to be more 
 #TODO: find way to save data
 #Google sheets: https://medium.com/nyu-ds-review/how-to-create-a-python-web-app-to-securely-collect-and-store-user-information-cb8f36921988
 #trubrics: https://trubrics.github.io/trubrics-sdk/streamlit/
+##account: inclisa@inclisa.iam.gserviceaccount.com
