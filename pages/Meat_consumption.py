@@ -7,6 +7,7 @@ import pandas as pd
 from shillelagh.backends.apsw.db import connect
 from google.oauth2 import service_account
 import time
+from PIL import Image
 
 #Header
 st.markdown('# Meat consumption patterns')
@@ -97,18 +98,14 @@ st.plotly_chart(fig3, theme="streamlit")
 #TODO: make graphs larger
 
 
+#import images
+image1 = Image.open("pages/Scenario_Archetypes.png")
+st.image(image1, width=500)
 
 st.markdown('### Feedback survey')
 
 
 
-#streamlit_survey package to inlcude survey features
-
-survey = ss.StreamlitSurvey("Survey Example")
-survey.radio("Which scenario do you personally find to be more just, based on the graph above?",
-             options=["Scenario A", "Scenario B", "Scenario C"], horizontal=True)
-
-survey.text_input("Please briefly explain why you found one scenario to be more just compared to the other and if possible explain which concept of justice did you apply to derive your answer.")
 
 
 
