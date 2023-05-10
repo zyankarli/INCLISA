@@ -161,6 +161,7 @@ with st.form("Survey"):
         cursor = create_connection()
         query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{feedback}", "{timestamp}")'
         cursor.execute(query)
+        st.write("Submission successful. Thank you for your feedback!")
 
 #Links for the solution above
 #https://discuss.streamlit.io/t/solved-issue-of-pulling-private-google-sheet-into-a-streamlit-app-using-gspread-instead-of-gsheetsdb/39056/4
