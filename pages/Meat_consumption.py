@@ -10,7 +10,7 @@ import time
 from PIL import Image
 
 
-st.markdown("### Examplary page")
+st.markdown("### Examplary introduction & interactive graph")
 #Header
 st.markdown('# Meat consumption patterns')
 st.sidebar.markdown('# Meat consumption patterns')
@@ -87,7 +87,6 @@ fig3.update_layout(legend=dict(
     borderwidth=2
 ))
 
-st.markdown("### Examplary interactive graph")
 st.plotly_chart(fig3, theme="streamlit")
 
 #fig3.update_layout(height=600, width=800, title_text="Side By Side Subplots")
