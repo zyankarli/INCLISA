@@ -149,14 +149,14 @@ def create_connection():
 #create form objects
 with st.form("Survey"):
     accepted_answers = ["Scenario A", "Scenario B", "Scenario C"]
-    accepted_answers2 =["The level of consumption in 2050 achieved across regions",
-                        "Whether the levels of consumption converge or not by 2050",
-                        "By how much regions (especially that have a lower consumption starting point) improve compared to 2020 ​",
-                        "Other"]
+    accepted_answers2 =["I think it is important for everyone to be above a certain threshold.",
+                         "I think it is important to have a limit for consumption.",
+                         "I think it is important that consumption converges by 2050.",
+                         "I think it is important that lower consumption groups increase their consumption more rapidly by 2050 compared to 2020."]
     #key needs to be provide in case multiple same widgets are used in same form
     q1 = st.selectbox("Which scenario do you personally find to be more just, based on the graph above?", ["-"] + accepted_answers, key=1)
     q2 = st.selectbox("What was the main reason for your scenario selection?", ["-"] + accepted_answers2, key=2 )
-    feedback = st.text_input("Please add additional points that you were thinking about when evaluating the trajectories:")
+    feedback = st.text_input("Please add additional points that you were thinking about when you picked your preferred option: ")
     timestamp = time.time()
     submitted = st.form_submit_button("Submit your entry!")
     if submitted:
