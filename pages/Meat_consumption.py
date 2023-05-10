@@ -112,20 +112,7 @@ survey.text_input("Please briefly explain why you found one scenario to be more 
 
 
 
-#attempt via st.forms
-#https://discuss.streamlit.io/t/get-user-input-and-store-in-a-database-table/31115
 
-
-'''form = st.form(key="match")
-with form:
-    name = st.text_input("User name")
-    matched = st.selectbox("Choose label", ("Match", "Mismatch"))
-    timestamp = time.time()
-    submit = st.form_submit_button("Submit")
-    if submit:
-        worksheet1.clear()
-        df = store_in_db({"name": name, "matched": matched, "timestamp": timestamp})
-        set_with_dataframe(worksheet=worksheet1, dataframe=df, include_index=False, include_column_header=True, resize=True)'''
 
 #connect google sheet
 
@@ -155,21 +142,30 @@ def create_connection():
 
 
 
+#create form objects
 with st.form("Survey"):
-    name = st.text_input("Your name")
-    email = st.text_input("Your email address")
-    accepted_answers = ["aaa", "bbb", "ccc"]
-    q1a1 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers, key=1)
-    q1a2 = st.selectbox("Question 1, Answer 2", ["PASS"] + accepted_answers, key=2)
-    q1a3 = st.selectbox("Question 1, Answer 3", ["PASS"] + accepted_answers, key=3)
+    accepted_answers = ["Scenario A", "Scenario B", "Scenario C"]
+    accepted_answers2 =["The level of consumption in 2050 achieved across regions",
+                        "Whether the levels of consumption converge or not by 2050",
+                        "By how much regions (especially that have a lower consumption starting point) improve compared to 2020 ​",
+                        "Other"]
+    #key needs to be provide in case multiple same widgets are used in same form
+    q1 = st.selectbox("Which scenario do you personally find to be more just, based on the graph above?", ["-"] + accepted_answers, key=1)
+    q2 = st.selectbox("What was the main reason for your scenario selection?", ["-"] + accepted_answers2, key=2 )
+    feedback = st.text_input("Please add additional points that you were thinking about when evaluating the trajectories:")
     timestamp = time.time()
     submitted = st.form_submit_button("Submit your entry!")
     if submitted:
         cursor = create_connection()
-        query = f'INSERT INTO "{sheet_url}" VALUES ("{name}", "{email}", "{q1a1}", "{q1a2}", "{q1a3}")'
+        query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{feedback}", "{timestamp}")'
         cursor.execute(query)
+
+#Links for the solution above
 #https://discuss.streamlit.io/t/solved-issue-of-pulling-private-google-sheet-into-a-streamlit-app-using-gspread-instead-of-gsheetsdb/39056/4
 #https://discuss.streamlit.io/t/sending-data-to-private-google-sheet-authentication-st-secrets/31420        
+
+#st.forms
+#https://discuss.streamlit.io/t/get-user-input-and-store-in-a-database-table/31115
 
 
 #TODO: find way to save data
