@@ -9,6 +9,8 @@ from google.oauth2 import service_account
 import time
 from PIL import Image
 
+
+st.markdown("### Examplary page")
 #Header
 st.markdown('# Meat consumption patterns')
 st.sidebar.markdown('# Meat consumption patterns')
@@ -85,7 +87,7 @@ fig3.update_layout(legend=dict(
     borderwidth=2
 ))
 
-
+st.markdown("### Examplary interactive graph")
 st.plotly_chart(fig3, theme="streamlit")
 
 #fig3.update_layout(height=600, width=800, title_text="Side By Side Subplots")
@@ -97,7 +99,7 @@ st.plotly_chart(fig3, theme="streamlit")
 #TODO: make graphs share legend
 #TODO: make graphs larger
 
-
+st.markdown("### Scenario Archetypes")
 #import images
 image1 = Image.open("pages/Scenario_Archetypes.png")
 image2 = Image.open("pages/Scenario_Archetypes_legend.png")
@@ -107,7 +109,7 @@ image1 = image1.resize((900, 350))
 st.image(image1)
 st.image(image2)
 
-st.markdown('### Feedback survey')
+st.markdown('### Feedback form')
 
 
 
