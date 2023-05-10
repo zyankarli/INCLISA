@@ -101,7 +101,7 @@ st.plotly_chart(fig3, theme="streamlit")
 #import images
 image1 = Image.open("pages/Scenario_Archetypes.png")
 #make image larger
-image1 = image1.resize((700, 350))
+image1 = image1.resize((900, 350))
 st.image(image1)
 
 st.markdown('### Feedback survey')
