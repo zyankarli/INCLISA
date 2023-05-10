@@ -103,7 +103,7 @@ image1 = Image.open("pages/Scenario_Archetypes.png")
 image2 = Image.open("pages/Scenario_Archetypes_legend.png")
 #resize images
 image1 = image1.resize((900, 350))
-image2 = image2.resize((350, 200))
+image2 = image2.resize((350, 100))
 #plot images
 st.image(image1)
 st.image(image2)
