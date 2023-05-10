@@ -91,7 +91,8 @@ st.plotly_chart(fig3, theme="streamlit")
 
 #fig3.update_layout(height=600, width=800, title_text="Side By Side Subplots")
 
-
+#add separating line
+st.markdown("""---""")
 
 
 #TODO implement chache to reduce loading time; get all countries
