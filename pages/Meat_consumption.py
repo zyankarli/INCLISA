@@ -7,49 +7,6 @@ import pandas as pd
 from shillelagh.backends.apsw.db import connect
 from google.oauth2 import service_account
 import time
-#connect google sheet
-
-sheet_url = st.secrets["private_gsheets_url"]
-
-def create_connection():
-        credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"], 
-        scopes=["https://www.googleapis.com/auth/spreadsheets",],)
-        connection = connect(":memory:", adapter_kwargs={
-            "gsheetsapi" : { 
-            "service_account_info" : {
-                "type" : st.secrets["gcp_service_account"]["type"],
-                "project_id" : st.secrets["gcp_service_account"]["project_id"],
-                "private_key_id" : st.secrets["gcp_service_account"]["private_key_id"],
-                "private_key" : st.secrets["gcp_service_account"]["private_key"],
-                "client_email" : st.secrets["gcp_service_account"]["client_email"],
-                "client_id" : st.secrets["gcp_service_account"]["client_id"],
-                "auth_uri" : st.secrets["gcp_service_account"]["auth_uri"],
-                "token_uri" : st.secrets["gcp_service_account"]["token_uri"],
-                "auth_provider_x509_cert_url" : st.secrets["gcp_service_account"]["auth_provider_x509_cert_url"],
-                "client_x509_cert_url" : st.secrets["gcp_service_account"]["client_x509_cert_url"],
-                }
-            },
-        })
-        return connection.cursor()
-
-
-
-with st.form("contest_entry_form"):
-    name = st.text_input("Your name")
-    email = st.text_input("Your email address")
-    accepted_answers = ["aaa", "bbb", "ccc"]
-    q1a1 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers, key=1)
-    q1a2 = st.selectbox("Question 1, Answer 2", ["PASS"] + accepted_answers, key=2)
-    q1a3 = st.selectbox("Question 1, Answer 3", ["PASS"] + accepted_answers, key=3)
-    submitted = st.form_submit_button("Submit your entry!")
-    if submitted:
-        cursor = create_connection()
-        query = f'INSERT INTO "{sheet_url}" VALUES ("{name}", "{email}", "{q1a1}", "{q1a2}", "{q1a3}")'
-        cursor.execute(query)
-#https://discuss.streamlit.io/t/solved-issue-of-pulling-private-google-sheet-into-a-streamlit-app-using-gspread-instead-of-gsheetsdb/39056/4
-#https://discuss.streamlit.io/t/sending-data-to-private-google-sheet-authentication-st-secrets/31420
-
 
 #Header
 st.markdown('# Meat consumption patterns')
@@ -128,8 +85,6 @@ fig3.update_layout(legend=dict(
 ))
 
 
-
-
 st.plotly_chart(fig3, theme="streamlit")
 
 #fig3.update_layout(height=600, width=800, title_text="Side By Side Subplots")
@@ -150,9 +105,6 @@ st.markdown('### Feedback survey')
 #streamlit_survey package to inlcude survey features
 
 survey = ss.StreamlitSurvey("Survey Example")
-
-
-
 survey.radio("Which scenario do you personally find to be more just, based on the graph above?",
              options=["Scenario A", "Scenario B", "Scenario C"], horizontal=True)
 
@@ -162,8 +114,7 @@ survey.text_input("Please briefly explain why you found one scenario to be more 
 
 #attempt via st.forms
 #https://discuss.streamlit.io/t/get-user-input-and-store-in-a-database-table/31115
-def store_in_db(data: dict): 
-    return pd.DataFrame(data)
+
 
 '''form = st.form(key="match")
 with form:
@@ -175,49 +126,52 @@ with form:
         worksheet1.clear()
         df = store_in_db({"name": name, "matched": matched, "timestamp": timestamp})
         set_with_dataframe(worksheet=worksheet1, dataframe=df, include_index=False, include_column_header=True, resize=True)'''
-        
-#Attempt via streamlit_survey
-'''json = survey.to_json()
-survey_df = pd.read_json(json)
 
-st.write(survey_df)'''
-'''Possible workflow: Store data as JSON -> convert to dataframe -> append to google sheet'''
-
-
-
-
-
-
-# Perform SQL query on the Google Sheet.
-# Uses st.cache_data to only rerun when the query changes or after 10 min.
-#@st.cache_data(ttl=600) TODO: caching makes streamlit crash
-#THis works but I can only read, not write
-
-'''
-from google.oauth2 import service_account
-from gsheetsdb import connect
-
-# Create a connection object.
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=[
-        "https://www.googleapis.com/auth/spreadsheets",
-    ],
-)
-conn = connect(credentials=credentials)'''
-
-'''def run_query(query):
-    rows = conn.execute(query, headers=1)
-    rows = rows.fetchall()
-    return rows
+#connect google sheet
 
 sheet_url = st.secrets["private_gsheets_url"]
-rows = run_query(f'SELECT * FROM "{sheet_url}"')
 
-# Print results.
-for row in rows:
-    st.write(f"{row.name} has a :{row.pet}:")
-'''
+def create_connection():
+        credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"], 
+        scopes=["https://www.googleapis.com/auth/spreadsheets",],)
+        connection = connect(":memory:", adapter_kwargs={
+            "gsheetsapi" : { 
+            "service_account_info" : {
+                "type" : st.secrets["gcp_service_account"]["type"],
+                "project_id" : st.secrets["gcp_service_account"]["project_id"],
+                "private_key_id" : st.secrets["gcp_service_account"]["private_key_id"],
+                "private_key" : st.secrets["gcp_service_account"]["private_key"],
+                "client_email" : st.secrets["gcp_service_account"]["client_email"],
+                "client_id" : st.secrets["gcp_service_account"]["client_id"],
+                "auth_uri" : st.secrets["gcp_service_account"]["auth_uri"],
+                "token_uri" : st.secrets["gcp_service_account"]["token_uri"],
+                "auth_provider_x509_cert_url" : st.secrets["gcp_service_account"]["auth_provider_x509_cert_url"],
+                "client_x509_cert_url" : st.secrets["gcp_service_account"]["client_x509_cert_url"],
+                }
+            },
+        })
+        return connection.cursor()
+
+
+
+with st.form("Survey"):
+    name = st.text_input("Your name")
+    email = st.text_input("Your email address")
+    accepted_answers = ["aaa", "bbb", "ccc"]
+    q1a1 = st.selectbox("Question 1, Answer 1", ["PASS"] + accepted_answers, key=1)
+    q1a2 = st.selectbox("Question 1, Answer 2", ["PASS"] + accepted_answers, key=2)
+    q1a3 = st.selectbox("Question 1, Answer 3", ["PASS"] + accepted_answers, key=3)
+    timestamp = time.time()
+    submitted = st.form_submit_button("Submit your entry!")
+    if submitted:
+        cursor = create_connection()
+        query = f'INSERT INTO "{sheet_url}" VALUES ("{name}", "{email}", "{q1a1}", "{q1a2}", "{q1a3}")'
+        cursor.execute(query)
+#https://discuss.streamlit.io/t/solved-issue-of-pulling-private-google-sheet-into-a-streamlit-app-using-gspread-instead-of-gsheetsdb/39056/4
+#https://discuss.streamlit.io/t/sending-data-to-private-google-sheet-authentication-st-secrets/31420        
+
+
 #TODO: find way to save data
 #Google sheets: https://medium.com/nyu-ds-review/how-to-create-a-python-web-app-to-securely-collect-and-store-user-information-cb8f36921988
 #https://medium.com/@jb.ranchana/write-and-append-dataframes-to-google-sheets-in-python-f62479460cf0
