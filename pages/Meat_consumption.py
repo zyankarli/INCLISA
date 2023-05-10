@@ -152,7 +152,8 @@ with st.form("Survey"):
     accepted_answers2 =["I think it is important for everyone to be above a certain threshold.",
                          "I think it is important to have a limit for consumption.",
                          "I think it is important that consumption converges by 2050.",
-                         "I think it is important that lower consumption groups increase their \n consumption more rapidly by 2050 compared to 2020."]
+                         "I think it is important that lower consumption groups increase their \n consumption more rapidly by 2050 compared to 2020.",
+                         "Other"]
     #key needs to be provide in case multiple same widgets are used in same form
     q1 = st.selectbox("Which scenario do you personally find to be more just, based on the graph above?", ["-"] + accepted_answers, key=1)
     q2 = st.selectbox("What was the main reason for your scenario selection?", ["-"] + accepted_answers2, key=2 )
