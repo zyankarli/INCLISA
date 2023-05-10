@@ -22,21 +22,21 @@ st.markdown("The first scenario assumes a continuation of current trends of live
 #Model to use: REMIND-MAgPIE 2.1-4.2
 
 #create funciton and cache it to save on compuation
-'''@st.cache_data
-def get_data():
-    #connect to iiasa server 
-    conn = pyam.iiasa.Connection('ar6-public')
-    #other variables: 'Emissions|CO2', 'Primary Energy|Coal', 
-    #query for climate scenario data
-    df = conn.query(
-        model='REMIND-MAgPIE 2.1-4.2',
-        scenario = ['EN_NPi2020_500', 'SusDev_SDP-PkBudg1000'],
-        variable="Agricultural Demand|Livestock|Food",
-        region=['Asia', 'Latin America']
-    )
-    #return data format of df
-    return df.data
-'''
+# @st.cache_data
+# def get_data():
+#     #connect to iiasa server 
+#     conn = pyam.iiasa.Connection('ar6-public')
+#     #other variables: 'Emissions|CO2', 'Primary Energy|Coal', 
+#     #query for climate scenario data
+#     df = conn.query(
+#         model='REMIND-MAgPIE 2.1-4.2',
+#         scenario = ['EN_NPi2020_500', 'SusDev_SDP-PkBudg1000'],
+#         variable="Agricultural Demand|Livestock|Food",
+#         region=['Asia', 'Latin America']
+#     )
+#     #return data format of df
+#     return df.data
+
 #df = get_data()
 
 #selecting subset
@@ -100,7 +100,7 @@ st.plotly_chart(fig3, theme="streamlit")
 
 #import images
 image1 = Image.open("pages/Scenario_Archetypes.png")
-st.image(image1, width=500)
+st.image(image1, width=700)
 
 st.markdown('### Feedback survey')
 
