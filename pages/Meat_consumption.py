@@ -32,7 +32,7 @@ st.markdown("The first scenario assumes a continuation of current trends of live
 #         model='REMIND-MAgPIE 2.1-4.2',
 #         scenario = ['EN_NPi2020_500', 'SusDev_SDP-PkBudg1000'],
 #         variable="Agricultural Demand|Livestock|Food",
-#         region=['Asia', 'Latin America']
+#         RRRRRRRRRRRRRRRregion=['Asia', 'Latin America']
 #     )
 #     #return data format of df
 #     return df.data
