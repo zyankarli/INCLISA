@@ -50,7 +50,7 @@ scenarios_ = ["EN_NPi2020_500", "SusDev_SDP-PkBudg1000"]
 #selection = df[(df['scenario'].isin(scenarios_)) & (df["region"].isin(regions_))]
 
 ### IMPORT CSV DATA
-df = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/scenario_data.csv",
+df = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/scenario_archetypes.csv",
                                     sep=",", 
                                     lineterminator='\n'))
 
