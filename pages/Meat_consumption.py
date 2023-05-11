@@ -50,32 +50,52 @@ scenarios_ = ["EN_NPi2020_500", "SusDev_SDP-PkBudg1000"]
 #selection = df[(df['scenario'].isin(scenarios_)) & (df["region"].isin(regions_))]
 
 ### IMPORT CSV DATA
-selection = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/scenario_data.csv",
+df = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/scenario_data.csv",
                                     sep=",", 
                                     lineterminator='\n'))
 
+
+##Wrangle data
+#fix last row name
+df.rename(columns = {'2050\r':'2050'}, inplace=True)
+#from wide to long
+df = pd.melt(df, id_vars=['Scenario', 'Region'],
+             var_name="Year", value_name="Value")
+df["Year"] = df['Year'].astype(int)
+
 #PLOTLY
-##first attempt: two seperate figures
-#create both figures
+##get colors
+#sort on values of first year
+regions_rank = df[df['Year'] == df["Year"].min()].sort_values(by='Value', ascending=False)
+#drop duplicates
+regions_rank = regions_rank.drop_duplicates(subset='Region')
+#add color column ; could be automatise using sns
+ReBu = ["#B2182B", "#D6604D", "#F4A582", "#FDDBC7", "#F7F7F7", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC"]
+#add colors to df
+regions_rank["Color"] = ReBu
+#convert to dict
+colors_dict = regions_rank.set_index('Region')['Color'].to_dict()
 
-
-#second attempt to combine figures
-##get one large data sheet
-
-fig3 = px.line(selection, x='year', y="value\r", color="region", facet_col='scenario',
+##plot
+fig = px.line(df, x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
-                     "year": "Year",
-                     "value": "Livestock Food Demand",
-                     "region": "Region"
-                    }, 
+                     "Value": "kCal per capita/day",
+                },
+                category_orders={"Scenario": ["Scenario B", "Scenario C", "Scenario A"]},
                 title="Climate Scenarios - Livestock Food Demand per region",
-                range_x=[2005, 2100],
-                range_y=[0, 250]
+                range_x=[2018, 2050],
+                range_y=[0, 1000],
+                color_discrete_map=colors_dict
                 )
 
-#fig3.update_xaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
-#fig3.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
-fig3.update_layout(legend=dict(
+# Add Lancet Healthy Diet 
+fig.add_hline(y=250,
+            annotation_text="Lancet Healthy Diet",
+            annotation_position="bottom left",
+            line_dash="dot")
+
+#add legend
+fig.update_layout(legend=dict(
     orientation="h",
     entrywidth=200,
     yanchor="bottom",
@@ -87,7 +107,7 @@ fig3.update_layout(legend=dict(
     borderwidth=2
 ))
 
-st.plotly_chart(fig3, theme="streamlit")
+st.plotly_chart(fig, theme="streamlit")
 
 #fig3.update_layout(height=600, width=800, title_text="Side By Side Subplots")
 
@@ -98,6 +118,7 @@ st.markdown("""---""")
 #TODO implement chache to reduce loading time; get all countries
 #TODO: make graphs share legend
 #TODO: make graphs larger
+#TODO: cache functions
 
 st.markdown("### Scenario Archetypes")
 #import images
