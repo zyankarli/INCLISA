@@ -180,19 +180,19 @@ with st.form("Survey"):
     #                  pd.read_csv("https://raw.githubusercontent.com/OxfordEconomics/CountryLists/master/countryList-UN.csv", 
     #                              lineterminator='\n',skiprows=1, encoding="ascii"))
     q5 = st.selectbox("What type of organisation do you work for?",
-                      ("Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"))
+                      ("Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), key=5)
     #TODO: add conditional pop-up for st text with other
     q6 = st.selectbox("What is the highest level of education you have completed?",
-                      ('No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"))
+                      ('No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"), key=6)
     q7 = st. selectbox("What is your age?",
-                       "18-24", '25-34','35-44','45-54','55-64','65-100')
+                       ("18-24", '25-34','35-44','45-54','55-64','65-100'), key=7)
     q8 = st.selectbox("What is your gender?",
-                      ("Male", "Female", "Other", "Prefer not to say"))
+                      ("Male", "Female", "Other", "Prefer not to say"), key=8)
     q9 = st.selectbox("To which sector is your work most related to?",
-                      ("Agriculture", "Industry", "Transport", "Buildings", "General climate mitigation", "other"))
+                      ("Agriculture", "Industry", "Transport", "Buildings", "General climate mitigation", "other"),  key=9)
     #TODO: implement Shonalis suggestion to add words to sectors
     q10 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
-                       ("No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"))
+                       ("No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"), key=10)
     timestamp = time.time()
     submitted = st.form_submit_button("Submit your entry!")
     if submitted:
