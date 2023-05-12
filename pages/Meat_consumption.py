@@ -100,14 +100,14 @@ fig.update_layout(legend=dict(
     entrywidth=500,
     yanchor="bottom",
     y=-0.5, #1.02
-    xanchor="right",
+    xanchor="left",
     x=1,
     bgcolor="White",
     bordercolor="Black",
     borderwidth=1
 ))
 #make graph larger
-fig.update_layout(width=1000)
+fig.update_layout(width=1000, height=600)
 
 st.plotly_chart(fig, theme="streamlit")
 
