@@ -3,6 +3,13 @@ import streamlit as st
 #to import pictures, use Python Imaging Library
 from PIL import Image
 
+#set page configs
+st.set_page_config(
+     page_title='Climate Justice',
+     layout="wide",
+     initial_sidebar_state="expanded",
+)
+
 #add page title and sidebar
 st.markdown('# Climate justice')
 st.sidebar.markdown('# Climate justice')
