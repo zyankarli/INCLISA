@@ -171,9 +171,26 @@ with st.form("Survey"):
                          "I think it is important that lower consumption groups increase their \n consumption more rapidly by 2050 compared to 2020.",
                          "Other"]
     #key needs to be provide in case multiple same widgets are used in same form
-    q1 = st.radio("Which scenario do you personally find to be fairer, based on the graph above?", accepted_answers, key=1)
-    q2 = st.text_input("Why do you find this scenario to be fairer")
-    q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", accepted_answers2, key=2 )
+    q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", accepted_answers, key=1)
+    q2 = st.text_input("Why do you find this scenario to be the fairest?", key=2)
+    q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", accepted_answers2, key=3 )
+    st.markdown('### Personal Questions')
+    q4 = st.selectbox("Which country are you from?",
+                      pd.read_csv("https://raw.githubusercontent.com/OxfordEconomics/CountryLists/master/countryList-UN.csv", lineterminator='\n'))
+    q5 = st.selectbox("What type of organisation do you work for?",
+                      ("Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"))
+    #TODO: add conditional pop-up for st text with other
+    q6 = st.selectbox("What is the highest level of education you have completed?",
+                      ('No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"))
+    q7 = st. selectbox("What is your age?",
+                       "18-24", '25-34','35-44','45-54','55-64','65-100')
+    q8 = st.selectbox("What is your gender?",
+                      ("Male", "Female", "Other", "Prefer not to say"))
+    q9 = st.selectbox("To which sector is your work most related to?",
+                      ("Agriculture", "Industry", "Transport", "Buildings", "General climate mitigation", "other"))
+    #TODO: implement Shonalis suggestion to add words to sectors
+    q10 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
+                       ("No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"))
     timestamp = time.time()
     submitted = st.form_submit_button("Submit your entry!")
     if submitted:
