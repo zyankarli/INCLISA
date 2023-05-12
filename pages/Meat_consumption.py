@@ -97,17 +97,17 @@ fig.add_hline(y=250,
 #add legend
 fig.update_layout(legend=dict(
     orientation="h",
-    entrywidth=200,
+    entrywidth=500,
     yanchor="bottom",
     y=-0.5, #1.02
     xanchor="right",
     x=1,
-    bgcolor="LightSteelBlue",
+    bgcolor="White",
     bordercolor="Black",
-    borderwidth=2
+    borderwidth=1
 ))
 #make graph larger
-fig.update_layout(width=800)
+fig.update_layout(width=1000)
 
 st.plotly_chart(fig, theme="streamlit")
 
