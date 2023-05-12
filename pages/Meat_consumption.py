@@ -9,6 +9,9 @@ from google.oauth2 import service_account
 import time
 from PIL import Image
 
+#set page intial config
+st.set_page_config(
+     layout="wide")
 
 
 #Header
@@ -76,12 +79,17 @@ regions_rank["Color"] = ReBu
 #convert to dict
 colors_dict = regions_rank.set_index('Region')['Color'].to_dict()
 
+df['Scenario'] = df['Scenario'].replace({"Scenario A":"\u2BC3", 
+                                         "Scenario B": '\u25A0',
+                                         "Scenario C": "\u25C6"})
+
 ##plot
 fig = px.line(df, x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "kCal per capita/day",
                 },
-                category_orders={"Scenario": ["Scenario B", "Scenario C", "Scenario A"]},
+                #TODO automise random order
+                category_orders={"Scenario": ["\u2BC3", "\u25A0", "\u25C6"]},
                 title="Climate Scenarios - Livestock Food Demand per region",
                 range_x=[2018, 2050],
                 range_y=[0, 1000],
@@ -90,24 +98,27 @@ fig = px.line(df, x='Year', y="Value", color="Region", facet_col='Scenario',
 
 # Add Lancet Healthy Diet 
 fig.add_hline(y=250,
-            annotation_text="Lancet Healthy Diet",
-            annotation_position="bottom left",
-            line_dash="dot")
+              annotation_text="Lancet Healthy Diet",
+              annotation_position="bottom left",
+              line_dash="dot")
 
 #add legend
 fig.update_layout(legend=dict(
-    orientation="h",
-    entrywidth=500,
+    orientation="v",
+    entrywidth=100,
+    entrywidthmode='fraction',
     yanchor="bottom",
-    y=-0.5, #1.02
-    xanchor="left",
-    x=1,
+    y=0.35,
+    xanchor="right",
+    x=1.17,
     bgcolor="White",
     bordercolor="Black",
     borderwidth=1
 ))
 #make graph larger
-fig.update_layout(width=1000, height=600)
+fig.update_layout(width=1250)
+#change subplot figure titles
+fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
 st.plotly_chart(fig, theme="streamlit")
 
