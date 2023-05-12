@@ -10,7 +10,7 @@ import time
 from PIL import Image
 
 
-st.markdown("### Examplary introduction & interactive graph")
+
 #Header
 st.markdown('# Meat consumption patterns')
 st.sidebar.markdown('# Meat consumption patterns')
@@ -106,37 +106,21 @@ fig.update_layout(legend=dict(
     bordercolor="Black",
     borderwidth=2
 ))
+#make graph larger
+fig.update_layout(width=800)
 
 st.plotly_chart(fig, theme="streamlit")
 
-#fig3.update_layout(height=600, width=800, title_text="Side By Side Subplots")
 
 #add separating line
 st.markdown("""---""")
 
 
-#TODO implement chache to reduce loading time; get all countries
-#TODO: make graphs share legend
 #TODO: make graphs larger
 #TODO: cache functions
 
-st.markdown("### Scenario Archetypes")
-#import images
-image1 = Image.open("pages/Scenario_Archetypes.png")
-image2 = Image.open("pages/Scenario_Archetypes_legend.png")
-#resize images
-image1 = image1.resize((900, 350))
-#plot images
-st.image(image1)
-st.image(image2)
 
 st.markdown('### Feedback form')
-
-
-
-
-
-
 
 
 #connect google sheet
