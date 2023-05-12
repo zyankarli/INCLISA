@@ -79,9 +79,9 @@ regions_rank["Color"] = ReBu
 #convert to dict
 colors_dict = regions_rank.set_index('Region')['Color'].to_dict()
 
-df['Scenario'] = df['Scenario'].replace({"Scenario A":"\u2BC3", 
-                                         "Scenario B": '\u25A0',
-                                         "Scenario C": "\u25C6"})
+df['Scenario'] = df['Scenario'].replace({"Scenario A":"Scenario \u2BC3", 
+                                         "Scenario B": 'Scenario \u25A0',
+                                         "Scenario C": "Scenario \u25C6"})
 
 ##plot
 fig = px.line(df, x='Year', y="Value", color="Region", facet_col='Scenario',
@@ -89,7 +89,7 @@ fig = px.line(df, x='Year', y="Value", color="Region", facet_col='Scenario',
                      "Value": "kCal per capita/day",
                 },
                 #TODO automise random order
-                category_orders={"Scenario": ["\u2BC3", "\u25A0", "\u25C6"]},
+                category_orders={"Scenario": ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]},
                 title="Climate Scenarios - Livestock Food Demand per region",
                 range_x=[2018, 2050],
                 range_y=[0, 1000],
@@ -164,21 +164,21 @@ def create_connection():
 
 #create form objects
 with st.form("Survey"):
-    accepted_answers = ["Scenario A", "Scenario B", "Scenario C"]
+    accepted_answers = ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]
     accepted_answers2 =["I think it is important for everyone to be above a certain threshold.",
                          "I think it is important to have a limit for consumption.",
                          "I think it is important that consumption converges by 2050.",
                          "I think it is important that lower consumption groups increase their \n consumption more rapidly by 2050 compared to 2020.",
                          "Other"]
     #key needs to be provide in case multiple same widgets are used in same form
-    q1 = st.selectbox("Which scenario do you personally find to be more just, based on the graph above?", ["-"] + accepted_answers, key=1)
-    q2 = st.selectbox("What was the main reason for your scenario selection?", ["-"] + accepted_answers2, key=2 )
-    feedback = st.text_input("Please add additional points that you were thinking about when you picked your preferred option: ")
+    q1 = st.radio("Which scenario do you personally find to be fairer, based on the graph above?", accepted_answers, key=1)
+    q2 = st.text_input("Why do you find this scenario to be fairer")
+    q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", accepted_answers2, key=2 )
     timestamp = time.time()
     submitted = st.form_submit_button("Submit your entry!")
     if submitted:
         cursor = create_connection()
-        query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{feedback}", "{timestamp}")'
+        query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{timestamp}")'
         cursor.execute(query)
         st.write("Submission successful. Thank you for your feedback!")
 
