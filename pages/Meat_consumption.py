@@ -176,7 +176,8 @@ with st.form("Survey"):
     q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", accepted_answers2, key=3 )
     st.markdown('### Personal Questions')
     q4 = st.selectbox("Which country are you from?",
-                      pd.read_csv("https://raw.githubusercontent.com/OxfordEconomics/CountryLists/master/countryList-UN.csv", lineterminator='\n'))
+                      pd.read_csv("https://raw.githubusercontent.com/OxfordEconomics/CountryLists/master/countryList-UN.csv", 
+                                  lineterminator='\n',skiprows=1, on_bad_lines='skip'))
     q5 = st.selectbox("What type of organisation do you work for?",
                       ("Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"))
     #TODO: add conditional pop-up for st text with other
