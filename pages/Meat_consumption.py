@@ -177,7 +177,7 @@ with st.form("Survey"):
     st.markdown('### Personal Questions')
     q4 = st.selectbox("Which country are you from?",
                       pd.read_csv("https://raw.githubusercontent.com/OxfordEconomics/CountryLists/master/countryList-UN.csv", 
-                                  lineterminator='\n',skiprows=1, on_bad_lines='skip'))
+                                  lineterminator='\n',skiprows=1, encoding="ascii"))
     q5 = st.selectbox("What type of organisation do you work for?",
                       ("Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"))
     #TODO: add conditional pop-up for st text with other
