@@ -41,6 +41,7 @@ def run_query(query):
     return rows
 
 #Get data
+#TODO: only reload graph on click
 df = pd.DataFrame(run_query(f'SELECT * FROM "{sheet_url}"'))
 #rename columns
 df.columns= ['scen_meat', 'scen_meat_feedback', 'scen_meat_reason', 'country', 'organisation', 'education', 'age','gender', 'sector','iam','timestamp']
