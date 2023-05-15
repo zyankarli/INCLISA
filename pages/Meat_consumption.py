@@ -12,16 +12,10 @@ from PIL import Image
 #set page intial config
 st.set_page_config(
      layout="wide")
-
-
 #Header
-st.markdown('# Meat consumption patterns')
-st.sidebar.markdown('# Meat consumption patterns')
+st.sidebar.markdown('# Justice in Climate Scenarios')
 
 #Text
-st.markdown("**The livestock sector is an important contributor to greenhouse gas emissions.**")
-st.markdown("Below **we show trends of livestock demand** in different macro regions in two different scenarios that reach the 1.5°C target in 2100. These scenarios have been developed by the REMIND MAgPIE model. The 'Food Demand Livestock' variable measures daily per capita consumption of animal proteins.")
-st.markdown("The first scenario assumes a continuation of current trends of livestock consumption, while the second scenario assumes a global convergence to a low-meat diet by 2050.")
 
 #PYAM
 #Model to use: REMIND-MAgPIE 2.1-4.2
@@ -56,9 +50,7 @@ scenarios_ = ["EN_NPi2020_500", "SusDev_SDP-PkBudg1000"]
 df = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/scenario_archetypes.csv",
                                     sep=",", 
                                     lineterminator='\n'))
-
-
-##Wrangle data
+### WRANGLE DATA
 #fix last row name
 df.rename(columns = {'2050\r':'2050'}, inplace=True)
 #from wide to long
@@ -66,7 +58,7 @@ df = pd.melt(df, id_vars=['Scenario', 'Region'],
              var_name="Year", value_name="Value")
 df["Year"] = df['Year'].astype(int)
 
-#PLOTLY
+### CREATE PLOTLY PLOT
 ##get colors
 #sort on values of first year
 regions_rank = df[df['Year'] == df["Year"].min()].sort_values(by='Value', ascending=False)
@@ -120,22 +112,17 @@ fig.update_layout(width=1250)
 #change subplot figure titles
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
-st.plotly_chart(fig, theme="streamlit")
 
-
-#add separating line
-st.markdown("""---""")
 
 
 #TODO: make graphs larger
 #TODO: cache functions
 
 
-st.markdown('### Feedback form')
+st.markdown('# Justice in Climate Scenarios')
 
 
-#connect google sheet
-
+#prepare google sheet connection
 sheet_url = st.secrets["private_gsheets_url"]
 
 def create_connection():
@@ -160,46 +147,72 @@ def create_connection():
         })
         return connection.cursor()
 
+### PREPARE FORM OBJECTS & LISTS
+#load country data function
+@st.cache_data
+def load_countries():
+    #load data from github
+    df = pd.read_csv("https://raw.githubusercontent.com/OxfordEconomics/CountryLists/master/countryList-UN.csv", 
+                                lineterminator='\n',skiprows=0, encoding="latin")
+    #limit df to first column in case csv file changes
+    df = df.iloc[:,0]
+    #TODO: ask elina what's the best approach on that
+    return df
+country_list = ["-"] + list(load_countries())
 
+accepted_answers = ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]
+accepted_answers2 =["I think it is important for everyone to be above a certain threshold.",
+                        "I think it is important to have a limit for consumption.",
+                        "I think it is important that consumption converges by 2050.",
+                        "I think it is important that lower consumption groups increase their \n consumption more rapidly by 2050 compared to 2020.",
+                        "Other"]
 
-#create form objects
+#initiate form
 with st.form("Survey"):
-    accepted_answers = ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]
-    accepted_answers2 =["I think it is important for everyone to be above a certain threshold.",
-                         "I think it is important to have a limit for consumption.",
-                         "I think it is important that consumption converges by 2050.",
-                         "I think it is important that lower consumption groups increase their \n consumption more rapidly by 2050 compared to 2020.",
-                         "Other"]
-    #key needs to be provide in case multiple same widgets are used in same form
-    q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", accepted_answers, key=1)
-    q2 = st.text_input("Why do you find this scenario to be the fairest?", key=2)
-    q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", accepted_answers2, key=3 )
-    st.markdown('### Personal Questions')
-    #TODO fix country selection
-    # q4 = st.selectbox("Which country are you from?",
-    #                  pd.read_csv("https://raw.githubusercontent.com/OxfordEconomics/CountryLists/master/countryList-UN.csv", 
-    #                              lineterminator='\n',skiprows=1, encoding="ascii"))
-    q5 = st.selectbox("What type of organisation do you work for?",
-                      ("Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), key=5)
-    #TODO: add conditional pop-up for st text with other
-    q6 = st.selectbox("What is the highest level of education you have completed?",
-                      ('No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"), key=6)
-    q7 = st. selectbox("What is your age?",
-                       ("18-24", '25-34','35-44','45-54','55-64','65-100'), key=7)
-    q8 = st.selectbox("What is your gender?",
-                      ("Male", "Female", "Other", "Prefer not to say"), key=8)
-    q9 = st.selectbox("To which sector is your work most related to?",
-                      ("Agriculture", "Industry", "Transport", "Buildings", "General climate mitigation", "other"),  key=9)
-    #TODO: implement Shonalis suggestion to add words to sectors
-    q10 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
-                       ("No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"), key=10)
-    timestamp = time.time()
-    submitted = st.form_submit_button("Submit your entry!")
-    if submitted:
-        cursor = create_connection()
-        query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{timestamp}")'
-        cursor.execute(query)
-        st.write("Submission successful. Thank you for your feedback!")
+    #Initiate tabs
+    tab1, tab2 = st.tabs(["Meat Consumption", "Personal Questions"])
+
+    #MEAT CONSUMPTION
+    with tab1:
+        #Introduction
+        st.markdown('### Meat Consumption')
+        st.markdown("**The livestock sector is an important contributor to greenhouse gas emissions.**")
+        st.markdown("Below **we show trends of livestock demand** in different macro regions in two different scenarios that reach the 1.5°C target in 2100. These scenarios have been developed by the REMIND MAgPIE model. The 'Food Demand Livestock' variable measures daily per capita consumption of animal proteins.")
+        st.markdown("The first scenario assumes a continuation of current trends of livestock consumption, while the second scenario assumes a global convergence to a low-meat diet by 2050.")
+
+        #key needs to be provide in case multiple same widgets are used in same form
+        st.plotly_chart(fig, theme="streamlit")
+
+        q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,key=1)
+        q2 = st.text_input("Why do you find this scenario to be the fairest?", key=2)
+        q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2, key=3 )
+    #st.markdown("""---""")
+    with tab2:
+        st.markdown('### Personal Questions')
+        q4 = st.selectbox("Which country are you from? (Please select the country you feel closer to and more knowledgeable about)",
+                        country_list)
+        q5 = st.selectbox("What type of organisation do you work for?", 
+                        ("-", "Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), key=5)
+        #TODO: add conditional pop-up for st text with other
+        q6 = st.selectbox("What is the highest level of education you have completed?",
+                        ("-", 'No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"), key=6)
+        q7 = st. selectbox("What is your age?",
+                        ("-", "18-24", '25-34','35-44','45-54','55-64','65-100'), key=7)
+        q8 = st.selectbox("What is your gender?",
+                        ("-", "Male", "Female", "Other", "Prefer not to say"), key=8)
+        q9 = st.selectbox("To which sector is your work most related to?",
+                        ("-", "Agriculture", "Industry", "Transport", "Buildings", "General climate mitigation", "Other"),  key=9)
+        #TODO: implement Shonalis suggestion to add words to sectors
+        q10 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
+                        ("-", "No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"), key=10)
+        timestamp = time.time()
+        #Submit button; send data to google sheet
+        submitted = st.form_submit_button("Click here to submit!")
+        if submitted:
+            cursor = create_connection()
+            query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}", "{timestamp}")'
+            cursor.execute(query)
+            st.write("Submission successful. Thank you for your feedback!")
 
 #Links for the solution above
 #https://discuss.streamlit.io/t/solved-issue-of-pulling-private-google-sheet-into-a-streamlit-app-using-gspread-instead-of-gsheetsdb/39056/4
