@@ -171,7 +171,7 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
 with st.form("Survey"):
     #Initiate tabs
     tab1, tab2 = st.tabs(["Meat Consumption", "Personal Questions"])
-
+    #TODO: check for update on placeholder here https://github.com/streamlit/streamlit/issues/949
     #MEAT CONSUMPTION
     with tab1:
         #Introduction
@@ -184,7 +184,7 @@ with st.form("Survey"):
         st.plotly_chart(fig, theme="streamlit")
 
         q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,key=1)
-        q2 = st.text_input("Why do you find this scenario to be the fairest?", key=2)
+        q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", key=2)
         q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2, key=3 )
     #st.markdown("""---""")
     with tab2:
