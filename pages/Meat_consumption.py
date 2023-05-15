@@ -211,6 +211,7 @@ with st.form("Survey"):
         if submitted:
             cursor = create_connection()
             query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}", "{timestamp}")'
+            st.write(query)
             cursor.execute(query)
             st.write("Submission successful. Thank you for your feedback!")
 
