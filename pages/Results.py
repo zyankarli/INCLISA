@@ -61,7 +61,7 @@ fig = px.bar(df[df['scen_meat'] != '-'], x='scen_meat',
 
 
 #adjust layout
-fig.update_layout(height = 600 ,width=700)
+#fig.update_layout(height = 600 ,width=700)
 
 
-st.plotly_chart(fig, theme="streamlit")
+st.plotly_chart(fig, theme="streamlit", use_container_width=True)
