@@ -6,8 +6,7 @@ from PIL import Image
 #set page configs
 st.set_page_config(
      page_title='Justice in climate mitigation scenarios',
-     initial_sidebar_state="expanded",
-     layout="auto"
+     initial_sidebar_state="auto"
 )
 
 #add page title and sidebar
