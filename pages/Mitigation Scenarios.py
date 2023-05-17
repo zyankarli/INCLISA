@@ -11,7 +11,7 @@ from PIL import Image
 
 #set page intial config
 st.set_page_config(
-     layout="wide")
+     layout="centered")
 #Header
 st.sidebar.markdown('# Mitigation scenarios')
 
