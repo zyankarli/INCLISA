@@ -7,6 +7,7 @@ from PIL import Image
 st.set_page_config(
      page_title='Justice in climate mitigation scenarios',
      initial_sidebar_state="expanded",
+     layout="wide"
 )
 
 #add page title and sidebar
@@ -15,7 +16,7 @@ st.sidebar.markdown('# Justice in climate mitigation scenarios')
 
 #import images
 image1 = Image.open("pages/p1_Climate Justice.png")
-st.image(image1, width=750)
+st.image(image1, width=500)
 
 
 # 2 ways forward

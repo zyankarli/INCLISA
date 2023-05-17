@@ -5,6 +5,11 @@ from shillelagh.backends.apsw.db import connect
 from google.oauth2 import service_account
 import plotly.express as px
 
+#set page intial config
+st.set_page_config(
+     layout="wide")
+
+
 #prepare google sheet connection
 sheet_url = st.secrets["private_gsheets_url"]
 
