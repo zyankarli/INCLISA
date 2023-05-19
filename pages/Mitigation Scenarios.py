@@ -175,12 +175,12 @@ with st.form("Survey"):
     #MEAT CONSUMPTION
     with tab1:
         #Introduction
-        st.markdown(":red[**The text below is a placeholder. More information will be provided later.]")
+        st.markdown(":red[**The text below is a placeholder. More information will be provided later.**]")
         st.markdown("""---""")
         st.markdown('### Meat Consumption')
         st.markdown("**The livestock sector is an important contributor to greenhouse gas emissions.**")
         st.markdown("Below **we show trends of meat consumption** in different macro regions in two three archetypal scenarios.")
-        st.markdown("Scenario \u2BC3 assumes linear growth rates. Scenario \u25A0 assumes that consumption stabilises in high-consuming regions while other regions catch up. Lastly, Scenario \u25C6 assumes that consumption rates converge globally.")
+        st.markdown("Scenario \u2BC3 assumes linear growth rates.  Scenario \u25A0 assumes that consumption stabilises in high-consuming regions while other regions catch up.  Lastly, Scenario \u25C6 assumes that consumption rates converge globally.")
 
         #key needs to be provide in case multiple same widgets are used in same form
         st.plotly_chart(fig, theme="streamlit")
@@ -189,7 +189,7 @@ with st.form("Survey"):
         q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", key=2)
         q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2, key=3 )
     #st.markdown("""---""")
-    st.markdown("Please continue this survey by scrolling upwards and selecting the *Personal Questions* tab.")
+    st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Personal Questions' tab.***")
     with tab2:
         st.markdown('### Personal Questions')
         q4 = st.selectbox("Which country are you from? (Please select the country you feel closer to and more knowledgeable about)",
