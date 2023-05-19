@@ -181,8 +181,8 @@ with st.form("Survey"):
         st.markdown("**The livestock sector is an important contributor to greenhouse gas emissions.**")
         st.markdown("Below **we show trends of meat consumption** in different macro regions in two three archetypal scenarios.")
         st.markdown("""Scenario \u2BC3 assumes linear growth rates.  
-                    Scenario \u25A0 assumes that consumption stabilises in high-consuming regions while other regions catch up.  
-                    Lastly, Scenario \u25C6 assumes that consumption rates converge globally.""")
+                    Scenario \u25A0 assumes that consumption stabilises in high-consuming regions while other regions increase their consumption.  
+                    Lastly, scenario \u25C6 assumes that consumption rates converge globally.""")
 
         #key needs to be provide in case multiple same widgets are used in same form
         st.plotly_chart(fig, theme="streamlit")
