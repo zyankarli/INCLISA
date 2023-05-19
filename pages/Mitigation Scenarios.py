@@ -82,7 +82,7 @@ fig = px.line(df, x='Year', y="Value", color="Region", facet_col='Scenario',
                 },
                 #TODO automise random order
                 category_orders={"Scenario": ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]},
-                title="Climate Scenarios - Livestock Food Demand per region",
+                title="Climate Scenarios - Meat consumption per region",
                 range_x=[2018, 2050],
                 range_y=[0, 1000],
                 color_discrete_map=colors_dict
