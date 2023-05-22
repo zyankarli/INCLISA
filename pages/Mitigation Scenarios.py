@@ -113,6 +113,84 @@ fig.update_layout(width=1250)
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
 
+#-------------------------#
+#          2ndFIG         #
+#-------------------------#
+
+df2 = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
+                                    sep=",", 
+                                    lineterminator='\n'))
+
+
+### WRANGLE DATA
+#fix last row name
+df2.rename(columns = {'year':'Year',
+                      'region': "Region",
+                      'value':"Value",
+                      'scenario':"Scenario"}, inplace=True)
+
+
+
+#from wide to long
+#df = pd.melt(df, id_vars=['Scenario', 'Region'],
+#             var_name="Year", value_name="Value")
+df2["Year"] = df2['Year'].astype(int)
+df2["Value"] = df2["Value"].astype(int)
+
+### CREATE PLOTLY PLOT
+##get colors
+#sort on values of first year
+regions_rank = df2[df2['Year'] == df2["Year"].min()].sort_values(by='Value', ascending=False)
+#drop duplicates
+regions_rank = regions_rank.drop_duplicates(subset='Region')
+#add color column ; could be automatise using sns
+ReBu = ["#B2182B", "#D6604D", "#F4A582", "#FDDBC7", "#F7F7F7", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC"]
+#add colors to df
+regions_rank["Color"] = ReBu
+#convert to dict
+colors_dict = regions_rank.set_index('Region')['Color'].to_dict()
+
+#df['Scenario'] = df['Scenario'].replace({"Scenario A":"Scenario \u2BC3", 
+#                                         "Scenario B": 'Scenario \u25A0',
+#                                         "Scenario C": "Scenario \u25C6"})
+
+##plot
+fig2 = px.line(df2, x='Year', y="Value", color="Region", facet_col='Scenario',
+                labels={
+                     "Value": "Passenger kilometer per year",
+                },
+                #TODO automise random order
+                #category_orders={"Scenario": ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]},
+                title="Climate Scenarios - Transportion per region",
+                range_x=[2020, 2050],
+                range_y=[0, 12000],
+                color_discrete_map=colors_dict
+                )
+
+# Add Lancet Healthy Diet 
+fig2.add_hline(y=8000,
+              annotation_text="Pkm per year Japan",
+              annotation_position="bottom left",
+              line_dash="dot")
+
+#add legend
+fig2.update_layout(legend=dict(
+    orientation="h",
+    #entrywidth=10,
+    #entrywidthmode='fraction',
+    yanchor="bottom",
+    y=-0.5,
+    xanchor="right",
+    x=1,
+    bgcolor="White",
+    bordercolor="Black",
+    borderwidth=1
+))
+#make graph larger
+fig2.update_layout(width=1250)
+#change subplot figure titles
+fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+
 
 
 #TODO: make graphs larger
@@ -170,7 +248,7 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
 #initiate form
 with st.form("Survey"):
     #Initiate tabs
-    tab1, tab2 = st.tabs(["Meat Consumption", "Personal Questions"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Meat Consumption", "Transportation", "Other sectors...", "Personal Questions"])
     #TODO: check for update on placeholder here https://github.com/streamlit/streamlit/issues/949
     #MEAT CONSUMPTION
     with tab1:
@@ -193,6 +271,12 @@ with st.form("Survey"):
     #st.markdown("""---""")
         st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Personal Questions' tab.***")
     with tab2:
+         st.markdown("### Transportation")
+         st.markdown("A introductory text will be added here at a later stage.")
+         st.plotly_chart(fig2, theme="streamlit")
+    with tab3:
+        st.markdown('### Other sectors will be added at a later stage.')
+    with tab4:
         st.markdown('### Personal Questions')
         q4 = st.selectbox("Which country are you from? (Please select the country you feel closer to and more knowledgeable about)",
                         country_list)
