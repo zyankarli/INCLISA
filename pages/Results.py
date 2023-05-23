@@ -49,7 +49,11 @@ def run_query(query):
 #TODO: only reload graph on click
 df = pd.DataFrame(run_query(f'SELECT * FROM "{sheet_url}"'))
 #rename columns
-df.columns= ['scen_meat', 'scen_meat_feedback', 'scen_meat_reason', 'country', 'organisation', 'education', 'age','gender', 'sector','iam','timestamp']
+df.columns= ['scen_meat', 'scen_meat_feedback', 'scen_meat_reason', 
+            'scen_tran', 'scen_tran_feedback', 'scen_tran_reason', 
+            'scen_buil', 'scen_buil_feedback', 'scen_buil_reason', 
+            'scen_gdp', 'scen_gdp_feedback', 'scen_gdp_reason', 
+             'meat_consumption', 'air_travel', 'housing_space','country', 'organisation', 'education', 'age','gender', 'sector','iam','timestamp']
 #Create plot
 fig = px.bar(df[df['scen_meat'] != '-'], x='scen_meat',
              labels={
@@ -57,7 +61,7 @@ fig = px.bar(df[df['scen_meat'] != '-'], x='scen_meat',
                      'count': "Count"
                 },
                 #TODO automise random order
-                title="Preferred climate mitigation scenario")
+                title="Preferred climate mitigation scenario regarding meat consumption")
 
 
 #adjust layout
