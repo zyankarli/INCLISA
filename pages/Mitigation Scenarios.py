@@ -114,13 +114,12 @@ fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
 
 #-------------------------#
-#          2ndFIG         #
+#        OTHER FIGS       #
 #-------------------------#
-
+#Data loading and wrangling
 df2 = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
                                     sep=",", 
                                     lineterminator='\n'))
-
 
 ### WRANGLE DATA
 #fix last row name
@@ -129,15 +128,12 @@ df2.rename(columns = {'year':'Year',
                       'value':"Value",
                       'scenario':"Scenario"}, inplace=True)
 
-
-
 #from wide to long
 #df = pd.melt(df, id_vars=['Scenario', 'Region'],
 #             var_name="Year", value_name="Value")
 df2["Year"] = df2['Year'].astype(int)
 df2["Value"] = df2["Value"].astype(int)
 
-### CREATE PLOTLY PLOT
 ##get colors
 #sort on values of first year
 regions_rank = df2[df2['Year'] == df2["Year"].min()].sort_values(by='Value', ascending=False)
@@ -150,12 +146,9 @@ regions_rank["Color"] = ReBu
 #convert to dict
 colors_dict = regions_rank.set_index('Region')['Color'].to_dict()
 
-#df['Scenario'] = df['Scenario'].replace({"Scenario A":"Scenario \u2BC3", 
-#                                         "Scenario B": 'Scenario \u25A0',
-#                                         "Scenario C": "Scenario \u25C6"})
-
-##plot
-fig2 = px.line(df2, x='Year', y="Value", color="Region", facet_col='Scenario',
+##CREATE PLOTLY PLOTS
+#----TRANSPORTATION----#
+fig2 = px.line(df2[df2["Scenario"].str.contains("Trans")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "Passenger kilometer per year",
                 },
@@ -167,7 +160,7 @@ fig2 = px.line(df2, x='Year', y="Value", color="Region", facet_col='Scenario',
                 color_discrete_map=colors_dict
                 )
 
-# Add Lancet Healthy Diet 
+# Add Japanese Passenger Kilometers by year
 fig2.add_hline(y=8000,
               annotation_text="Pkm per year Japan",
               annotation_position="bottom left",
@@ -191,6 +184,80 @@ fig2.update_layout(width=1250)
 #change subplot figure titles
 fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
+#----BUILDINGS----#
+fig3 = px.line(df2[df2["Scenario"].str.contains("Buil")], x='Year', y="Value", color="Region", facet_col='Scenario',
+                labels={
+                     "Value": "floorspace (m²) per year per capita",
+                },
+                #TODO automise random order
+                #category_orders={"Scenario": ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]},
+                title="Climate Scenarios - Buildings per region",
+                range_x=[2020, 2050],
+                range_y=[0, 115],
+                color_discrete_map=colors_dict
+                )
+
+# Add Japanese Passenger Kilometers by year
+fig3.add_hline(y=30,
+              annotation_text="ADD LABEL",
+              annotation_position="bottom left",
+              line_dash="dot")
+
+#add legend
+fig3.update_layout(legend=dict(
+    orientation="h",
+    #entrywidth=10,
+    #entrywidthmode='fraction',
+    yanchor="bottom",
+    y=-0.5,
+    xanchor="right",
+    x=1,
+    bgcolor="White",
+    bordercolor="Black",
+    borderwidth=1
+))
+#make graph larger
+fig3.update_layout(width=1250)
+#change subplot figure titles
+fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+
+
+#----GDP----#
+fig4 = px.line(df2[df2["Scenario"].str.contains("GDP")], x='Year', y="Value", color="Region", facet_col='Scenario',
+                labels={
+                     "Value": "GDP per capita per year",
+                },
+                #TODO automise random order
+                #category_orders={"Scenario": ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]},
+                title="Climate Scenarios - GDP per region",
+                range_x=[2020, 2050],
+                range_y=[0, 82000],
+                color_discrete_map=colors_dict
+                )
+
+# Add Japanese Passenger Kilometers by year
+fig4.add_hline(y=30000,
+              annotation_text="ADD LABEL",
+              annotation_position="bottom left",
+              line_dash="dot")
+
+#add legend
+fig4.update_layout(legend=dict(
+    orientation="h",
+    #entrywidth=10,
+    #entrywidthmode='fraction',
+    yanchor="bottom",
+    y=-0.5,
+    xanchor="right",
+    x=1,
+    bgcolor="White",
+    bordercolor="Black",
+    borderwidth=1
+))
+#make graph larger
+fig4.update_layout(width=1250)
+#change subplot figure titles
+fig4.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
 
 #TODO: make graphs larger
@@ -245,10 +312,10 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
                         "I think it is important that lower consumption groups increase their \n consumption more rapidly by 2050 compared to 2020.",
                         "Other"]
 
-#initiate form
+#initiate form // #key needs to be provide in case multiple same widgets are used in same form!
 with st.form("Survey"):
     #Initiate tabs
-    tab1, tab2, tab3, tab4 = st.tabs(["Meat Consumption", "Transportation", "Other sectors...", "Personal Questions"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Meat Consumption", "Transportation", "Buildings","Economic Activity", "Personal Questions"])
     #TODO: check for update on placeholder here https://github.com/streamlit/streamlit/issues/949
     #MEAT CONSUMPTION
     with tab1:
@@ -261,46 +328,99 @@ with st.form("Survey"):
         st.markdown("""Scenario \u2BC3 assumes linear growth rates.  
                     Scenario \u25A0 assumes that consumption stabilises in high-consuming regions while other regions increase their consumption.  
                     Lastly, scenario \u25C6 assumes that consumption rates converge globally.""")
-
-        #key needs to be provide in case multiple same widgets are used in same form
+        #Graph
         st.plotly_chart(fig, theme="streamlit")
-
-        q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,key=1)
-        q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", key=2)
-        q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2, key=3 )
+        #Questions
+        q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,
+                    key=1)
+        q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+                    key=2)
+        q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                    key=3 )
     #st.markdown("""---""")
         st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Transportation' tab.***")
     with tab2:
+        #Introduction
         st.markdown("### Transportation")
         st.markdown("A introductory text will be added here at a later stage.")
+        #Graph
         st.plotly_chart(fig2, theme="streamlit")
-        st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Personal Questions' tab.***")
+        #Questions
+        q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True,
+                    key=4)
+        q5 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+                    key=5)
+        q6 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                    key=6)
+        st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Buildings' tab.***")
     with tab3:
-        st.markdown('### Other sectors will be added at a later stage.')
+        #Introduction
+        st.markdown("### Buildings")
+        st.markdown("A introductory text will be added here at a later stage.")
+        #Graph
+        st.plotly_chart(fig3, theme="streamlit")
+        #Questions
+        q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,
+                    key=7)
+        q8 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+                    key=8)
+        q9 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                    key=9)
+        st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Economic Activity' tab.***")
     with tab4:
+        #Introduction
+        st.markdown("### Economic Activity")
+        st.markdown("A introductory text will be added here at a later stage.")
+        #Graph
+        st.plotly_chart(fig4, theme="streamlit" )
+        #Questions
+        q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,
+                       key=10)
+        q11 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
+                            key=11)
+        q12 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                        key=12)
+        st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Personal Questions' tab.***")
+    with tab5:
         st.markdown('### Personal Questions')
-        q4 = st.selectbox("Which country are you from? (Please select the country you feel closer to and more knowledgeable about)",
-                        country_list)
-        q5 = st.selectbox("What type of organisation do you work for?", 
-                        ("-", "Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), key=5)
+        q13=st.selectbox("How often per week do you eat meat?",
+                         ("-", "Never", "Once per week or less", "At least 3 times per week", "Everyday"), 
+                         key=13)
+        q14=st.selectbox("How often per year do you travel by plane?",#TODO improve wording
+                         ("-", "Never", "Once per year", "3 times per year", "At least 5 times per year"), 
+                         key=14)
+        q15=st.selectbox("What is the size of your apartment/ house?", #TODO agree on categories
+                         ("-", "Less than 10m² per person", "Between 10m² and 20m² per person","Between 20m² and 30m² per person","More than 30m² per person" ), 
+                         key=15)
+        q16 = st.selectbox("Which country are you from? (Please select the country you feel closer to and more knowledgeable about)",
+                        country_list, 
+                        key=16)
+        q17 = st.selectbox("What type of organisation do you work for?", 
+                        ("-", "Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), 
+                        key=17)
         #TODO: add conditional pop-up for st text with other
-        q6 = st.selectbox("What is the highest level of education you have completed?",
-                        ("-", 'No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"), key=6)
-        q7 = st. selectbox("What is your age?",
-                        ("-", "18-24", '25-34','35-44','45-54','55-64','65-100'), key=7)
-        q8 = st.selectbox("What is your gender?",
-                        ("-", "Male", "Female", "Other", "Prefer not to say"), key=8)
-        q9 = st.selectbox("To which sector is your work most related to?",
-                        ("-", "Agriculture", "Industry", "Transport", "Buildings", "General climate mitigation", "Other"),  key=9)
+        q18 = st.selectbox("What is the highest level of education you have completed?",
+                        ("-", 'No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"),
+                        key=18)
+        q19 = st. selectbox("What is your age?",
+                        ("-", "18-24", '25-34','35-44','45-54','55-64','65-100'), 
+                        key=19)
+        q20 = st.selectbox("What is your gender?",
+                        ("-", "Male", "Female", "Other", "Prefer not to say"), 
+                        key=20)
+        q21 = st.selectbox("To which sector is your work most related to?",
+                        ("-", "Agriculture", "Industry", "Transport", "Buildings", "General climate mitigation", "Other"), 
+                        key=21)
         #TODO: implement Shonalis suggestion to add words to sectors
-        q10 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
-                        ("-", "No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"), key=10)
+        q22 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
+                        ("-", "No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"),
+                        key=22)
         timestamp = time.time()
         #Submit button; send data to google sheet
         submitted = st.form_submit_button("Click here to submit!")
         if submitted:
             cursor = create_connection()
-            query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}", "{timestamp}")'
+            query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}", "{timestamp}")'
             cursor.execute(query)
             st.write("**:green[Submission successful. Thank you for your feedback!]**")
 
