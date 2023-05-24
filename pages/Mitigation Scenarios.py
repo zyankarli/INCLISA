@@ -315,14 +315,14 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
 #initiate form // #key needs to be provide in case multiple same widgets are used in same form!
 with st.form("Survey"):
     #Initiate tabs
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Meat Consumption", "Transportation", "Buildings","Economic Activity", "Personal Questions"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Nutrition", "Mobility", "Housing","Economic Activity", "Personal Questions"])
     #TODO: check for update on placeholder here https://github.com/streamlit/streamlit/issues/949
     #MEAT CONSUMPTION
     with tab1:
         #Introduction
         st.markdown(":red[**The text below is a placeholder. More information will be provided later.**]")
         st.markdown("""---""")
-        st.markdown('### Meat Consumption')
+        st.markdown('### Nutrition')
         st.markdown("**The livestock sector is an important contributor to greenhouse gas emissions.**")
         st.markdown("Below **we show trends of meat consumption** in different macro regions in three archetypal scenarios.")
         st.markdown("""Scenario \u2BC3 assumes linear growth rates.  
@@ -341,7 +341,7 @@ with st.form("Survey"):
         st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Transportation' tab.***")
     with tab2:
         #Introduction
-        st.markdown("### Transportation")
+        st.markdown("### Mobility")
         st.markdown("A introductory text will be added here at a later stage.")
         #Graph
         st.plotly_chart(fig2, theme="streamlit")
@@ -355,7 +355,7 @@ with st.form("Survey"):
         st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Buildings' tab.***")
     with tab3:
         #Introduction
-        st.markdown("### Buildings")
+        st.markdown("### Housing")
         st.markdown("A introductory text will be added here at a later stage.")
         #Graph
         st.plotly_chart(fig3, theme="streamlit")

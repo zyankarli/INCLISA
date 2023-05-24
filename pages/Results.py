@@ -54,18 +54,29 @@ df.columns= ['scen_meat', 'scen_meat_feedback', 'scen_meat_reason',
             'scen_buil', 'scen_buil_feedback', 'scen_buil_reason', 
             'scen_gdp', 'scen_gdp_feedback', 'scen_gdp_reason', 
              'meat_consumption', 'air_travel', 'housing_space','country', 'organisation', 'education', 'age','gender', 'sector','iam','timestamp']
-#Create plot
-fig = px.bar(df[df['scen_meat'] != '-'], x='scen_meat',
-             labels={
-                     "scen_meat": "Scenario",
+
+#wrangle data
+to_plot = df[['scen_meat', 'scen_tran', 'scen_buil', 'scen_gdp']]
+#change wide to long
+to_plot = pd.melt(to_plot, var_name="Scenario", value_name="Value")
+#drop "-"
+to_plot = to_plot[to_plot.Value != "-"]
+
+
+fig = px.bar(to_plot, x ='Value', color="Scenario",barmode='group',
+              labels={
+                     "Value": "Scenario",
                      'count': "Count"
                 },
                 #TODO automise random order
-                title="Preferred climate mitigation scenario regarding meat consumption")
+                title="Chosen climate mitigation scenarios per sector")
+
+st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+
 
 
 #adjust layout
 #fig.update_layout(height = 600 ,width=700)
 
 
-st.plotly_chart(fig, theme="streamlit", use_container_width=True)
