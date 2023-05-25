@@ -8,6 +8,7 @@ from shillelagh.backends.apsw.db import connect
 from google.oauth2 import service_account
 import time
 from PIL import Image
+import random
 
 #set page intial config
 st.set_page_config(
@@ -46,19 +47,60 @@ regions_ = ["Asian countries except Japan",
 scenarios_ = ["EN_NPi2020_500", "SusDev_SDP-PkBudg1000"]
 #selection = df[(df['scenario'].isin(scenarios_)) & (df["region"].isin(regions_))]
 
-### IMPORT CSV DATA
-df = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/scenario_archetypes.csv",
+
+
+#add legend
+
+# fig.update_layout(legend=dict(
+#     orientation="v",
+#     entrywidth=100,
+#     entrywidthmode='fraction',
+#     yanchor="bottom",
+#     y=0.35,
+#     xanchor="right",
+#     x=1.17,
+#     bgcolor="White",
+#     bordercolor="Black",
+#     borderwidth=1
+# ))
+
+
+
+#-------------------------#
+#          PLOTS          #
+#-------------------------#
+#Data loading and wrangling
+df = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
                                     sep=",", 
                                     lineterminator='\n'))
+
 ### WRANGLE DATA
 #fix last row name
-df.rename(columns = {'2050\r':'2050'}, inplace=True)
-#from wide to long
-df = pd.melt(df, id_vars=['Scenario', 'Region'],
-             var_name="Year", value_name="Value")
-df["Year"] = df['Year'].astype(int)
+df.rename(columns = {'year':'Year',
+                      'region': "Region",
+                      'value':"Value",
+                      'scenario':"scen_id"}, inplace=True)
 
-### CREATE PLOTLY PLOT
+#annonymise scenario names
+#df["Scenario"] = None
+df["Scenario"] = df["scen_id"]
+#utilitarian = circle
+df.loc[df["Scenario"].str.contains("Cont"), "Scenario"] = "Scenario \u2BC3"
+#convergence = square
+df.loc[df["Scenario"].str.contains("Conv"), "Scenario"] = "Scenario \u25A0"
+#high treshold & catch up = diamond
+df.loc[df["Scenario"].str.contains("Diff"), "Scenario"] = "Scenario \u25C6"
+
+#Randomisation
+scenario_list = ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6" ]
+scenario_list = random.sample(scenario_list, len(scenario_list))
+
+#from wide to long
+#df = pd.melt(df, id_vars=['Scenario', 'Region'],
+#             var_name="Year", value_name="Value")
+df["Year"] = df['Year'].astype(int)
+df["Value"] = df["Value"].astype(int)
+
 ##get colors
 #sort on values of first year
 regions_rank = df[df['Year'] == df["Year"].min()].sort_values(by='Value', ascending=False)
@@ -71,89 +113,51 @@ regions_rank["Color"] = ReBu
 #convert to dict
 colors_dict = regions_rank.set_index('Region')['Color'].to_dict()
 
-df['Scenario'] = df['Scenario'].replace({"Scenario A":"Scenario \u2BC3", 
-                                         "Scenario B": 'Scenario \u25A0',
-                                         "Scenario C": "Scenario \u25C6"})
-
-##plot
-fig = px.line(df, x='Year', y="Value", color="Region", facet_col='Scenario',
+##CREATE PLOTLY PLOTS
+#----NUTRITION----#
+fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "kCal per capita/day",
                 },
                 #TODO automise random order
-                category_orders={"Scenario": ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]},
+                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list))},
                 title="Climate Scenarios - Meat consumption per region",
                 range_x=[2018, 2050],
                 range_y=[0, 1000],
                 color_discrete_map=colors_dict
                 )
 
-# Add Lancet Healthy Diet 
-fig.add_hline(y=250,
+# Add Lancet Healthy Diet
+fig1.add_hline(y=250,
               annotation_text="Lancet Healthy Diet",
               annotation_position="bottom left",
               line_dash="dot")
 
 #add legend
-fig.update_layout(legend=dict(
-    orientation="v",
-    entrywidth=100,
-    entrywidthmode='fraction',
+fig1.update_layout(legend=dict(
+    orientation="h",
+    #entrywidth=10,
+    #entrywidthmode='fraction',
     yanchor="bottom",
-    y=0.35,
+    y=-0.5,
     xanchor="right",
-    x=1.17,
+    x=1,
     bgcolor="White",
     bordercolor="Black",
     borderwidth=1
 ))
 #make graph larger
-fig.update_layout(width=1250)
+fig1.update_layout(width=1250)
 #change subplot figure titles
-fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+fig1.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
 
-#-------------------------#
-#        OTHER FIGS       #
-#-------------------------#
-#Data loading and wrangling
-df2 = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
-                                    sep=",", 
-                                    lineterminator='\n'))
-
-### WRANGLE DATA
-#fix last row name
-df2.rename(columns = {'year':'Year',
-                      'region': "Region",
-                      'value':"Value",
-                      'scenario':"Scenario"}, inplace=True)
-
-#from wide to long
-#df = pd.melt(df, id_vars=['Scenario', 'Region'],
-#             var_name="Year", value_name="Value")
-df2["Year"] = df2['Year'].astype(int)
-df2["Value"] = df2["Value"].astype(int)
-
-##get colors
-#sort on values of first year
-regions_rank = df2[df2['Year'] == df2["Year"].min()].sort_values(by='Value', ascending=False)
-#drop duplicates
-regions_rank = regions_rank.drop_duplicates(subset='Region')
-#add color column ; could be automatise using sns
-ReBu = ["#B2182B", "#D6604D", "#F4A582", "#FDDBC7", "#F7F7F7", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC"]
-#add colors to df
-regions_rank["Color"] = ReBu
-#convert to dict
-colors_dict = regions_rank.set_index('Region')['Color'].to_dict()
-
-##CREATE PLOTLY PLOTS
 #----TRANSPORTATION----#
-fig2 = px.line(df2[df2["Scenario"].str.contains("Trans")], x='Year', y="Value", color="Region", facet_col='Scenario',
+fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "Passenger kilometer per year",
                 },
-                #TODO automise random order
-                #category_orders={"Scenario": ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]},
+                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list))},
                 title="Climate Scenarios - Transportion per region",
                 range_x=[2020, 2050],
                 range_y=[0, 12000],
@@ -185,12 +189,11 @@ fig2.update_layout(width=1250)
 fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
 #----BUILDINGS----#
-fig3 = px.line(df2[df2["Scenario"].str.contains("Buil")], x='Year', y="Value", color="Region", facet_col='Scenario',
+fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "floorspace (m²) per year per capita",
                 },
-                #TODO automise random order
-                #category_orders={"Scenario": ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]},
+                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list))},
                 title="Climate Scenarios - Buildings per region",
                 range_x=[2020, 2050],
                 range_y=[0, 115],
@@ -223,12 +226,11 @@ fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
 
 #----GDP----#
-fig4 = px.line(df2[df2["Scenario"].str.contains("GDP")], x='Year', y="Value", color="Region", facet_col='Scenario',
+fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "GDP per capita per year",
                 },
-                #TODO automise random order
-                #category_orders={"Scenario": ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]},
+                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list))},
                 title="Climate Scenarios - GDP per region",
                 range_x=[2020, 2050],
                 range_y=[0, 82000],
@@ -329,7 +331,7 @@ with st.form("Survey"):
                     Scenario \u25A0 assumes that consumption stabilises in high-consuming regions while other regions increase their consumption.  
                     Lastly, scenario \u25C6 assumes that consumption rates converge globally.""")
         #Graph
-        st.plotly_chart(fig, theme="streamlit")
+        st.plotly_chart(fig1, theme="streamlit")
         #Questions
         q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,
                     key=1)
