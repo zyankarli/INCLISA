@@ -10,6 +10,7 @@ import time
 from PIL import Image
 import random
 
+
 #set page intial config
 st.set_page_config(
      layout="wide")
@@ -40,11 +41,11 @@ st.sidebar.markdown('# Mitigation scenarios')
 #df = get_data()
 
 #selecting subset
-regions_ = ["Asian countries except Japan", 
-            "Latin American countries", 
-            "Countries of the Middle East and Africa", 
-            "OECD90 and EU (and EU candidate) countries"]
-scenarios_ = ["EN_NPi2020_500", "SusDev_SDP-PkBudg1000"]
+# regions_ = ["Asian countries except Japan", 
+#             "Latin American countries", 
+#             "Countries of the Middle East and Africa", 
+#             "OECD90 and EU (and EU candidate) countries"]
+# scenarios_ = ["EN_NPi2020_500", "SusDev_SDP-PkBudg1000"]
 #selection = df[(df['scenario'].isin(scenarios_)) & (df["region"].isin(regions_))]
 
 
@@ -103,15 +104,36 @@ df["Value"] = df["Value"].astype(int)
 
 ##get colors
 #sort on values of first year
-regions_rank = df[df['Year'] == df["Year"].min()].sort_values(by='Value', ascending=False)
-#drop duplicates
-regions_rank = regions_rank.drop_duplicates(subset='Region')
 #add color column ; could be automatise using sns
-ReBu = ["#B2182B", "#D6604D", "#F4A582", "#FDDBC7", "#F7F7F7", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC"]
+#ReBu = ["#B2182B", "#D6604D", "#F4A582", "#FDDBC7", "#F7F7F7", "#D1E5F0", "#92C5DE", "#4393C3", "#2166AC"]
 #add colors to df
-regions_rank["Color"] = ReBu
+#regions_rank["Color"] = ReBu
 #convert to dict
-colors_dict = regions_rank.set_index('Region')['Color'].to_dict()
+#colors_dict = regions_rank.set_index('Region')['Color'].to_dict()
+country_conversion = {"Countries of Latin America and the Caribbean" : "Latin America",
+    "Countries of South Asia; primarily India":"India+",
+    "Countries of Sub-Saharan Africa":"Africa",
+    "Countries of centrally-planned Asia; primarily China":"China+",
+    "Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.": "Middle East",
+    "Eastern and Western Europe (i.e., the EU28)":"Europe",
+    "North America; primarily the United States of America and Canada": "North America",
+    "Pacific OECD":"Pacific OECD",
+    "Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia": "Reformed Economies"
+}
+
+#standardise country names
+df=df.replace({"Region": country_conversion })
+
+
+#use temporary lists
+#names of 3 out of 4 scenarios
+#colors_dict = pd.DataFrame({"Region": pd.unique(df[df["scen_id"].str.contains("Trans")]["Region"])})
+colors_dict = pd.DataFrame({"Region": pd.unique(df["Region"])})
+colors_dict["Color"] = pd.Series(px.colors.qualitative.Set1[:(len(colors_dict)+1)])
+colors_dict = colors_dict.set_index("Region")["Color"].to_dict()
+#TODO make sure legends are same order everywhere
+
+
 
 ##CREATE PLOTLY PLOTS
 #----NUTRITION----#
@@ -312,6 +334,7 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
                         "I think it is important to have a limit for consumption.",
                         "I think it is important that consumption converges by 2050.",
                         "I think it is important that lower consumption groups increase their \n consumption more rapidly by 2050 compared to 2020.",
+                        "I think it is important that the resources should go to who would get most use out of them.",
                         "Other"]
 
 #initiate form // #key needs to be provide in case multiple same widgets are used in same form!
