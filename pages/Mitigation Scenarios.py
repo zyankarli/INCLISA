@@ -164,6 +164,7 @@ hover_dic = {
 #hovertemplate
 #hovertemp = ""
 #TODO: make region only visible label => requires moving away from express plotly to plotly objects?
+#for phone applications: https://towardsdatascience.com/mobile-first-visualization-b64a6745e9fd
 #----NUTRITION----#
 fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
