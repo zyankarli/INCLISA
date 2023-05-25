@@ -133,21 +133,52 @@ colors_dict["Color"] = pd.Series(px.colors.qualitative.Set1[:(len(colors_dict)+1
 colors_dict = colors_dict.set_index("Region")["Color"].to_dict()
 #TODO make sure legends are same order everywhere
 
-
-
 ##CREATE PLOTLY PLOTS
+##Layout
+#Legend
+legend_dic = dict(
+    orientation="h",
+    #entrywidth=10,
+    #entrywidthmode='fraction',
+    yanchor="bottom",
+    y=-0.2,
+    xanchor="right",
+    x=1,
+    bgcolor="White",
+    bordercolor="Black",
+    borderwidth=1
+    )
+#Size
+plot_width=1024 
+plot_height=768 
+#Deactivate zoom/ True = deactivated
+x_axis_zoom = True
+y_axis_zoom = True
+#Hover data
+hover_dic = {
+    "Region": True, 
+    "Scenario": False,
+    "Year": False,
+    "Value": False
+}
+#hovertemplate
+#hovertemp = ""
+#TODO: make region only visible label => requires moving away from express plotly to plotly objects?
 #----NUTRITION----#
 fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "kCal per capita/day",
                 },
                 #TODO automise random order
-                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list))},
+                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list)),
+                                 "Region": sorted(pd.unique(df["Region"]))},
                 title="Climate Scenarios - Meat consumption per region",
                 range_x=[2018, 2050],
                 range_y=[0, 1000],
-                color_discrete_map=colors_dict
+                color_discrete_map=colors_dict,
+                hover_data=hover_dic
                 )
+#fig1.update_traces(hovertemplate = hovertemp)
 
 # Add Lancet Healthy Diet
 fig1.add_hline(y=250,
@@ -156,34 +187,27 @@ fig1.add_hline(y=250,
               line_dash="dot")
 
 #add legend
-fig1.update_layout(legend=dict(
-    orientation="h",
-    #entrywidth=10,
-    #entrywidthmode='fraction',
-    yanchor="bottom",
-    y=-0.5,
-    xanchor="right",
-    x=1,
-    bgcolor="White",
-    bordercolor="Black",
-    borderwidth=1
-))
+fig1.update_layout(legend=legend_dic,
+                   width=plot_width,
+                   height=plot_height)
 #make graph larger
 fig1.update_layout(width=1250)
 #change subplot figure titles
 fig1.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-
-
+fig1.layout.xaxis.fixedrange = x_axis_zoom
+fig1.layout.yaxis.fixedrange = y_axis_zoom
 #----TRANSPORTATION----#
 fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "Passenger kilometer per year",
                 },
-                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list))},
+                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list)),
+                                 "Region": sorted(pd.unique(df["Region"]))},
                 title="Climate Scenarios - Transportion per region",
                 range_x=[2020, 2050],
                 range_y=[0, 12000],
-                color_discrete_map=colors_dict
+                color_discrete_map=colors_dict,
+                hover_data=hover_dic
                 )
 
 # Add Japanese Passenger Kilometers by year
@@ -193,33 +217,25 @@ fig2.add_hline(y=8000,
               line_dash="dot")
 
 #add legend
-fig2.update_layout(legend=dict(
-    orientation="h",
-    #entrywidth=10,
-    #entrywidthmode='fraction',
-    yanchor="bottom",
-    y=-0.5,
-    xanchor="right",
-    x=1,
-    bgcolor="White",
-    bordercolor="Black",
-    borderwidth=1
-))
-#make graph larger
-fig2.update_layout(width=1250)
+fig2.update_layout(legend=legend_dic,
+                   width=plot_width,
+                   height=plot_height)
 #change subplot figure titles
 fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-
+fig2.layout.xaxis.fixedrange = x_axis_zoom
+fig2.layout.yaxis.fixedrange = y_axis_zoom
 #----BUILDINGS----#
 fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "floorspace (m²) per year per capita",
                 },
-                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list))},
+                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list)),
+                                 "Region": sorted(pd.unique(df["Region"]))},
                 title="Climate Scenarios - Buildings per region",
                 range_x=[2020, 2050],
                 range_y=[0, 115],
-                color_discrete_map=colors_dict
+                color_discrete_map=colors_dict,
+                hover_data=hover_dic
                 )
 
 # Add Japanese Passenger Kilometers by year
@@ -229,34 +245,26 @@ fig3.add_hline(y=30,
               line_dash="dot")
 
 #add legend
-fig3.update_layout(legend=dict(
-    orientation="h",
-    #entrywidth=10,
-    #entrywidthmode='fraction',
-    yanchor="bottom",
-    y=-0.5,
-    xanchor="right",
-    x=1,
-    bgcolor="White",
-    bordercolor="Black",
-    borderwidth=1
-))
-#make graph larger
-fig3.update_layout(width=1250)
+fig3.update_layout(legend=legend_dic,
+                   width=plot_width,
+                   height=plot_height)
 #change subplot figure titles
 fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-
+fig3.layout.xaxis.fixedrange = x_axis_zoom
+fig3.layout.yaxis.fixedrange = y_axis_zoom
 
 #----GDP----#
 fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "GDP per capita per year",
                 },
-                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list))},
+                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list)),
+                                 "Region": sorted(pd.unique(df["Region"]))},
                 title="Climate Scenarios - GDP per region",
                 range_x=[2020, 2050],
                 range_y=[0, 82000],
-                color_discrete_map=colors_dict
+                color_discrete_map=colors_dict,
+                hover_data=hover_dic
                 )
 
 # Add Japanese Passenger Kilometers by year
@@ -266,25 +274,15 @@ fig4.add_hline(y=30000,
               line_dash="dot")
 
 #add legend
-fig4.update_layout(legend=dict(
-    orientation="h",
-    #entrywidth=10,
-    #entrywidthmode='fraction',
-    yanchor="bottom",
-    y=-0.5,
-    xanchor="right",
-    x=1,
-    bgcolor="White",
-    bordercolor="Black",
-    borderwidth=1
-))
-#make graph larger
-fig4.update_layout(width=1250)
+fig4.update_layout(legend=legend_dic,
+                   width=plot_width,
+                   height=plot_height)
 #change subplot figure titles
 fig4.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+fig4.layout.xaxis.fixedrange = x_axis_zoom
+fig4.layout.yaxis.fixedrange = y_axis_zoom
 
 
-#TODO: make graphs larger
 #TODO: cache functions
 
 
