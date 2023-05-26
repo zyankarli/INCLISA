@@ -92,10 +92,12 @@ df.loc[df["Scenario"].str.contains("Conv"), "Scenario"] = "Scenario \u25A0"
 #high treshold & catch up = diamond
 df.loc[df["Scenario"].str.contains("Diff"), "Scenario"] = "Scenario \u25C6"
 
-#Randomisation
+#Randomisation of i) graph order ii) radio order
 scenario_list = ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6" ]
-scenario_list = random.sample(scenario_list, len(scenario_list))
-
+scenario_list_nutr = random.sample(scenario_list, len(scenario_list))
+scenario_list_tran = random.sample(scenario_list, len(scenario_list))
+scenario_list_buil = random.sample(scenario_list, len(scenario_list))
+scenario_list_gdp = random.sample(scenario_list, len(scenario_list))
 #from wide to long
 #df = pd.melt(df, id_vars=['Scenario', 'Region'],
 #             var_name="Year", value_name="Value")
@@ -129,14 +131,14 @@ df=df.replace({"Region": country_conversion })
 #names of 3 out of 4 scenarios
 #colors_dict = pd.DataFrame({"Region": pd.unique(df[df["scen_id"].str.contains("Trans")]["Region"])})
 colors_dict = pd.DataFrame({"Region": pd.unique(df["Region"])})
-colors_dict["Color"] = pd.Series(px.colors.qualitative.Set1[:(len(colors_dict)+1)])
+colors_dict["Color"] = pd.Series(px.colors.qualitative.T10[:(len(colors_dict)+1)])
 colors_dict = colors_dict.set_index("Region")["Color"].to_dict()
-#TODO make sure legends are same order everywhere
+
 
 ##CREATE PLOTLY PLOTS
 ##Layout
-#Legend
-legend_dic = dict(
+#Legend horizontal
+legend_dic_hor = dict(
     orientation="h",
     #entrywidth=10,
     #entrywidthmode='fraction',
@@ -148,19 +150,36 @@ legend_dic = dict(
     bordercolor="Black",
     borderwidth=1
     )
+legend_dic_ver = dict(
+    #orientation="h",
+    #entrywidth=10,
+    entrywidthmode='fraction',
+    yanchor="bottom",
+    y=0.3,
+    xanchor="right",
+    x=1.5,
+    bgcolor="White",
+    bordercolor="Black",
+    borderwidth=1
+    )
+
+#set legend layout
+legend_dic = legend_dic_ver
+
 #Size
-plot_width=1024 
-plot_height=768 
+plot_width=600 
+plot_height= plot_width * 0.75 
 #Deactivate zoom/ True = deactivated
 x_axis_zoom = True
 y_axis_zoom = True
 #Hover data
 hover_dic = {
-    "Region": True, 
+    "Region": False, 
     "Scenario": False,
     "Year": False,
     "Value": False
 }
+global_hover_name = "Region"
 #hovertemplate
 #hovertemp = ""
 #TODO: make region only visible label => requires moving away from express plotly to plotly objects?
@@ -169,15 +188,17 @@ hover_dic = {
 fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "kCal per capita/day",
+                     "Year" : ""
                 },
                 #TODO automise random order
-                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list)),
+                category_orders={"Scenario": scenario_list_nutr,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Climate Scenarios - Meat consumption per region",
                 range_x=[2018, 2050],
                 range_y=[0, 1000],
                 color_discrete_map=colors_dict,
-                hover_data=hover_dic
+                hover_data=hover_dic,
+                hover_name=global_hover_name
                 )
 #fig1.update_traces(hovertemplate = hovertemp)
 
@@ -191,8 +212,6 @@ fig1.add_hline(y=250,
 fig1.update_layout(legend=legend_dic,
                    width=plot_width,
                    height=plot_height)
-#make graph larger
-fig1.update_layout(width=1250)
 #change subplot figure titles
 fig1.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 fig1.layout.xaxis.fixedrange = x_axis_zoom
@@ -201,14 +220,16 @@ fig1.layout.yaxis.fixedrange = y_axis_zoom
 fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "Passenger kilometer per year",
+                     "Year" : ""
                 },
-                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list)),
+                category_orders={"Scenario": scenario_list_tran,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Climate Scenarios - Transportion per region",
                 range_x=[2020, 2050],
                 range_y=[0, 12000],
                 color_discrete_map=colors_dict,
-                hover_data=hover_dic
+                hover_data=hover_dic,
+                hover_name=global_hover_name
                 )
 
 # Add Japanese Passenger Kilometers by year
@@ -229,14 +250,16 @@ fig2.layout.yaxis.fixedrange = y_axis_zoom
 fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "floorspace (m²) per year per capita",
+                     "Year" : ""
                 },
-                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list)),
+                category_orders={"Scenario": scenario_list_buil,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Climate Scenarios - Buildings per region",
                 range_x=[2020, 2050],
                 range_y=[0, 115],
                 color_discrete_map=colors_dict,
-                hover_data=hover_dic
+                hover_data=hover_dic,
+                hover_name=global_hover_name
                 )
 
 # Add Japanese Passenger Kilometers by year
@@ -258,14 +281,16 @@ fig3.layout.yaxis.fixedrange = y_axis_zoom
 fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "GDP per capita per year",
+                     "Year" : ""
                 },
-                category_orders={"Scenario": random.sample(scenario_list, len(scenario_list)),
+                category_orders={"Scenario": scenario_list_gdp,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Climate Scenarios - GDP per region",
                 range_x=[2020, 2050],
                 range_y=[0, 82000],
                 color_discrete_map=colors_dict,
-                hover_data=hover_dic
+                hover_data=hover_dic,
+                hover_name=global_hover_name
                 )
 
 # Add Japanese Passenger Kilometers by year
@@ -355,14 +380,14 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(fig1, theme="streamlit")
         #Questions
-        q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,
+        q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nutr, horizontal=True ,
                     key=1)
         q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=2)
         q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=3 )
     #st.markdown("""---""")
-        st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Transportation' tab.***")
+        st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Mobility' tab.***")
     with tab2:
         #Introduction
         st.markdown("### Mobility")
@@ -370,13 +395,13 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(fig2, theme="streamlit")
         #Questions
-        q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True,
+        q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_tran,horizontal=True,
                     key=4)
         q5 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=5)
         q6 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=6)
-        st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Buildings' tab.***")
+        st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Housing' tab.***")
     with tab3:
         #Introduction
         st.markdown("### Housing")
@@ -384,7 +409,7 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(fig3, theme="streamlit")
         #Questions
-        q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,
+        q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_buil,horizontal=True ,
                     key=7)
         q8 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=8)
@@ -398,7 +423,7 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(fig4, theme="streamlit" )
         #Questions
-        q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + accepted_answers,horizontal=True ,
+        q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
                        key=10)
         q11 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                             key=11)
