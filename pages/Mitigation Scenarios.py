@@ -15,7 +15,7 @@ import random
 st.set_page_config(
      layout="wide")
 #Header
-st.sidebar.markdown('# Mitigation scenarios')
+#st.sidebar.markdown('# Mitigation scenarios')
 
 #Text
 

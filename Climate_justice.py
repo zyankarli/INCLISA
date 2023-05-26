@@ -11,7 +11,7 @@ st.set_page_config(
 
 #add page title and sidebar
 st.markdown('# Justice in climate mitigation scenarios')
-st.sidebar.markdown('# Justice in climate mitigation scenarios')
+#st.sidebar.markdown('# Justice in climate mitigation scenarios')
 
 #add columns
 col1, col2, col3 = st.columns(3)
