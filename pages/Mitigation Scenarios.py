@@ -2,6 +2,7 @@
 import streamlit as st
 #import pyam
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit_survey as ss
 import pandas as pd
 from shillelagh.backends.apsw.db import connect
@@ -158,6 +159,7 @@ legend_dic_hor = dict(
 legend_dic_ver = dict(
     #orientation="h",
     #entrywidth=10,
+    title_text = "Legend",
     entrywidthmode='fraction',
     yanchor="bottom",
     y=0.3,
@@ -213,10 +215,25 @@ fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color
                 hover_name=global_hover_name
                 )
 # Add Lancet Healthy Diet
-fig1.add_hline(y=250,
-              annotation_text="Lancet Healthy Diet",
-              annotation_position="bottom left",
-              line_dash="dot")
+# fig1.add_hline(y=250,
+#               annotation_text="Lancet Healthy Diet",
+#               annotation_position="bottom left",
+#               line_dash="dot")
+
+trace = go.Scatter(
+    x=df[df["scen_id"].str.contains("Nut")]["Year"],
+    y=[250] * len(df[df["scen_id"].str.contains("Nut")]["Year"]),
+    mode='lines',
+    name='Lancet Healthy Diet',
+    line=dict(dash='dot', width=2, color='black'),
+    hoverinfo="skip"
+)
+trace.update(legendgroup="trendline", showlegend=False, hovertemplate = "Lancet Healthy Diet")
+fig1.add_trace(trace, row="all", col="all", exclude_empty_subplots=True)
+fig1.update_traces(selector=-1, showlegend=True)
+#TODO: ask for feedback which implementation is better
+
+
 #----TRANSPORTATION----#
 fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
