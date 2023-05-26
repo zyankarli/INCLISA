@@ -345,7 +345,7 @@ st.markdown('# Mitigation Scenarios')
 #prepare google sheet connection
 sheet_url = st.secrets["private_gsheets_url"]
 
-@st.cache_data
+@st.cache_resource
 def create_connection():
         credentials = service_account.Credentials.from_service_account_info(
         st.secrets["gcp_service_account"], 
