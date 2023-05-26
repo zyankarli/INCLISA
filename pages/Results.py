@@ -72,10 +72,7 @@ def wrangle_data():
 
 to_plot = wrangle_data()
 
-#TODO: only reload graph on click
-if st.button('Click here to update the graph.'):
-    wrangle_data()      
-
+#Create PLOT
 fig = px.bar(to_plot, x ='Value', color="Scenario",barmode='group',
               labels={
                      "Value": "",
@@ -102,8 +99,13 @@ fig.update_layout(
 fig.layout.xaxis.fixedrange = False
 fig.layout.yaxis.fixedrange = False
 
-
-st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+#TODO: only reload graph on click
+if st.button('Click here to update the graph.'):
+    wrangle_data()
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+      
+else:
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 
 
