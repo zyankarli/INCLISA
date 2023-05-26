@@ -71,9 +71,14 @@ st.set_page_config(
 #          PLOTS          #
 #-------------------------#
 #Data loading and wrangling
-df = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
+@st.cache_data
+def load_csv():
+    df = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
                                     sep=",", 
                                     lineterminator='\n'))
+    return df
+
+df = load_csv()
 
 ### WRANGLE DATA
 #fix last row name
@@ -86,14 +91,14 @@ df.rename(columns = {'year':'Year',
 #df["Scenario"] = None
 df["Scenario"] = df["scen_id"]
 #utilitarian = circle
-df.loc[df["Scenario"].str.contains("Cont"), "Scenario"] = "Scenario \u2BC3"
+df.loc[df["Scenario"].str.contains("Cont"), "Scenario"] = "Scenario \u25B2"
 #convergence = square
 df.loc[df["Scenario"].str.contains("Conv"), "Scenario"] = "Scenario \u25A0"
 #high treshold & catch up = diamond
 df.loc[df["Scenario"].str.contains("Diff"), "Scenario"] = "Scenario \u25C6"
 
 #Randomisation of i) graph order ii) radio order
-scenario_list = ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6" ]
+scenario_list = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6" ]
 scenario_list_nutr = random.sample(scenario_list, len(scenario_list))
 scenario_list_tran = random.sample(scenario_list, len(scenario_list))
 scenario_list_buil = random.sample(scenario_list, len(scenario_list))
@@ -323,6 +328,7 @@ st.markdown('# Mitigation Scenarios')
 #prepare google sheet connection
 sheet_url = st.secrets["private_gsheets_url"]
 
+@st.cache_data
 def create_connection():
         credentials = service_account.Credentials.from_service_account_info(
         st.secrets["gcp_service_account"], 
