@@ -183,8 +183,12 @@ hover_dic = {
 }
 global_hover_name = "Region"
 #xaxis ticks
-global_xticks = dict(tickangle=-45, automargin=True)
-
+global_xticks = dict(tickangle=-45, automargin=True,
+                     tickvals = [2030, 2040, 2050])
+#annotations
+global_annotation = dict(
+    xref="paper", yref="paper",
+    x=-.05, y=-0.1, text="2020", showarrow=False)
 #TODO: make region only visible label => requires moving away from express plotly to plotly objects?
 #for phone applications: https://towardsdatascience.com/mobile-first-visualization-b64a6745e9fd
 #----NUTRITION----#
@@ -289,7 +293,7 @@ fig1.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 fig4.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-#Rotate ticks
+#Rotate ticks and disable 2020 to avoid overlap
 fig1.update_xaxes(global_xticks)
 fig2.update_xaxes(global_xticks)
 fig3.update_xaxes(global_xticks)
@@ -305,7 +309,11 @@ fig3.layout.yaxis.fixedrange = y_axis_zoom
 fig4.layout.xaxis.fixedrange = x_axis_zoom
 fig4.layout.yaxis.fixedrange = y_axis_zoom
 
-
+#add year 2020 in first graph
+fig1.add_annotation(global_annotation)
+fig2.add_annotation(global_annotation)
+fig3.add_annotation(global_annotation)
+fig4.add_annotation(global_annotation)
 #TODO: cache functions
 
 
