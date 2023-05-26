@@ -157,11 +157,13 @@ legend_dic_ver = dict(
     yanchor="bottom",
     y=0.3,
     xanchor="right",
-    x=1.5,
+    x=1.6,
     bgcolor="White",
     bordercolor="Black",
-    borderwidth=1
-    )
+    borderwidth=1,
+    font = dict(
+        size = 14
+    ))
 
 #set legend layout
 legend_dic = legend_dic_ver
@@ -180,8 +182,9 @@ hover_dic = {
     "Value": False
 }
 global_hover_name = "Region"
-#hovertemplate
-#hovertemp = ""
+#xaxis ticks
+global_xticks = dict(tickangle=-45, automargin=True)
+
 #TODO: make region only visible label => requires moving away from express plotly to plotly objects?
 #for phone applications: https://towardsdatascience.com/mobile-first-visualization-b64a6745e9fd
 #----NUTRITION----#
@@ -200,22 +203,11 @@ fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-#fig1.update_traces(hovertemplate = hovertemp)
-
 # Add Lancet Healthy Diet
 fig1.add_hline(y=250,
               annotation_text="Lancet Healthy Diet",
               annotation_position="bottom left",
               line_dash="dot")
-
-#add legend
-fig1.update_layout(legend=legend_dic,
-                   width=plot_width,
-                   height=plot_height)
-#change subplot figure titles
-fig1.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-fig1.layout.xaxis.fixedrange = x_axis_zoom
-fig1.layout.yaxis.fixedrange = y_axis_zoom
 #----TRANSPORTATION----#
 fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
@@ -231,21 +223,11 @@ fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", col
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-
 # Add Japanese Passenger Kilometers by year
 fig2.add_hline(y=8000,
               annotation_text="Pkm per year Japan",
               annotation_position="bottom left",
               line_dash="dot")
-
-#add legend
-fig2.update_layout(legend=legend_dic,
-                   width=plot_width,
-                   height=plot_height)
-#change subplot figure titles
-fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-fig2.layout.xaxis.fixedrange = x_axis_zoom
-fig2.layout.yaxis.fixedrange = y_axis_zoom
 #----BUILDINGS----#
 fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
@@ -261,22 +243,11 @@ fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", colo
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-
-# Add Japanese Passenger Kilometers by year
+# Add threshold [Source??]
 fig3.add_hline(y=30,
               annotation_text="ADD LABEL",
               annotation_position="bottom left",
               line_dash="dot")
-
-#add legend
-fig3.update_layout(legend=legend_dic,
-                   width=plot_width,
-                   height=plot_height)
-#change subplot figure titles
-fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-fig3.layout.xaxis.fixedrange = x_axis_zoom
-fig3.layout.yaxis.fixedrange = y_axis_zoom
-
 #----GDP----#
 fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
@@ -292,19 +263,45 @@ fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-
-# Add Japanese Passenger Kilometers by year
+# Add threshold [Source???]
 fig4.add_hline(y=30000,
               annotation_text="ADD LABEL",
               annotation_position="bottom left",
               line_dash="dot")
 
-#add legend
+#LAYOUT UPDATES
+#add legends
+fig1.update_layout(legend=legend_dic,
+                   width=plot_width,
+                   height=plot_height)
+fig2.update_layout(legend=legend_dic,
+                   width=plot_width,
+                   height=plot_height)
+fig3.update_layout(legend=legend_dic,
+                   width=plot_width,
+                   height=plot_height)
 fig4.update_layout(legend=legend_dic,
                    width=plot_width,
                    height=plot_height)
+
 #change subplot figure titles
+fig1.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 fig4.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+#Rotate ticks
+fig1.update_xaxes(global_xticks)
+fig2.update_xaxes(global_xticks)
+fig3.update_xaxes(global_xticks)
+fig4.update_xaxes(global_xticks)
+
+#Disable zoom feature
+fig1.layout.xaxis.fixedrange = x_axis_zoom
+fig1.layout.yaxis.fixedrange = y_axis_zoom
+fig2.layout.xaxis.fixedrange = x_axis_zoom
+fig2.layout.yaxis.fixedrange = y_axis_zoom
+fig3.layout.xaxis.fixedrange = x_axis_zoom
+fig3.layout.yaxis.fixedrange = y_axis_zoom
 fig4.layout.xaxis.fixedrange = x_axis_zoom
 fig4.layout.yaxis.fixedrange = y_axis_zoom
 
