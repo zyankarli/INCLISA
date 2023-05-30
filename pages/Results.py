@@ -6,9 +6,6 @@ from google.oauth2 import service_account
 import plotly.express as px
 from datetime import datetime
 
-#set page intial config
-st.set_page_config(
-     layout="wide")
 #hide menu and footer
 hide_default_format = """
        <style>
