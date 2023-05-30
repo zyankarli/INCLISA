@@ -22,7 +22,18 @@ with col2:
      st.image(image1)
 
 
-# 2 ways forward
-#TODO: 1) reseize original pictures
-#TODO: 2) ensure that full-size pictures are central [requires CSS] 
-#TODO: bring it online
+#ensure that picture is centered when in full screen mode
+st.markdown(
+    """
+    <style>
+        button[title^=Exit]+div [data-testid=stImage]{
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+    </style>
+    """, unsafe_allow_html=True
+)
+
