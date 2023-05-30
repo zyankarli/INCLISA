@@ -3,10 +3,22 @@ import streamlit as st
 #to import pictures, use Python Imaging Library
 from PIL import Image
 
+#hide menu and footer
+hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+st.markdown(hide_default_format, unsafe_allow_html=True)
+
+
+page_image = Image.open("pages/IIASA_PNG logo-short_blue.png")
 #set page configs
 st.set_page_config(
      page_title='Justice in climate mitigation scenarios',
-     initial_sidebar_state="auto"
+     initial_sidebar_state="auto",
+     page_icon=page_image
 )
 
 #add page title and sidebar

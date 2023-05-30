@@ -15,6 +15,14 @@ import random
 #set page intial config
 st.set_page_config(
      layout="wide")
+#hide menu and footer
+hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+st.markdown(hide_default_format, unsafe_allow_html=True)
 #Header
 #st.sidebar.markdown('# Mitigation scenarios')
 
@@ -345,7 +353,7 @@ st.markdown('# Mitigation Scenarios')
 #prepare google sheet connection
 sheet_url = st.secrets["private_gsheets_url"]
 
-#@st.cache_resource
+#@st.cache_data
 def create_connection():
         credentials = service_account.Credentials.from_service_account_info(
         st.secrets["gcp_service_account"], 

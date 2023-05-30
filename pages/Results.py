@@ -8,7 +8,14 @@ import plotly.express as px
 #set page intial config
 st.set_page_config(
      layout="wide")
-
+#hide menu and footer
+hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+st.markdown(hide_default_format, unsafe_allow_html=True)
 
 #prepare google sheet connection
 sheet_url = st.secrets["private_gsheets_url"]
@@ -39,7 +46,7 @@ cursor = create_connection()
 
 # Perform SQL query on the Google Sheet.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data()
+@st.cache_data
 def run_query(query):
     rows = cursor.execute(query)
     rows = rows.fetchall()
@@ -47,6 +54,7 @@ def run_query(query):
 
 #Get data
 ##define data wrangling function
+@st.cache_data
 def wrangle_data():
     df = pd.DataFrame(run_query(f'SELECT * FROM "{sheet_url}"'))
 #rename columns
@@ -59,53 +67,75 @@ def wrangle_data():
     #wrangle data
     to_plot = df[['scen_meat', 'scen_tran', 'scen_buil', 'scen_gdp']]
     #rename scenarios
-    to_plot = to_plot.rename(columns={'scen_meat':"Food",
+    to_plot = to_plot.rename(columns={'scen_meat':"Nutrition",
                                       'scen_tran':"Mobility",
                                       'scen_buil':'Housing',
                                       'scen_gdp':"Economic Activity"})
 
     #change wide to long
-    to_plot = pd.melt(to_plot, var_name="Scenario", value_name="Value")
+    to_plot = pd.melt(to_plot, var_name="Sector", value_name="Scenario")
     #drop "-"
-    to_plot = to_plot[to_plot.Value != "-"]
+    to_plot = to_plot[to_plot.Scenario != "-"]
+    #group by sector and get percentage of each scenario
+    to_plot = pd.DataFrame(to_plot.groupby('Sector')['Scenario'].value_counts(normalize=True).round(decimals=2)).reset_index()
+    #Rename new column
+    to_plot = to_plot.rename(columns={'proportion': "Percentage"})
+    #calculate percentage out of proportion
+    to_plot["Percentage"] = to_plot["Percentage"] * 100
+    #add labels column
+    to_plot["Label"] = to_plot["Percentage"].astype(int).astype(str) + "%"
+    #Change scenario names
+    to_plot.loc[to_plot["Scenario"].str.contains('\u25B2'), "Scenario"] = "Continuous Growth"
+    to_plot.loc[to_plot["Scenario"].str.contains('\u25A0'), "Scenario"] = "Convergence"
+    to_plot.loc[to_plot["Scenario"].str.contains('\u25C6'), "Scenario"] = "High Threshold"
+    
     return to_plot
 
 to_plot = wrangle_data()
 
+
 #Create PLOT
-fig = px.bar(to_plot, x ='Value', color="Scenario",barmode='group',
-              labels={
-                     "Value": "",
-                     'count': "Count"
+fig = px.bar(to_plot, x="Percentage", y='Sector', color="Scenario", text = "Label",
+            labels={
+                     'Percentage': "",
+                     'Sector':""
                 },
-                #TODO automise random order
-                title="Results: Climate mitigation scenarios per sector")
+            hover_data = {"Scenario": False, "Percentage": False, "Sector":False, "Label":False},
+            hover_name="Scenario",
+            orientation='h',
+            color_discrete_sequence=px.colors.qualitative.Bold)
+
 
 #Size
 plot_width=600 
 plot_height= plot_width * 0.75 
 
-
 fig.update_layout(
     legend = dict(
-        title_text = "Sector",
+        title_text = "Scenario",
         ),
-        width = plot_width,
-        height = plot_height
+    width = plot_width,
+    height = plot_height
+    
     )
 
-#Deactivate zoom/ True = deactivated
+
 #Disable zoom feature
-fig.layout.xaxis.fixedrange = False
-fig.layout.yaxis.fixedrange = False
+fig.layout.xaxis.fixedrange = True
+fig.layout.yaxis.fixedrange = True
+#disable x axis
+fig.update_xaxes(showticklabels=False)
+
+
+
+st.markdown('# Survey Results')
+#Print graph
+st.plotly_chart(fig, theme="streamlit")
 
 #TODO: only reload graph on click
 if st.button('Click here to update the graph.'):
-    wrangle_data()
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-      
-else:
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+    st.experimental_rerun()
+
 
 
 
