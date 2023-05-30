@@ -4,6 +4,7 @@ import pandas as pd
 from shillelagh.backends.apsw.db import connect
 from google.oauth2 import service_account
 import plotly.express as px
+from datetime import datetime
 
 #set page intial config
 st.set_page_config(
@@ -63,9 +64,12 @@ def wrangle_data():
             'scen_buil', 'scen_buil_feedback', 'scen_buil_reason', 
             'scen_gdp', 'scen_gdp_feedback', 'scen_gdp_reason', 
              'meat_consumption', 'air_travel', 'housing_space','country', 'organisation', 'education', 'age','gender', 'sector','iam','timestamp']
-
-    #wrangle data
-    to_plot = df[['scen_meat', 'scen_tran', 'scen_buil', 'scen_gdp']]
+    #drop all data points that are not from today
+    today = datetime.now().date()
+    df['date'] = df['timestamp'].apply(datetime.fromtimestamp).apply(datetime.date)
+    to_plot = df[df['date'] == today]
+    #select relevant columns
+    to_plot = to_plot[['scen_meat', 'scen_tran', 'scen_buil', 'scen_gdp']]
     #rename scenarios
     to_plot = to_plot.rename(columns={'scen_meat':"Nutrition",
                                       'scen_tran':"Mobility",
@@ -84,14 +88,18 @@ def wrangle_data():
     to_plot["Percentage"] = to_plot["Percentage"] * 100
     #add labels column
     to_plot["Label"] = to_plot["Percentage"].astype(int).astype(str) + "%"
-    #Change scenario names
-    to_plot.loc[to_plot["Scenario"].str.contains('\u25B2'), "Scenario"] = "Continuous Growth"
-    to_plot.loc[to_plot["Scenario"].str.contains('\u25A0'), "Scenario"] = "Convergence"
-    to_plot.loc[to_plot["Scenario"].str.contains('\u25C6'), "Scenario"] = "High Threshold"
-    
+    #Change scenario names // within try function in case certain scenarios are never picked
+    try:
+        to_plot.loc[to_plot["Scenario"].str.contains('\u25B2'), "Scenario"] = "Growing consumption"
+        to_plot.loc[to_plot["Scenario"].str.contains('\u25A0'), "Scenario"] = "Convergence"
+        to_plot.loc[to_plot["Scenario"].str.contains('\u25C6'), "Scenario"] = "Catching up"
+    except:
+        pass
+
     return to_plot
 
 to_plot = wrangle_data()
+
 
 
 #Create PLOT
