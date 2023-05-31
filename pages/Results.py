@@ -44,7 +44,7 @@ cursor = create_connection()
 
 # Perform SQL query on the Google Sheet.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data
+
 def run_query(query):
     rows = cursor.execute(query)
     rows = rows.fetchall()
@@ -52,7 +52,6 @@ def run_query(query):
 
 #Get data
 ##define data wrangling function
-@st.cache_data
 def wrangle_data():
     df = pd.DataFrame(run_query(f'SELECT * FROM "{sheet_url}"'))
 #rename columns
@@ -87,17 +86,22 @@ def wrangle_data():
     to_plot["Label"] = to_plot["Percentage"].astype(int).astype(str) + "%"
     #Change scenario names // within try function in case certain scenarios are never picked
     try:
-        to_plot.loc[to_plot["Scenario"].str.contains('\u25B2'), "Scenario"] = "Growing consumption"
+         to_plot.loc[to_plot["Scenario"].str.contains('\u25B2'), "Scenario"] = "Growing consumption"
+    except:
+         pass
+    try:
         to_plot.loc[to_plot["Scenario"].str.contains('\u25A0'), "Scenario"] = "Convergence"
+    except:
+         pass
+    try:
         to_plot.loc[to_plot["Scenario"].str.contains('\u25C6'), "Scenario"] = "Catching up"
     except:
         pass
 
     return to_plot
 
+
 to_plot = wrangle_data()
-
-
 
 #Create PLOT
 fig = px.bar(to_plot, x="Percentage", y='Sector', color="Scenario", text = "Label",

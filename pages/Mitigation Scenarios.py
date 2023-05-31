@@ -107,11 +107,18 @@ df.loc[df["Scenario"].str.contains("Conv"), "Scenario"] = "Scenario \u25A0"
 df.loc[df["Scenario"].str.contains("Diff"), "Scenario"] = "Scenario \u25C6"
 
 #Randomisation of i) graph order ii) radio order
-scenario_list = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6" ]
-scenario_list_nutr = random.sample(scenario_list, len(scenario_list))
-scenario_list_tran = random.sample(scenario_list, len(scenario_list))
-scenario_list_buil = random.sample(scenario_list, len(scenario_list))
-scenario_list_gdp = random.sample(scenario_list, len(scenario_list))
+##cached function is needed, because form get's re-run when submitting, which causes randomised radio widget to re-set 
+@st.cache_data
+def random_scenario_order():
+    scenario_list = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6"]
+    scenario_list_nutr = random.sample(scenario_list, len(scenario_list))
+    scenario_list_tran = random.sample(scenario_list, len(scenario_list))
+    scenario_list_buil = random.sample(scenario_list, len(scenario_list))
+    scenario_list_gdp = random.sample(scenario_list, len(scenario_list))
+    return scenario_list_nutr, scenario_list_tran, scenario_list_buil, scenario_list_gdp
+
+scenario_list_nutr, scenario_list_tran, scenario_list_buil, scenario_list_gdp = random_scenario_order()
+
 #from wide to long
 #df = pd.melt(df, id_vars=['Scenario', 'Region'],
 #             var_name="Year", value_name="Value")
