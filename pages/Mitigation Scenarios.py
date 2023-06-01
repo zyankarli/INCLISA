@@ -218,7 +218,6 @@ global_xticks = dict(tickangle=-45, automargin=True,
 global_annotation = dict(
     xref="paper", yref="paper",
     x=-.05, y=-0.1, text="2020", showarrow=False)
-#TODO: make region only visible label => requires moving away from express plotly to plotly objects?
 #for phone applications: https://towardsdatascience.com/mobile-first-visualization-b64a6745e9fd
 #----NUTRITION----#
 fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color="Region", facet_col='Scenario',
@@ -226,7 +225,7 @@ fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color
                      "Value": "kCal per capita/day",
                      "Year" : ""
                 },
-                #TODO automise random order
+                #automise random order
                 category_orders={"Scenario": scenario_list_nutr,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Meat consumption trajectories",
@@ -254,7 +253,6 @@ fig1.add_hline(y=90,
 # trace.update(legendgroup="trendline", showlegend=False, hovertemplate = "Lancet Healthy Diet")
 # fig1.add_trace(trace, row="all", col="all", exclude_empty_subplots=True)
 # fig1.update_traces(selector=-1, showlegend=True)
-#TODO: ask for feedback which implementation is better
 
 
 #----TRANSPORTATION----#
@@ -360,7 +358,6 @@ fig1.add_annotation(global_annotation)
 fig2.add_annotation(global_annotation)
 fig3.add_annotation(global_annotation)
 fig4.add_annotation(global_annotation)
-#TODO: cache functions
 
 
 
@@ -402,7 +399,6 @@ def load_countries():
                                 lineterminator='\n',skiprows=0, encoding="latin")
     #limit df to first column in case csv file changes
     df = df.iloc[:,0]
-    #TODO: ask elina what's the best approach on that
     return df
 country_list = ["-"] + list(load_countries())
 
@@ -511,11 +507,11 @@ with st.form("Survey"):
         q13=st.selectbox("How often per week do you eat meat?",
                          ("-", "Never", "Once per week or less", "At least 3 times per week", "Everyday"), 
                          key=13)
-        q14=st.selectbox("How often per year do you travel by plane?",#TODO improve wording
+        q14=st.selectbox("How often per year do you travel by plane?",#
                          ("-", "Never", "Once per year", "3 times per year", "At least 5 times per year"), 
                          key=14)
         q15=st.selectbox("What is the size of your apartment/ house?", #TODO agree on categories
-                         ("-", "Less than 10m² per person", "Between 10m² and 20m² per person","Between 20m² and 30m² per person","More than 30m² per person" ), 
+                         ("-", "Less than 10m² per person", "Between 10m² and 30m² per person","Between 30m² and 50m² per person","More than 50m² per person" ), 
                          key=15)
         q16 = st.selectbox("Which country are you from? (Please select the country you feel closer to and more knowledgeable about)",
                         country_list, 
@@ -534,7 +530,7 @@ with st.form("Survey"):
                         ("-", "Male", "Female", "Other", "Prefer not to say"), 
                         key=20)
         q21 = st.selectbox("To which sector is your work most related to?",
-                        ("-", "Agriculture", "Industry", "Transport", "Buildings", "General climate mitigation", "Other"), 
+                        ("-", "Agriculture/Food/Land Management", "Industry/Manufacturing", "Transport/Shipping/Public Transportation", "Buildings/Housing/Construction", "Climate mitigation/ adapdation", "Other"), 
                         key=21)
         #TODO: implement Shonalis suggestion to add words to sectors
         q22 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",

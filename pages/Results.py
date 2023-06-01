@@ -152,7 +152,7 @@ st.markdown('# Survey Results')
 #Print graph
 st.plotly_chart(fig, theme="streamlit")
 
-#TODO: only reload graph on click
+#only reload graph on click
 if st.button('Click here to update the graph.'):
     st.experimental_rerun()
 
