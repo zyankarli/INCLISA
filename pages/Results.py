@@ -5,6 +5,17 @@ from shillelagh.backends.apsw.db import connect
 from google.oauth2 import service_account
 import plotly.express as px
 from datetime import datetime
+from PIL import Image 
+
+st.set_page_config(
+    layout="wide",
+    page_title='Justice in climate mitigation scenarios',
+    initial_sidebar_state="auto",
+    #online
+    #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+    #local
+    page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
+)
 
 #hide menu and footer
 hide_default_format = """

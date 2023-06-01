@@ -14,7 +14,14 @@ import random
 
 #set page intial config
 st.set_page_config(
-     layout="wide")
+        layout="wide",
+        page_title='Justice in climate mitigation scenarios',
+        initial_sidebar_state="auto",
+        #online
+        #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+        #local
+        page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
+)
 #hide menu and footer
 hide_default_format = """
        <style>
@@ -222,7 +229,7 @@ fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color
                 #TODO automise random order
                 category_orders={"Scenario": scenario_list_nutr,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Climate Scenarios - Meat consumption per region",
+                title="Meat consumption trajectories",
                 range_x=[2018, 2050],
                 range_y=[0, 1000],
                 color_discrete_map=colors_dict,
@@ -230,22 +237,23 @@ fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color
                 hover_name=global_hover_name
                 )
 # Add Lancet Healthy Diet
-# fig1.add_hline(y=250,
-#               annotation_text="Lancet Healthy Diet",
-#               annotation_position="bottom left",
-#               line_dash="dot")
+fig1.add_hline(y=90,
+               annotation_text="",
+               annotation_position="bottom left",
+               line_dash="dot")
 
-trace = go.Scatter(
-    x=df[df["scen_id"].str.contains("Nut")]["Year"],
-    y=[250] * len(df[df["scen_id"].str.contains("Nut")]["Year"]),
-    mode='lines',
-    name='Lancet Healthy Diet',
-    line=dict(dash='dot', width=2, color='black'),
-    hoverinfo="skip"
-)
-trace.update(legendgroup="trendline", showlegend=False, hovertemplate = "Lancet Healthy Diet")
-fig1.add_trace(trace, row="all", col="all", exclude_empty_subplots=True)
-fig1.update_traces(selector=-1, showlegend=True)
+# Option below adds line in legend
+# trace = go.Scatter(
+#     x=df[df["scen_id"].str.contains("Nut")]["Year"],
+#     y=[250] * len(df[df["scen_id"].str.contains("Nut")]["Year"]),
+#     mode='lines',
+#     name='Lancet Healthy Diet',
+#     line=dict(dash='dot', width=2, color='black'),
+#     hoverinfo="skip"
+# )
+# trace.update(legendgroup="trendline", showlegend=False, hovertemplate = "Lancet Healthy Diet")
+# fig1.add_trace(trace, row="all", col="all", exclude_empty_subplots=True)
+# fig1.update_traces(selector=-1, showlegend=True)
 #TODO: ask for feedback which implementation is better
 
 
@@ -257,7 +265,7 @@ fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", col
                 },
                 category_orders={"Scenario": scenario_list_tran,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Climate Scenarios - Transportion per region",
+                title="Mobility trajectories",
                 range_x=[2020, 2050],
                 range_y=[0, 12000],
                 color_discrete_map=colors_dict,
@@ -266,9 +274,26 @@ fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", col
                 )
 # Add Japanese Passenger Kilometers by year
 fig2.add_hline(y=8000,
-              annotation_text="Pkm per year Japan",
+              annotation_text="",
               annotation_position="bottom left",
               line_dash="dot")
+fig2.add_shape(
+    type="line", 
+    xref='paper', yref='paper',
+    x0= 1.288, x1=1.4, y0=0.2, y1=0.2,
+    #yanchor="bottom",
+    #y=0.3,
+    #xanchor="right",
+    #x=1.6,
+    line = dict(
+        color = "black",
+        dash="dot"
+    ),
+    label = dict(
+        text ="Annual pkm Japan"
+    )
+)
+
 #----BUILDINGS----#
 fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
@@ -277,7 +302,7 @@ fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", colo
                 },
                 category_orders={"Scenario": scenario_list_buil,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Climate Scenarios - Buildings per region",
+                title="Housing trajectories",
                 range_x=[2020, 2050],
                 range_y=[0, 115],
                 color_discrete_map=colors_dict,
@@ -285,8 +310,8 @@ fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", colo
                 hover_name=global_hover_name
                 )
 # Add threshold [Source??]
-fig3.add_hline(y=30,
-              annotation_text="ADD LABEL",
+fig3.add_hline(y=45,
+              annotation_text="",
               annotation_position="bottom left",
               line_dash="dot")
 #----GDP----#
@@ -297,7 +322,7 @@ fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color
                 },
                 category_orders={"Scenario": scenario_list_gdp,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Climate Scenarios - GDP per region",
+                title="Economic activity trajectories",
                 range_x=[2020, 2050],
                 range_y=[0, 82000],
                 color_discrete_map=colors_dict,
@@ -305,8 +330,8 @@ fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color
                 hover_name=global_hover_name
                 )
 # Add threshold [Source???]
-fig4.add_hline(y=30000,
-              annotation_text="ADD LABEL",
+fig4.add_hline(y=36000,
+              annotation_text="",
               annotation_position="bottom left",
               line_dash="dot")
 
@@ -352,6 +377,7 @@ fig2.add_annotation(global_annotation)
 fig3.add_annotation(global_annotation)
 fig4.add_annotation(global_annotation)
 #TODO: cache functions
+
 
 
 st.markdown('# Mitigation Scenarios')
