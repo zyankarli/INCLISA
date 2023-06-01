@@ -20,7 +20,7 @@ st.set_page_config(
         #online
         #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
         #local
-        page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
+        #page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
 )
 #hide menu and footer
 hide_default_format = """
