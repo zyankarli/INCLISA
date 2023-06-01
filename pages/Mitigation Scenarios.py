@@ -18,7 +18,7 @@ st.set_page_config(
         page_title='Justice in climate mitigation scenarios',
         initial_sidebar_state="auto",
         #online
-        #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+        page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
         #local
         #page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
 )
