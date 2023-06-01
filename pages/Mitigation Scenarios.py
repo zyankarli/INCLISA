@@ -277,22 +277,6 @@ fig2.add_hline(y=8000,
               annotation_text="",
               annotation_position="bottom left",
               line_dash="dot")
-fig2.add_shape(
-    type="line", 
-    xref='paper', yref='paper',
-    x0= 1.288, x1=1.4, y0=0.2, y1=0.2,
-    #yanchor="bottom",
-    #y=0.3,
-    #xanchor="right",
-    #x=1.6,
-    line = dict(
-        color = "black",
-        dash="dot"
-    ),
-    label = dict(
-        text ="Annual pkm Japan"
-    )
-)
 
 #----BUILDINGS----#
 fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", color="Region", facet_col='Scenario',
@@ -438,14 +422,16 @@ with st.form("Survey"):
     #MEAT CONSUMPTION
     with tab1:
         #Introduction
-        st.markdown(":red[**The text below is a placeholder. More information will be provided later.**]")
-        st.markdown("""---""")
         st.markdown('### Nutrition')
-        st.markdown("**The livestock sector is an important contributor to greenhouse gas emissions.**")
-        st.markdown("Below **we show trends of meat consumption** in different macro regions in three archetypal scenarios.")
-        st.markdown("""Scenario \u2BC3 assumes linear growth rates.  
-                    Scenario \u25A0 assumes that consumption stabilises in high-consuming regions while other regions increase their consumption.  
-                    Lastly, scenario \u25C6 assumes that consumption rates converge globally.""")
+        st.markdown("""A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
+                    Meat production has a significant environmental impact and requires extensive resources compared to plant-based foods. Raising animals for meat requires vast amounts of land, water, and feed.  
+                    The production of feed crops for livestock, like soy and corn, often involves deforestation and the use of fertilizers, which contribute to greenhouse gas emissions.  
+                    Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.""")  
+        st.markdown("""Below, we present future trajectories for **meat consumption** across different world regions.  
+                    Meat consumption is assessed using kilo calories of meat consumption per capita per day.  
+                    The EAT-Lancet Commission recommends that a **healthy diet** includes approximately 90cKal (or 85g) of meat per day, which is represented as dashed line. This quantity is equivalent to a piece of meat about the size of the palm of your hand.  
+                    ***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***"""
+)
         #Graph
         st.plotly_chart(fig1, theme="streamlit")
         #Questions
@@ -460,7 +446,16 @@ with st.form("Survey"):
     with tab2:
         #Introduction
         st.markdown("### Mobility")
-        st.markdown("A introductory text will be added here at a later stage.")
+        st.markdown("""Mobility is crucial for a good standard of living as it allows the connection of people and markets, thereby enabling access to services and economic opportunities.  
+                    However, the current mobility system has significant negative effects on human health and the environment.  
+                    The mobility sector is a major contributor to global greenhouse gas emissions, while air and noise pollution affect local populations.  
+                    Furthermore, ecosystems suffer due to the fragmentation of habitats.""")
+        st.markdown("""Below, we present future trajectories for mobility across different world regions.  
+                    Mobility is assessed using **passenger kilometers per year**,  which includes all modes of transport except air travel.  
+                    This indicator provides insights into the overall level of mobility within a population or region and is used to estimate energy consumption and environmental impacts in climate scenarios.  
+                    To provide a benchmark, the dashed line refers to the **Japanese mobility system**, which is often considered an efficient and effective role model.  
+                    The average Japanese individual travels approximately  22km per day (8.000km per year), which is approximately the distance from the Cologne Bonn Airport to the World Conference Center (27km).  
+                    ***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C***.""")
         #Graph
         st.plotly_chart(fig2, theme="streamlit")
         #Questions
@@ -474,7 +469,13 @@ with st.form("Survey"):
     with tab3:
         #Introduction
         st.markdown("### Housing")
-        st.markdown("A introductory text will be added here at a later stage.")
+        st.markdown("""Housing plays a vital role in a person’s living conditions, but it also has a significant environmental impact.  
+        Aside from the land used for construction and the resources consumed during construction, housing requires a substantial amounts of energy for heating, cooling, and cooking.""")
+        st.markdown("""Below, we present future trajectories for housing across different world regions.  
+        **Floor space per capita** is used to assess the level of living or working space available to individuals.  
+        In climate scenarios, this indicator helps calculate heating and cooling needs, which are essential for determining energy demands.  
+        The dashed line symbolizes a floor space of 45m² per person, which is the **estimated average of floor space** per person across European countries in 2014.  
+        ***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***""")
         #Graph
         st.plotly_chart(fig3, theme="streamlit")
         #Questions
@@ -488,7 +489,13 @@ with st.form("Survey"):
     with tab4:
         #Introduction
         st.markdown("### Economic Activity")
-        st.markdown("A introductory text will be added here at a later stage.")
+        st.markdown("Despite being contested, the gross domestic product (GDP) is universally used as an indicator for economic performance.")
+        st.markdown("""Below, we present future GDP trajectories across different world regions.  
+                    GDP per capita is used to assess the economic activity of a country in relation to its population.  
+                    In climate scenarios, GDP per capita is an important indicator for estimating energy demand and supply.  
+                    The dashed line displays the **average GPD across all regions for all climate scenarios that adhere to the 1.5°C goal** according to the integrated REMIND-MAgPIE 2.1-4.2 model.  
+                    This average GDP is projected to be around 36.000 USD (in 2010 currency) per year.  
+                    Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.""")
         #Graph
         st.plotly_chart(fig4, theme="streamlit" )
         #Questions
