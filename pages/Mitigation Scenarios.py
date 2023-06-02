@@ -404,11 +404,12 @@ country_list = ["-"] + list(load_countries())
 
 accepted_answers = ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]
 accepted_answers2 =["I think it is important for everyone to be above a certain threshold.",
-                        "I think it is important to have a limit for consumption.",
-                        "I think it is important that consumption converges by 2050.",
-                        "I think it is important that lower consumption groups increase their \n consumption more rapidly by 2050 compared to 2020.",
-                        "I think it is important that the resources should go to who would get most use out of them.",
-                        "Other"]
+                    "I think it is important to have a limit for consumption.",
+                    "I think it is important that everyone can increase consumption",
+                    "I think it is important that consumption converges.",
+                    "I think it is important that lower consumption groups increase their consumption.",
+                    "I think it is important that the resources should go to who would get most use out of them.",
+                    "Other"]
 
 #initiate form // #key needs to be provide in case multiple same widgets are used in same form!
 with st.form("Survey"):
@@ -435,7 +436,7 @@ with st.form("Survey"):
                     key=1)
         q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=2)
-        q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q3 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=3 )
     #st.markdown("""---""")
         st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Mobility' tab.***")
@@ -459,7 +460,7 @@ with st.form("Survey"):
                     key=4)
         q5 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=5)
-        q6 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q6 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=6)
         st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Housing' tab.***")
     with tab3:
@@ -479,7 +480,7 @@ with st.form("Survey"):
                     key=7)
         q8 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=8)
-        q9 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q9 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=9)
         st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Economic Activity' tab.***")
     with tab4:
@@ -499,7 +500,7 @@ with st.form("Survey"):
                        key=10)
         q11 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                             key=11)
-        q12 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q12 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                         key=12)
         st.markdown("***Please continue this survey by scrolling upwards and selecting the 'Personal Questions' tab.***")
     with tab5:
@@ -543,7 +544,7 @@ with st.form("Survey"):
             cursor = create_connection()
             query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}", "{timestamp}")'
             cursor.execute(query)
-            st.write("**:green[Submission successful. Thank you for your feedback!]**")
+            st.write("**:green[Submission successful. Thank you for your input!]**")
 
 #Links for the solution above
 #https://discuss.streamlit.io/t/solved-issue-of-pulling-private-google-sheet-into-a-streamlit-app-using-gspread-instead-of-gsheetsdb/39056/4
