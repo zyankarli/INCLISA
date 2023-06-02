@@ -192,7 +192,7 @@ fig2.update_layout(
         title_text = "Motivation",
         orientation="h",
         yanchor="bottom",
-        y=-.32,
+        y=-.42,
         xanchor="right",
         x=1
         ),
