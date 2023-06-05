@@ -204,7 +204,6 @@ fig2.update_layout(
         xanchor="right",
         x=1,
         ),
-    legend_traceorder="reversed",
     yaxis = dict(
         tickmode = 'array',
         tickvals = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6"],
