@@ -12,7 +12,7 @@ st.set_page_config(
     page_title='Justice in climate mitigation scenarios',
     initial_sidebar_state="auto",
     #online
-    page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+    #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
     #local
     #page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
 )
@@ -172,13 +172,13 @@ fig2 = px.bar(to_plot_moti, x="Percentage", y="Scenario", color="Reason", text="
             color_discrete_sequence=px.colors.qualitative.Bold,
             title="Motivation for scenarios",
             #set order for legend
-            category_orders= ["I think it is important for everyone to be above a certain threshold.",
+            category_orders= {"Reason" : ["I think it is important for everyone to be above a certain threshold.",
                     "I think it is important to have a limit for consumption.",
                     "I think it is important that everyone can increase consumption",
                     "I think it is important that consumption converges.",
                     "I think it is important that lower consumption groups increase their consumption.",
                     "I think it is important that the resources should go to who would get most use out of them.",
-                    "Other"])
+                    "Other"]})
 
 
 #Set LAYOUTS
