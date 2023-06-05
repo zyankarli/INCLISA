@@ -230,7 +230,7 @@ fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Meat consumption trajectories",
                 range_x=[2018, 2050],
-                range_y=[0, 1000],
+                range_y=[0, 700],
                 color_discrete_map=colors_dict,
                 hover_data=hover_dic,
                 hover_name=global_hover_name
