@@ -306,7 +306,7 @@ fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Economic activity trajectories",
                 range_x=[2020, 2050],
-                range_y=[0, 82000],
+                range_y=[0, 70000],
                 color_discrete_map=colors_dict,
                 hover_data=hover_dic,
                 hover_name=global_hover_name

@@ -170,7 +170,15 @@ fig2 = px.bar(to_plot_moti, x="Percentage", y="Scenario", color="Reason", text="
             hover_name="Reason",
             orientation='h',
             color_discrete_sequence=px.colors.qualitative.Bold,
-            title="Motivation for scenarios")
+            title="Motivation for scenarios",
+            #set order for legend
+            category_orders= ["I think it is important for everyone to be above a certain threshold.",
+                    "I think it is important to have a limit for consumption.",
+                    "I think it is important that everyone can increase consumption",
+                    "I think it is important that consumption converges.",
+                    "I think it is important that lower consumption groups increase their consumption.",
+                    "I think it is important that the resources should go to who would get most use out of them.",
+                    "Other"])
 
 
 #Set LAYOUTS
@@ -194,8 +202,9 @@ fig2.update_layout(
         yanchor="bottom",
         y=-1,
         xanchor="right",
-        x=1
+        x=1,
         ),
+    legend_traceorder="reversed",
     yaxis = dict(
         tickmode = 'array',
         tickvals = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6"],
