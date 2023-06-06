@@ -232,7 +232,7 @@ st.plotly_chart(fig1, theme="streamlit")
 st.plotly_chart(fig2, theme="streamlit")
 
 #only reload graph on click
-if st.button('Click here to update the graph.'):
+if st.button('Click here to update the graphs.'):
     st.experimental_rerun()
 
 
