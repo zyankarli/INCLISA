@@ -18,7 +18,7 @@ st.set_page_config(
         page_title='Justice in climate mitigation scenarios',
         initial_sidebar_state="auto",
         #online
-        page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+        #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
         #local
         #page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
 )
@@ -114,9 +114,11 @@ df.loc[df["Scenario"].str.contains("Conv"), "Scenario"] = "Scenario \u25A0"
 df.loc[df["Scenario"].str.contains("Diff"), "Scenario"] = "Scenario \u25C6"
 
 #Randomisation of i) graph order ii) radio order
-##cached function is needed, because form get's re-run when submitting, which causes randomised radio widget to re-set 
-@st.cache_data
+if 'rs' not in st.session_state:
+    st.session_state['rs'] = random.randint(1, 100)
+
 def random_scenario_order():
+    random.seed(st.session_state.rs)
     scenario_list = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6"]
     scenario_list_nutr = random.sample(scenario_list, len(scenario_list))
     scenario_list_tran = random.sample(scenario_list, len(scenario_list))
