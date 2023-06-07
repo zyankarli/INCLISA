@@ -18,7 +18,7 @@ st.set_page_config(
         page_title='Justice in climate mitigation scenarios',
         initial_sidebar_state="auto",
         #online
-        page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+        #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
         #local
         #page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
 )
@@ -258,7 +258,7 @@ fig1.add_hline(y=90,
 #----TRANSPORTATION----#
 fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
-                     "Value": "Passenger kilometer per year",
+                     "Value": "passenger km/capita per year",
                      "Year" : ""
                 },
                 category_orders={"Scenario": scenario_list_tran,
@@ -291,7 +291,7 @@ fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", colo
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-# Add threshold [Source??]
+# Add threshold [Source = European average]
 fig3.add_hline(y=45,
               annotation_text="",
               annotation_position="bottom left",
@@ -311,7 +311,7 @@ fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-# Add threshold [Source???]
+# Add threshold [Source = own calculations]
 fig4.add_hline(y=36000,
               annotation_text="",
               annotation_position="bottom left",
@@ -426,8 +426,9 @@ with st.form("Survey"):
                     Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.""")  
         st.markdown("""Below, we present future trajectories for **meat consumption** across different world regions.  
                     Meat consumption is assessed using kilo calories of meat consumption per capita per day.  
-                    The EAT-Lancet Commission recommends that a **healthy diet** includes approximately 90cKal (or 85g) of meat per day, which is represented as dashed line. This quantity is equivalent to a piece of meat about the size of the palm of your hand.  
-                    ***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***"""
+                    The EAT-Lancet Commission recommends that a **healthy diet** includes approximately 90cKal (or 85g) of meat per day, which is represented as dashed line. This quantity is equivalent to a piece of meat about the size of the palm of your hand.""")
+        st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
+                    Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""" 
 )
         #Graph
         st.plotly_chart(fig1, theme="streamlit")
@@ -451,8 +452,10 @@ with st.form("Survey"):
                     Mobility is assessed using **passenger kilometers per year**,  which includes all modes of transport except air travel.  
                     This indicator provides insights into the overall level of mobility within a population or region and is used to estimate energy consumption and environmental impacts in climate scenarios.  
                     To provide a benchmark, the dashed line refers to the **Japanese mobility system**, which is often considered an efficient and effective role model.  
-                    The average Japanese individual travels approximately  22km per day (8.000km per year), which is approximately the distance from the Cologne Bonn Airport to the World Conference Center (27km).  
-                    ***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C***.""")
+                    The average Japanese individual travels approximately  22km per day (8.000km per year), which is approximately the distance from the Cologne Bonn Airport to the World Conference Center (27km).""")  
+        st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
+                    Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""")            
+                    
         #Graph
         st.plotly_chart(fig2, theme="streamlit")
         #Questions
@@ -471,8 +474,9 @@ with st.form("Survey"):
         st.markdown("""Below, we present future trajectories for housing across different world regions.  
         **Floor space per capita** is used to assess the level of living or working space available to individuals.  
         In climate scenarios, this indicator helps calculate heating and cooling needs, which are essential for determining energy demands.  
-        The dashed line symbolizes a floor space of 45m² per person, which is the **estimated average of floor space** per person across European countries in 2014.  
-        ***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***""")
+        The dashed line symbolizes a floor space of 45m² per person, which is the **estimated average of floor space** per person across European countries in 2014.""")  
+        st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
+                    Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""")            
         #Graph
         st.plotly_chart(fig3, theme="streamlit")
         #Questions
@@ -491,8 +495,9 @@ with st.form("Survey"):
                     GDP per capita is used to assess the economic activity of a country in relation to its population.  
                     In climate scenarios, GDP per capita is an important indicator for estimating energy demand and supply.  
                     The dashed line displays the **average GPD across all regions for all climate scenarios that adhere to the 1.5°C goal** according to the integrated REMIND-MAgPIE 2.1-4.2 model.  
-                    This average GDP is projected to be around 36.000 USD (in 2010 currency) per year.  
-                    Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.""")
+                    This average GDP is projected to be around 36.000 USD (in 2010 currency) per year.""")  
+        st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
+                    Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""")            
         #Graph
         st.plotly_chart(fig4, theme="streamlit" )
         #Questions
