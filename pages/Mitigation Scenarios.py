@@ -115,7 +115,9 @@ df.loc[df["Scenario"].str.contains("Diff"), "Scenario"] = "Scenario \u25C6"
 
 #Randomisation of i) graph order ii) radio order
 if 'rs' not in st.session_state:
-    st.session_state['rs'] = random.randint(1, 100)
+    #set seed on current time
+    random.seed()
+    st.session_state['rs'] = random.randint(1, 10000)
 
 st.write(st.session_state.rs)
 st.write(st.session_state)
