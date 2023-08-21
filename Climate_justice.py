@@ -266,8 +266,10 @@ fig4.add_hline(y=36000,
 #LAYOUT UPDATES
 #add legends
 fig1.update_layout(legend=legend_dic,
-                   width=plot_width,
-                   height=plot_height)
+                   autosize=True
+                #    width=plot_width,
+                #    height=plot_height
+                   )
 fig2.update_layout(legend=legend_dic,
                    width=plot_width,
                    height=plot_height)
@@ -378,8 +380,8 @@ with st.form("Survey"):
     #Introduction
         st.markdown('### Nutrition')
         st.markdown("""A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
-                    Meat production has a significant environmental impact and requires extensive resources compared to plant-based foods. Raising animals for meat requires vast amounts of land, water, and feed.  
-                    The production of feed crops for livestock, like soy and corn, often involves deforestation and the use of fertilizers, which contribute to greenhouse gas emissions.  
+                    Meat production has many environmental impacts and requires a lot of resources compared to plant-based foods. Raising animals for meat requires large amounts of land, water, and feed. 
+                    The production of feed for livestock, like soy and corn, often involves deforestation and the use of fertilizers, which contribute to greenhouse gas emissions. 
                     Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.""")  
         st.markdown("""Below, we present future trajectories for **meat consumption** across different world regions.  
                     Meat consumption is assessed using kilo calories of meat consumption per capita per day.  
@@ -401,14 +403,14 @@ with st.form("Survey"):
         #MOBILITY
         #Introduction
         st.markdown("### Mobility")
-        st.markdown("""Mobility is crucial for a good standard of living as it allows the connection of people and markets, thereby enabling access to services and economic opportunities.  
-                    However, the current mobility system has significant negative effects on human health and the environment.  
-                    The mobility sector is a major contributor to global greenhouse gas emissions, while air and noise pollution affect local populations.  
-                    Furthermore, ecosystems suffer due to the fragmentation of habitats.""")
+        st.markdown("""Mobility is important for a good standard of living as it allows the connection of people and markets, thereby enabling access to services and economic opportunities.  
+                    However, the current mobility system has significant negative effects on human health and the environment. 
+                    The mobility sector is a major contributor to global greenhouse gas emissions, while air and noise pollution further affect local populations. 
+                    Moreover, mobility infrastructure is artificially dividing natural habitats and thereby damaging ecosystems.""")
         st.markdown("""Below, we present future trajectories for mobility across different world regions.  
                     Mobility is assessed using **passenger kilometers per year**,  which includes all modes of transport except air travel.  
                     This indicator provides insights into the overall level of mobility within a population or region and is used to estimate energy consumption and environmental impacts in climate scenarios.  
-                    To provide a benchmark, the dashed line refers to the **Japanese mobility system**, which is often considered an efficient and effective role model.  
+                    To provide a benchmark, the dashed line refers to the **Japanese mobility system**, which is often considered an efficient and effective role model. 
                     The average Japanese individual travels approximately  22km per day (8.000km per year), which is approximately the distance from the Cologne Bonn Airport to the World Conference Center (27km).""")  
         st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
                     Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""")            
@@ -427,12 +429,13 @@ with st.form("Survey"):
         #HOUSING
         #Introduction
         st.markdown("### Housing")
-        st.markdown("""Housing plays a vital role in a person’s living conditions, but it also has a significant environmental impact.  
-        Aside from the land used for construction and the resources consumed during construction, housing requires a substantial amounts of energy for heating, cooling, and cooking.""")
+        st.markdown("""Housing is a central factor for a persons living conditions, but it also has a significant environmental impact.  
+        Aside from the land used for construction and the resources consumed during construction, housing requires a large amounts of energy for heating, cooling, and cooking.""")
         st.markdown("""Below, we present future trajectories for housing across different world regions.  
         **Floor space per capita** is used to assess the level of living or working space available to individuals.  
-        In climate scenarios, this indicator helps calculate heating and cooling needs, which are essential for determining energy demands.  
-        The dashed line symbolizes a floor space of 45m² per person, which is the **estimated average of floor space** per person across European countries in 2014.""")  
+        In climate scenarios, this indicator helps calculate heating and cooling needs, which are essential for determining energy demands. 
+        The dashed line symbolizes a floor space of 45m² (or 480ft²) per person, which is the **estimated average of floor space** per person across European countries in 2014. 
+                    This is approximately the area covered by that 5 average cars.""")  
         st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
                     Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""")            
         #Graph
@@ -453,8 +456,8 @@ with st.form("Survey"):
         st.markdown("""Below, we present future GDP trajectories across different world regions.  
                     GDP per capita is used to assess the economic activity of a country in relation to its population.  
                     In climate scenarios, GDP per capita is an important indicator for estimating energy demand and supply.  
-                    The dashed line displays the **average GPD across all regions for all climate scenarios that adhere to the 1.5°C goal** according to the integrated REMIND-MAgPIE 2.1-4.2 model.  
-                    This average GDP is projected to be around 36.000 USD (in 2010 currency) per year.""")  
+                    The dashed line displays the **average GPD across all regions for all climate scenarios that adhere to the 1.5°C goal** according to the integrated REMIND-MAgPIE 2.1-4.2 model. 
+                    This average GDP per capita is projected to be around 36.000 USD (in 2010 currency) per person per year.""")  
         st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
                     Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""")            
         #Graph
@@ -503,9 +506,11 @@ with st.form("Survey"):
                         key=22)
         timestamp = time.time()
     #Submit button; send data to google sheet
-    submitted = st.form_submit_button("Click here to submit!")
-    if submitted:
-        cursor = create_connection()
-        query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}", "{timestamp}")'
-        cursor.execute(query)
-        st.write("**:green[Submission successful. Thank you for your input!]**")
+        submitted = st.form_submit_button("Click here to submit!")
+        if submitted:
+            cursor = create_connection()
+            query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}", "{timestamp}")'
+            cursor.execute(query)
+            st.write("**:green[Submission successful. Thank you for your input!]**")
+            st.toast("**:green[Submission successful!]**", icon=None)
+
