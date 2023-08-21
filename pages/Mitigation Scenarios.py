@@ -119,7 +119,8 @@ if 'rs' not in st.session_state:
     random.seed()
     st.session_state['rs'] = random.randint(1, 10000)
 
-st.write(st.session_state.rs)
+#check on session_state
+#st.write(st.session_state.rs)
 
 def random_scenario_order():
     random.seed(st.session_state.rs)
