@@ -21,7 +21,7 @@ import random
 st.set_page_config(
      layout="wide",
      page_title='Justice in climate mitigation scenarios',
-     initial_sidebar_state="auto",
+     initial_sidebar_state="collapsed",
      #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
 )
 #hide menu and footer
@@ -50,9 +50,9 @@ st.markdown(hide_img_fs, unsafe_allow_html=True)
 #Data loading and wrangling
 @st.cache_data
 def load_csv():
-    df = pd.DataFrame(pd.read_csv("https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
-                                    sep=",", 
-                                    lineterminator='\n'))
+    df = pd.DataFrame(pd.read_csv(r"C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\output.csv",
+                                    sep=","
+                                    ))
     return df
 df = load_csv()
 #------------------------------------------------------------------------------#
@@ -62,29 +62,35 @@ df = load_csv()
 #-------------------------#
 
 #rename columns
-df.rename(columns = {'year':'Year',
-                      'region': "Region",
+df.rename(columns = {'region': "Region",
                       'value':"Value",
+                      "year":'Year',
                       'scenario':"scen_id"}, inplace=True)
+
 
 #annonymise scenario names
 df["Scenario"] = df["scen_id"]
 #utilitarian = circle
-df.loc[df["Scenario"].str.contains("Cont"), "Scenario"] = "Scenario \u25B2"
-#convergence = square
-df.loc[df["Scenario"].str.contains("Conv"), "Scenario"] = "Scenario \u25A0"
-#high treshold & catch up = diamond
-df.loc[df["Scenario"].str.contains("Diff"), "Scenario"] = "Scenario \u25C6"
+df.loc[df["Scenario"].str.contains("agg"), "Scenario"] = "Scenario \u25B2"
+#egalitarian = square
+df.loc[df["Scenario"].str.contains("ega"), "Scenario"] = "Scenario \u25A0"
+#prioritarian = diamond
+df.loc[df["Scenario"].str.contains("pri"), "Scenario"] = "Scenario \u25C6"
+#sufficitarian = horizontal bar
+df.loc[df["Scenario"].str.contains("suf"), "Scenario"] = "Scenario \u25AC"
+#limitarian = vertical bar
+df.loc[df["Scenario"].str.contains("lim"), "Scenario"] = "Scenario \u275A"
 
 #Randomisation of i) graph order ii) radio order
 #set seed for session state on current time
-random.seed()
-st.session_state['rs'] = random.randint(1, 10000)
+#without this if statement, the seed would reset every time the page is reloaded, which prevents storing the survey in the google sheet
+if 'rs' not in st.session_state:
+    st.session_state['rs'] = random.randint(1, 10000)
 
 #randomise order scenarios are displayed
 def random_scenario_order():
     random.seed(st.session_state['rs'])
-    scenario_list = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6"]
+    scenario_list = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6", "Scenario \u25AC", "Scenario \u275A"]
     scenario_list_nutr = random.sample(scenario_list, len(scenario_list))
     scenario_list_tran = random.sample(scenario_list, len(scenario_list))
     scenario_list_buil = random.sample(scenario_list, len(scenario_list))
@@ -127,9 +133,9 @@ legend_dic_hor = dict(
     #entrywidth=10,
     #entrywidthmode='fraction',
     yanchor="bottom",
-    y=-0.2,
+    y=-0.3,
     xanchor="right",
-    x=1,
+    x=0.9,
     bgcolor="White",
     bordercolor="Black",
     borderwidth=1
@@ -147,12 +153,12 @@ legend_dic_ver = dict(
     bordercolor="Black",
     borderwidth=1,
     font = dict(
-        size = 14
+        size = 18
     ))
 #set legend layout
-legend_dic = legend_dic_ver
+legend_dic = legend_dic_hor
 #Size
-plot_width=600 
+plot_width=800 
 plot_height= plot_width * 0.75 
 #Deactivate zoom/ True = deactivated
 x_axis_zoom = True
@@ -179,7 +185,7 @@ global_annotation = dict(
 #-------------------------#
 #for phone applications: https://towardsdatascience.com/mobile-first-visualization-b64a6745e9fd
 #----NUTRITION----#
-fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color="Region", facet_col='Scenario',
+fig1 = px.line(df[df["scen_id"].str.contains("nutrition")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "kCal per capita/day",
                      "Year" : ""
@@ -194,6 +200,7 @@ fig1 = px.line(df[df["scen_id"].str.contains("Nut")], x='Year', y="Value", color
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
+
 # Add Lancet Healthy Diet
 fig1.add_hline(y=90,
                annotation_text="",
@@ -201,7 +208,7 @@ fig1.add_hline(y=90,
                line_dash="dot")
 
 #----TRANSPORTATION----#
-fig2 = px.line(df[df["scen_id"].str.contains("Trans")], x='Year', y="Value", color="Region", facet_col='Scenario',
+fig2 = px.line(df[df["scen_id"].str.contains("transport")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "passenger km/capita per year",
                      "Year" : ""
@@ -222,7 +229,7 @@ fig2.add_hline(y=8000,
               line_dash="dot")
 
 #----BUILDINGS----#
-fig3 = px.line(df[df["scen_id"].str.contains("Buil")], x='Year', y="Value", color="Region", facet_col='Scenario',
+fig3 = px.line(df[df["scen_id"].str.contains("building")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "floorspace (m²) per year per capita",
                      "Year" : ""
@@ -243,7 +250,7 @@ fig3.add_hline(y=45,
               line_dash="dot")
 
 #----GDP----#
-fig4 = px.line(df[df["scen_id"].str.contains("GDP")], x='Year', y="Value", color="Region", facet_col='Scenario',
+fig4 = px.line(df[df["scen_id"].str.contains("gdp")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "GDP per capita per year",
                      "Year" : ""
@@ -264,20 +271,38 @@ fig4.add_hline(y=36000,
               line_dash="dot")
 
 #LAYOUT UPDATES
+
+#set font sizes
+font_size_title = 24
+font_size_axis = 18
+font_size_legend = 14
+font_size_subheadings = 18
 #add legends
 fig1.update_layout(legend=legend_dic,
-                   autosize=True
+                   autosize=True,
+                   title={'font': {'size': font_size_title}},
+                   xaxis={'title': {'font': {'size': font_size_axis}}},
+                   yaxis={'title': {'font': {'size': font_size_axis}}},  
                 #    width=plot_width,
-                #    height=plot_height
+                    height=plot_height
                    )
 fig2.update_layout(legend=legend_dic,
-                   width=plot_width,
+                   autosize=True,
+                   title={'font': {'size': font_size_title}},
+                   xaxis={'title': {'font': {'size': font_size_axis}}},
+                   yaxis={'title': {'font': {'size': font_size_axis}}},
                    height=plot_height)
 fig3.update_layout(legend=legend_dic,
-                   width=plot_width,
+                   autosize=True,
+                   title={'font': {'size': font_size_title}},
+                   xaxis={'title': {'font': {'size': font_size_axis}}},
+                   yaxis={'title': {'font': {'size': font_size_axis}}},
                    height=plot_height)
 fig4.update_layout(legend=legend_dic,
-                   width=plot_width,
+                  autosize=True,
+                   title={'font': {'size': font_size_title}},
+                   xaxis={'title': {'font': {'size': font_size_axis}}},
+                   yaxis={'title': {'font': {'size': font_size_axis}}},
                    height=plot_height)
 
 #change subplot figure titles
@@ -285,6 +310,11 @@ fig1.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 fig4.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+#change size of subplot titles
+fig1.update_annotations(font_size=font_size_subheadings)
+fig2.update_annotations(font_size=font_size_subheadings)
+fig3.update_annotations(font_size=font_size_subheadings)
+fig4.update_annotations(font_size=font_size_subheadings)
 #Rotate ticks and disable 2020 to avoid overlap
 fig1.update_xaxes(global_xticks)
 fig2.update_xaxes(global_xticks)
@@ -370,6 +400,8 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
 #          FORM           #
 #-------------------------#
 
+#set font size for normal text
+font_size = "20px"
 with st.form("Survey"):
 
     #MEAT CONSUMPTION
@@ -379,18 +411,25 @@ with st.form("Survey"):
 
     #Introduction
         st.markdown('### Nutrition')
-        st.markdown("""A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
-                    Meat production has many environmental impacts and requires a lot of resources compared to plant-based foods. Raising animals for meat requires large amounts of land, water, and feed. 
-                    The production of feed for livestock, like soy and corn, often involves deforestation and the use of fertilizers, which contribute to greenhouse gas emissions. 
-                    Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.""")  
-        st.markdown("""Below, we present future trajectories for **meat consumption** across different world regions.  
-                    Meat consumption is assessed using kilo calories of meat consumption per capita per day.  
-                    The EAT-Lancet Commission recommends that a **healthy diet** includes approximately 90cKal (or 85g) of meat per day, which is represented as dashed line. This quantity is equivalent to a piece of meat about the size of the palm of your hand.""")
-        st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
-                    Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""" 
-        )
+        
+        st.markdown(f"""<p style="font-size:{font_size};">A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
+                        Meat production has many environmental impacts and requires a lot of resources compared to plant-based foods. Raising animals for meat requires large amounts of land, water, and feed. 
+                        The production of feed for livestock, like soy and corn, often involves deforestation and the use of fertilizers, which contribute to greenhouse gas emissions. 
+                        Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.</p>""", unsafe_allow_html=True)
+        
+        st.markdown(f"""<p style="font-size:{font_size};">A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
+                        Meat production has many environmental impacts and requires a lot of resources compared to plant-based foods. Raising animals for meat requires large amounts of land, water, and feed. 
+                        The production of feed for livestock, like soy and corn, often involves deforestation and the use of fertilizers, which contribute to greenhouse gas emissions. 
+                        Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.</p>""", unsafe_allow_html=True)
+        
+        st.markdown(f"""<p style="font-size:{font_size};">Below, we present future trajectories for <b> meat consumption </b> across different world regions.  
+                Meat consumption is assessed using kilo calories of meat consumption per capita per day.  
+                The EAT-Lancet Commission recommends that a <b>healthy diet</b> includes approximately 90cKal (or 85g) of meat per day, which is represented as dashed line. This quantity is equivalent to a piece of meat about the size of the palm of your hand.</p>""", unsafe_allow_html=True)
+        
+        st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
+                Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig1, theme="streamlit", config=config)
+        st.plotly_chart(fig1, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nutr, horizontal=True ,
                     key=1)
@@ -403,20 +442,20 @@ with st.form("Survey"):
         #MOBILITY
         #Introduction
         st.markdown("### Mobility")
-        st.markdown("""Mobility is important for a good standard of living as it allows the connection of people and markets, thereby enabling access to services and economic opportunities.  
+        st.markdown(f"""<p style="font-size:{font_size};">Mobility is important for a good standard of living as it allows the connection of people and markets, thereby enabling access to services and economic opportunities.  
                     However, the current mobility system has significant negative effects on human health and the environment. 
                     The mobility sector is a major contributor to global greenhouse gas emissions, while air and noise pollution further affect local populations. 
-                    Moreover, mobility infrastructure is artificially dividing natural habitats and thereby damaging ecosystems.""")
-        st.markdown("""Below, we present future trajectories for mobility across different world regions.  
-                    Mobility is assessed using **passenger kilometers per year**,  which includes all modes of transport except air travel.  
+                    Moreover, mobility infrastructure is artificially dividing natural habitats and thereby damaging ecosystems.</p>""", unsafe_allow_html=True)
+        st.markdown(f"""<p style="font-size:{font_size};">Below, we present future trajectories for mobility across different world regions.  
+                    Mobility is assessed using <b>passenger kilometers per year</b>,  which includes all modes of transport except air travel.  
                     This indicator provides insights into the overall level of mobility within a population or region and is used to estimate energy consumption and environmental impacts in climate scenarios.  
-                    To provide a benchmark, the dashed line refers to the **Japanese mobility system**, which is often considered an efficient and effective role model. 
-                    The average Japanese individual travels approximately  22km per day (8.000km per year), which is approximately the distance from the Cologne Bonn Airport to the World Conference Center (27km).""")  
-        st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
-                    Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""")            
+                    To provide a benchmark, the dashed line refers to the <b>Japanese mobility system</b>, which is often considered an efficient and effective role model. 
+                    The average Japanese individual travels approximately  22km per day (8.000km per year), which is approximately the distance from the Cologne Bonn Airport to the World Conference Center (27km).</p>""", unsafe_allow_html=True)  
+        st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
+                Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
                     
         #Graph
-        st.plotly_chart(fig2, theme="streamlit", config=config)
+        st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_tran,horizontal=True,
                     key=4)
@@ -429,17 +468,17 @@ with st.form("Survey"):
         #HOUSING
         #Introduction
         st.markdown("### Housing")
-        st.markdown("""Housing is a central factor for a persons living conditions, but it also has a significant environmental impact.  
-        Aside from the land used for construction and the resources consumed during construction, housing requires a large amounts of energy for heating, cooling, and cooking.""")
-        st.markdown("""Below, we present future trajectories for housing across different world regions.  
-        **Floor space per capita** is used to assess the level of living or working space available to individuals.  
+        st.markdown(f"""<p style="font-size:{font_size};">Housing is a central factor for a persons living conditions, but it also has a significant environmental impact.  
+        Aside from the land used for construction and the resources consumed during construction, housing requires a large amounts of energy for heating, cooling, and cooking.</p>""", unsafe_allow_html=True)
+        st.markdown(f"""<p style="font-size:{font_size};">Below, we present future trajectories for housing across different world regions.  
+        <b>Floor space per capita</b> is used to assess the level of living or working space available to individuals.  
         In climate scenarios, this indicator helps calculate heating and cooling needs, which are essential for determining energy demands. 
-        The dashed line symbolizes a floor space of 45m² (or 480ft²) per person, which is the **estimated average of floor space** per person across European countries in 2014. 
-                    This is approximately the area covered by that 5 average cars.""")  
-        st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
-                    Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""")            
+        The dashed line symbolizes a floor space of 45m² (or 480ft²) per person, which is the <b>estimated average of floor space</b> per person across European countries in 2014. 
+                    This is approximately the area covered by that 5 average cars.</p>""", unsafe_allow_html=True)  
+        st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
+                Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig3, theme="streamlit", config=config)
+        st.plotly_chart(fig3, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_buil,horizontal=True ,
                     key=7)
@@ -452,16 +491,16 @@ with st.form("Survey"):
         #ECONOMIC ACTIVITY
         #Introduction
         st.markdown("### Economic Activity")
-        st.markdown("Despite being contested, the gross domestic product (GDP) is universally used as an indicator for economic performance.")
-        st.markdown("""Below, we present future GDP trajectories across different world regions.  
+        st.markdown(f"""<p style="font-size:{font_size};">Despite being contested, the gross domestic product (GDP) is universally used as an indicator for economic performance.</p>""", unsafe_allow_html=True)
+        st.markdown(f"""<p style="font-size:{font_size};"> Below, we present future GDP trajectories across different world regions.  
                     GDP per capita is used to assess the economic activity of a country in relation to its population.  
                     In climate scenarios, GDP per capita is an important indicator for estimating energy demand and supply.  
-                    The dashed line displays the **average GPD across all regions for all climate scenarios that adhere to the 1.5°C goal** according to the integrated REMIND-MAgPIE 2.1-4.2 model. 
-                    This average GDP per capita is projected to be around 36.000 USD (in 2010 currency) per person per year.""")  
-        st.markdown("""***Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.***  
-                    Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.""")            
+                    The dashed line displays the <b>average GPD across all regions for all climate scenarios that adhere to the 1.5°C goal</b> according to the integrated REMIND-MAgPIE 2.1-4.2 model. 
+                    This average GDP per capita is projected to be around 36.000 USD (in 2010 currency) per person per year.</p>""", unsafe_allow_html=True)  
+        st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
+                Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig4, theme="streamlit", config=config)
+        st.plotly_chart(fig4, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
                         key=10)
