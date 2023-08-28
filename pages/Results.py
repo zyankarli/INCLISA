@@ -12,7 +12,7 @@ st.set_page_config(
     page_title='Justice in climate mitigation scenarios',
     initial_sidebar_state="auto",
     #online
-    page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+    #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
     #local
     #page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
 )
@@ -22,6 +22,7 @@ hide_default_format = """
        <style>
        #MainMenu {visibility: hidden; }
        footer {visibility: hidden;}
+       header {visibility: hidden;}
        </style>
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
@@ -109,6 +110,15 @@ def wrangle_data():
         to_plot_scen.loc[to_plot_scen["Scenario"].str.contains('\u25C6'), "Scenario"] = "Catching up (\u25C6)"
     except:
         pass
+    try:
+         to_plot_scen.loc[to_plot_scen["Scenario"].str.contains('\u25AC'), "Scenario"] = "Lower limit (\u25AC)"
+    except:
+        pass
+    try:
+        to_plot_scen.loc[to_plot_scen["Scenario"].str.contains('\u275A'), "Scenario"] = "Upper limit (\u275A)"
+    except:
+        pass
+
 
     #get data for figure 2 = motivations
     to_plot_moti = to_plot[['scen_meat', 'scen_tran', 'scen_buil', 'scen_gdp'
@@ -184,17 +194,23 @@ fig2 = px.bar(to_plot_moti, x="Percentage", y="Scenario", color="Reason", text="
 #Set LAYOUTS
 #Size
 plot_width=600 
-plot_height= plot_width * 0.75 
-#Layout
+plot_height= plot_width * 0.75
+#set font sizes
+font_size_title = 24
+font_size_axis = 18
+font_size_legend = 14
+
+#Layouts
 fig1.update_layout(
+    autosize=True,
+    title={'font': {'size': font_size_title}},
+    yaxis_tickfont_size=font_size_axis, 
     legend = dict(
         title_text = "Scenario",
+        font = dict(size = 18)
         ),
-    width = plot_width,
     height = plot_height
     )
-
-#Layout
 fig2.update_layout(
     legend = dict(
         title_text = "Motivation",
@@ -203,11 +219,13 @@ fig2.update_layout(
         y=-1,
         xanchor="right",
         x=1,
+        font = dict(size = 18)
         ),
+    yaxis_tickfont_size=font_size_axis, 
     yaxis = dict(
         tickmode = 'array',
-        tickvals = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6"],
-        ticktext = ['Growing consumption (\u25B2)', "Convergence (\u25A0)", 'Catching up (\u25C6)']
+        tickvals = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6", "Scenario \u25AC", "Scenario \u275A"],
+        ticktext = ['Growing consumption (\u25B2)', "Convergence (\u25A0)", 'Catching up (\u25C6)',  "Lower limit (\u25AC)", "Upper limit (\u275A)"]
     ),
     width = plot_width,
     height = plot_height)
@@ -222,14 +240,33 @@ fig2.layout.yaxis.fixedrange = True
 #disable x axis
 fig1.update_xaxes(showticklabels=False)
 fig2.update_xaxes(showticklabels=False)
+#size of sub titles
+config = {'displayModeBar': False}
 
 
 
-st.markdown('# Survey Results')
+#add update layout
+fig1.update_layout(
+                   autosize=True,
+                   title={'font': {'size': font_size_title}},
+                   xaxis={'title': {'font': {'size': font_size_axis}}},
+                   yaxis={'title': {'font': {'size': font_size_axis}}},  
+                #    width=plot_width,
+                    height=plot_height
+                   )
+fig2.update_layout(
+                   autosize=True,
+                   title={'font': {'size': font_size_title}},
+                   xaxis={'title': {'font': {'size': font_size_axis}}},
+                   yaxis={'title': {'font': {'size': font_size_axis}}},
+                   height=plot_height)
+
 #Print graph
-st.plotly_chart(fig1, theme="streamlit")
-
-st.plotly_chart(fig2, theme="streamlit")
+coll, colm, colr = st.columns([0.4, 0.6, 0.4])
+with colm: 
+    st.markdown('# Survey Results')
+    st.plotly_chart(fig1, theme="streamlit", config=config, use_container_width=True)
+    st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
 
 #only reload graph on click
 if st.button('Click here to update the graphs.'):
