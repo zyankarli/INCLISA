@@ -50,7 +50,7 @@ st.markdown(hide_img_fs, unsafe_allow_html=True)
 #Data loading and wrangling
 @st.cache_data
 def load_csv():
-    df = pd.DataFrame(pd.read_csv(r"C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\output.csv",
+    df = pd.DataFrame(pd.read_csv(r"https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
                                     sep=","
                                     ))
     return df
