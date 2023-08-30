@@ -25,14 +25,14 @@ st.set_page_config(
      #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
 )
 #hide menu and footer
-hide_default_format = """
-       <style>
-       #MainMenu {visibility: hidden; }
-       footer {visibility: hidden;}
-       header {visibility: hidden;}
-       </style>
-       """
-st.markdown(hide_default_format, unsafe_allow_html=True)
+# hide_default_format = """
+#        <style>
+#        #MainMenu {visibility: hidden; }
+#        footer {visibility: hidden;}
+#        header {visibility: hidden;}
+#        </style>
+#        """
+# st.markdown(hide_default_format, unsafe_allow_html=True)
 
 #hide fullscreen button for plots
 hide_img_fs = '''
@@ -207,26 +207,26 @@ fig1.add_hline(y=90,
                annotation_position="bottom left",
                line_dash="dot")
 
-#----TRANSPORTATION----#
+#----TRANSPORTATION----# The only one displayed
 fig2 = px.line(df[df["scen_id"].str.contains("transport")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
-                     "Value": "passenger km/capita per year",
+                     "Value": "",
                      "Year" : ""
                 },
                 category_orders={"Scenario": scenario_list_tran,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Mobility trajectories",
+                title="Trajectories",
                 range_x=[2020, 2050],
-                range_y=[0, 12000],
+                range_y=[0, 12000],  
                 color_discrete_map=colors_dict,
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
 # Add Japanese Passenger Kilometers by year
-fig2.add_hline(y=8000,
-              annotation_text="",
-              annotation_position="bottom left",
-              line_dash="dot")
+# fig2.add_hline(y=8000,
+#               annotation_text="",
+#               annotation_position="bottom left",
+#               line_dash="dot")
 
 #----BUILDINGS----#
 fig3 = px.line(df[df["scen_id"].str.contains("building")], x='Year', y="Value", color="Region", facet_col='Scenario',
@@ -286,12 +286,13 @@ fig1.update_layout(legend=legend_dic,
                 #    width=plot_width,
                     height=plot_height
                    )
-fig2.update_layout(legend=legend_dic,
+fig2.update_layout(showlegend=False,
                    autosize=True,
                    title={'font': {'size': font_size_title}},
                    xaxis={'title': {'font': {'size': font_size_axis}}},
-                   yaxis={'title': {'font': {'size': font_size_axis}}},
+                   yaxis={'title': {'font': {'size': font_size_axis}}, 'showticklabels':False},
                    height=plot_height)
+
 fig3.update_layout(legend=legend_dic,
                    autosize=True,
                    title={'font': {'size': font_size_title}},
@@ -304,6 +305,9 @@ fig4.update_layout(legend=legend_dic,
                    xaxis={'title': {'font': {'size': font_size_axis}}},
                    yaxis={'title': {'font': {'size': font_size_axis}}},
                    height=plot_height)
+
+
+
 
 #change subplot figure titles
 fig1.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
@@ -429,7 +433,7 @@ with st.form("Survey"):
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig1, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nutr, horizontal=True ,
                     key=1)
@@ -478,7 +482,7 @@ with st.form("Survey"):
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig3, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_buil,horizontal=True ,
                     key=7)
@@ -500,7 +504,7 @@ with st.form("Survey"):
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig4, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
                         key=10)
