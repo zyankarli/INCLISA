@@ -415,12 +415,7 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
 #set font size for normal text
 font_size = "20px"
 
-#INTRODUCTION
-st.markdown(f"""<p style="font-size:{font_size};">
-            Climate justice is about much more than CO2 emissions. At its core, it is a question of how we use and distribute energy in a fair manner.
-            Here, we focus on fair global distributions of energy for basic energy services: food, mobility, housing and economic activities.
-            Unfortunately, it is not always clear what a "fair" distribution would look like. Let's explore this question together!      
-            </p>""", unsafe_allow_html=True)
+
 
 
 with st.form("Survey"):
@@ -430,7 +425,13 @@ with st.form("Survey"):
     with colm:
         st.markdown('# Justice in climate mitigation scenarios')
 
-    #Introduction
+    #INTRODUCTION
+    st.markdown(f"""<p style="font-size:{font_size};">
+                Climate justice is about much more than CO2 emissions. At its core, it is a question of how we use and distribute energy in a fair manner.
+                Here, we focus on fair global distributions of energy for basic energy services: food, mobility, housing and economic activities.
+                Unfortunately, it is not always clear what a "fair" distribution would look like. Let's explore this question together!      
+                </p>""", unsafe_allow_html=True)
+
         st.markdown('### Nutrition')
         
         st.markdown(f"""<p style="font-size:{font_size};">A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
