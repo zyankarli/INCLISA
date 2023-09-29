@@ -385,6 +385,18 @@ def load_countries():
     df = df.iloc[:,0]
     return df
 country_list = ["-"] + list(load_countries())
+
+list_of_regions = [
+    "Countries of Latin America and the Caribbean",
+    "Countries of South Asia",
+    "Countries of Sub-Saharan Africa",
+    "Countries of Central Asia",
+    "Countries of the Middle East",
+    "The EU28",
+    "North America",
+    "Pacific OECD",
+    "Countries of Eastern Europe and the Former Soviet Union"]
+
 #prepare repeating questions
 accepted_answers = ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]
 accepted_answers2 =["I think it is important for everyone to be above a certain threshold.",
@@ -402,6 +414,15 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
 
 #set font size for normal text
 font_size = "20px"
+
+#INTRODUCTION
+st.markdown(f"""<p style="font-size:{font_size};">
+            Climate justice is about much more than CO2 emissions. At its core, it is a question of how we use and distribute energy in a fair manner.
+            Here, we focus on fair global distributions of energy for basic energy services: food, mobility, housing and economic activities.
+            Unfortunately, it is not always clear what a "fair" distribution would look like. Let's explore this question together!      
+            </p>""", unsafe_allow_html=True)
+
+
 with st.form("Survey"):
 
     #MEAT CONSUMPTION
@@ -411,11 +432,6 @@ with st.form("Survey"):
 
     #Introduction
         st.markdown('### Nutrition')
-        
-        st.markdown(f"""<p style="font-size:{font_size};">A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
-                        Meat production has many environmental impacts and requires a lot of resources compared to plant-based foods. Raising animals for meat requires large amounts of land, water, and feed. 
-                        The production of feed for livestock, like soy and corn, often involves deforestation and the use of fertilizers, which contribute to greenhouse gas emissions. 
-                        Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.</p>""", unsafe_allow_html=True)
         
         st.markdown(f"""<p style="font-size:{font_size};">A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
                         Meat production has many environmental impacts and requires a lot of resources compared to plant-based foods. Raising animals for meat requires large amounts of land, water, and feed. 
@@ -474,7 +490,7 @@ with st.form("Survey"):
         <b>Floor space per capita</b> is used to assess the level of living or working space available to individuals.  
         In climate scenarios, this indicator helps calculate heating and cooling needs, which are essential for determining energy demands. 
         The dashed line symbolizes a floor space of 45m² (or 480ft²) per person, which is the <b>estimated average of floor space</b> per person across European countries in 2014. 
-                    This is approximately the area covered by that 5 average cars.</p>""", unsafe_allow_html=True)  
+                    This is approximately the area covered by 5 average cars.</p>""", unsafe_allow_html=True)  
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
@@ -521,8 +537,8 @@ with st.form("Survey"):
         q15=st.selectbox("What is the size of your apartment/ house?", #TODO agree on categories
                             ("-", "Less than 10m² per person", "Between 10m² and 30m² per person","Between 30m² and 50m² per person","More than 50m² per person" ), 
                             key=15)
-        q16 = st.selectbox("Which country are you from? (Please select the country you feel closer to and more knowledgeable about)",
-                        country_list, 
+        q16 = st.selectbox("Which region are you from? (Please select the region you feel closer to and more knowledgeable about)",
+                        list_of_regions, 
                         key=16)
         q17 = st.selectbox("What type of organisation do you work for?", 
                         ("-", "Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), 
