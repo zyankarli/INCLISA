@@ -137,6 +137,174 @@ regions_filter = c(
 # When core logic of justice principle doesn't specify for some regions, regions stay constant
 
 #-------------------------#
+#     General Scenario    #
+#-------------------------#
+
+####----GENERAL SCENARIO----####
+export_simple_df <- data.frame()
+years <- c(2025, 2030, 2035, 2040, 2045, 2050)
+starting_values <- c(50, 150, 250, 400, 500, 700, 800, 1000, 1200)
+regions_list <- c("A", "B", "C", "D", "E", "F", "G", "H", "I")
+## AGGREGATE UTILITARIAN
+#set end values
+end_values <- starting_values + 200
+#get growth rates
+growth_rates <- LG_calculator(starting_value = starting_values,
+                              end_value = end_values,
+                              n = length(years))
+#forecast
+df_list <- list()
+index = 0
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = starting_values[index],
+                      years = years,
+                      growth_rate = growth_rates[index],
+                      region = r)
+  #add to data list
+  df_list[[index]] <- new_df
+}
+scen_data = do.call(rbind, df_list)
+export_simple_df <-  rbind(export_df, scen_data)
+#Visualize it
+scen_data %>%
+  ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
+  geom_line() +
+  ggtitle("Basic Aggregate Scenario")+
+  ylim(0, 1200)
+
+
+## PRIORITARIAN
+end_values <- starting_values * c(10, 3.6, 2.3, 1.55, 1.3, 1, 1, 1, 1)
+#get growth rates
+growth_rates <- CAGR_calculator(starting_value = starting_values,
+                                end_value = end_values,
+                                n = length(years))
+#forecast
+df_list <- list()
+index = 0
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = starting_values[index],
+                      years = years,
+                      growth_rate = growth_rates[index],
+                      region = r)
+  #add to data list
+  df_list[[index]] <- new_df
+}
+scen_data = do.call(rbind, df_list)
+export_simple_df <-  rbind(export_df, scen_data)
+#Visualize it
+scen_data %>%
+  ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
+  geom_line() +
+  ggtitle("Basic Prioriatrian Scenario")+
+  ylim(0, 1200)
+
+##EGALITARIAN
+end_values <-  c(350, 350, 350, 350, 350, 350, 350, 350, 350)
+#get growth rates
+growth_rates <- CAGR_calculator(starting_value = starting_values,
+                                end_value = end_values,
+                                n = length(years))
+#forecast
+df_list <- list()
+index = 0
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = starting_values[index],
+                      years = years,
+                      growth_rate = growth_rates[index],
+                      region = r)
+  #add to data list
+  df_list[[index]] <- new_df
+}
+scen_data = do.call(rbind, df_list)
+export_simple_df <-  rbind(export_df, scen_data)
+#Visualize it
+scen_data %>%
+  ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
+  geom_line() +
+  ggtitle("Basic Egalitarian Scenario")+
+  ylim(0, 1200)
+
+##SUFFICITARIAN
+threshold <- 400
+end_values <- c(threshold, threshold, threshold, 400, 500, 700, 800, 1000, 1200)
+#get growth rates
+growth_rates <- CAGR_calculator(starting_value = starting_values,
+                                end_value = end_values,
+                                n = length(years)-2)
+#forecast
+df_list <- list()
+index = 0
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = starting_values[index],
+                      years = years,
+                      growth_rate = growth_rates[index],
+                      region = r)
+  #change 2045 and 2050 values to threshold for affected years
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
+    
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+scen_data = do.call(rbind, df_list)
+export_simple_df <-  rbind(export_df, scen_data)
+#Visualize it
+scen_data %>%
+  ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
+  geom_line() +
+  ggtitle("Basic Sufficientarian Scenario")+
+  ylim(0, 1200)
+
+##Limitarian
+threshold <- 550
+end_values <- c(50, 150, 250, 400, 500, threshold, threshold, threshold, threshold)
+#get growth rates
+growth_rates <- CAGR_calculator(starting_value = starting_values,
+                                end_value = end_values,
+                                n = length(years)-2)
+#forecast
+df_list <- list()
+index = 0
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = starting_values[index],
+                      years = years,
+                      growth_rate = growth_rates[index],
+                      region = r)
+  #change 2045 and 2050 values to threshold for affected years
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
+    
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+scen_data = do.call(rbind, df_list)
+export_simple_df <-  rbind(export_df, scen_data)
+#Visualize it
+scen_data %>%
+  ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
+  geom_line() +
+  ggtitle("Basic Limitarian Scenario")+
+  ylim(0, 1200)
+
+
+
+
+#-------------------------#
 #       Transport         #
 #-------------------------#
 #load data
@@ -166,167 +334,6 @@ hist_vals %>%
 years <- c(2025, 2030, 2035, 2040, 2045, 2050)
 #get regions for scenarios
 regions_list <- unique(hist_vals$region)
-
-####----GENERAL SCENARIO----####
-years <- c(2025, 2030, 2035, 2040, 2045, 2050)
-starting_values <- c(100, 200, 300, 400, 500, 600, 700, 800, 900)
-regions_list <- c("A", "B", "C", "D", "E", "F", "G", "H", "I")
-## AGGREGATE UTILITARIAN
-#set end values
-end_values <- starting_values + 200
-#get growth rates
-growth_rates <- LG_calculator(starting_value = starting_values,
-                              end_value = end_values,
-                              n = length(years))
-#forecast
-df_list <- list()
-index = 0
-for (r in regions_list){
-  index = index + 1 #iterate index
-  new_df = forecaster(starting_year =  2020,
-            starting_value = starting_values[index],
-            years = years,
-            growth_rate = growth_rates[index],
-            region = r)
-  #add to data list
-  df_list[[index]] <- new_df
-}
-scen_data = do.call(rbind, df_list)
-
-#Visualize it
-scen_data %>%
-    ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
-    geom_line() +
-    ggtitle("Basic Aggregate Scenario")+
-    ylim(0, 1200)
-
-
-## PRIORITARIAN
-end_values <- starting_values * c(3.8, 2, 1.5, 1.2, 1.05, 1, 1, 1, 1)
-#get growth rates
-growth_rates <- CAGR_calculator(starting_value = starting_values,
-                              end_value = end_values,
-                              n = length(years))
-#forecast
-df_list <- list()
-index = 0
-for (r in regions_list){
-  index = index + 1 #iterate index
-  new_df = forecaster(starting_year =  2020,
-            starting_value = starting_values[index],
-            years = years,
-            growth_rate = growth_rates[index],
-            region = r)
-  #add to data list
-  df_list[[index]] <- new_df
-}
-scen_data = do.call(rbind, df_list)
-
-#Visualize it
-scen_data %>%
-    ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
-    geom_line() +
-    ggtitle("Basic Prioriatrian Scenario")+
-    ylim(0, 1200)
-
-##EGALITARIAN
-end_values <-  c(450, 450, 450, 450, 450, 450, 450, 450, 450)
-#get growth rates
-growth_rates <- CAGR_calculator(starting_value = starting_values,
-                              end_value = end_values,
-                              n = length(years))
-#forecast
-df_list <- list()
-index = 0
-for (r in regions_list){
-  index = index + 1 #iterate index
-  new_df = forecaster(starting_year =  2020,
-            starting_value = starting_values[index],
-            years = years,
-            growth_rate = growth_rates[index],
-            region = r)
-  #add to data list
-  df_list[[index]] <- new_df
-}
-scen_data = do.call(rbind, df_list)
-
-#Visualize it
-scen_data %>%
-    ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
-    geom_line() +
-    ggtitle("Basic Prioriatrian Scenario")+
-    ylim(0, 1200)
-
-##SUFFICITARIAN
-threshold <- 350
-end_values <- c(threshold, threshold, threshold, 400, 500, 600, 700, 800, 900)
-#get growth rates
-growth_rates <- CAGR_calculator(starting_value = starting_values,
-                              end_value = end_values,
-                              n = length(years)-2)
-#forecast
-df_list <- list()
-index = 0
-for (r in regions_list){
-  index = index + 1 #iterate index
-  new_df = forecaster(starting_year =  2020,
-            starting_value = starting_values[index],
-            years = years,
-            growth_rate = growth_rates[index],
-            region = r)
-    #change 2045 and 2050 values to threshold for affected years
-  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
-    new_df <- new_df %>%
-      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
-    
-  }
-  #add to data list
-  df_list[[index]] <- new_df
-}
-scen_data = do.call(rbind, df_list)
-
-#Visualize it
-scen_data %>%
-    ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
-    geom_line() +
-    ggtitle("Basic Prioriatrian Scenario")+
-    ylim(0, 1200)
-
-##Limitarian
-threshold <- 550
-end_values <- c(100, 200, 300, 400, 500, threshold, threshold, threshold, threshold)
-#get growth rates
-growth_rates <- CAGR_calculator(starting_value = starting_values,
-                              end_value = end_values,
-                              n = length(years)-2)
-#forecast
-df_list <- list()
-index = 0
-for (r in regions_list){
-  index = index + 1 #iterate index
-  new_df = forecaster(starting_year =  2020,
-            starting_value = starting_values[index],
-            years = years,
-            growth_rate = growth_rates[index],
-            region = r)
-    #change 2045 and 2050 values to threshold for affected years
-  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
-    new_df <- new_df %>%
-      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
-    
-  }
-  #add to data list
-  df_list[[index]] <- new_df
-}
-scen_data = do.call(rbind, df_list)
-
-#Visualize it
-scen_data %>%
-    ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
-    geom_line() +
-    ggtitle("Basic Prioriatrian Scenario")+
-    ylim(0, 1200)
-
 
 ####----SCENARIO 1 TRANSPORT aggu----####
 #AGGREGATE UTILITARIAN
