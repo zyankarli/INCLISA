@@ -50,7 +50,8 @@ st.markdown(hide_img_fs, unsafe_allow_html=True)
 #Data loading and wrangling
 @st.cache_data
 def load_csv():
-    df = pd.DataFrame(pd.read_csv(r"https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
+    df = pd.DataFrame(pd.read_csv(r"C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\output_basic.csv",
+         #r"https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
                                     sep=","
                                     ))
     return df
@@ -184,72 +185,70 @@ global_annotation = dict(
 #           PLOTS         #
 #-------------------------#
 #for phone applications: https://towardsdatascience.com/mobile-first-visualization-b64a6745e9fd
-#----NUTRITION----#
-fig1 = px.line(df[df["scen_id"].str.contains("nutrition")], x='Year', y="Value", color="Region", facet_col='Scenario',
-                labels={
-                     "Value": "kCal per capita/day",
-                     "Year" : ""
-                },
-                #automise random order
-                category_orders={"Scenario": scenario_list_nutr,
-                                 "Region": sorted(pd.unique(df["Region"]))},
-                title="Meat consumption trajectories",
-                range_x=[2018, 2050],
-                range_y=[0, 700],
-                color_discrete_map=colors_dict,
-                hover_data=hover_dic,
-                hover_name=global_hover_name
-                )
-
-# Add Lancet Healthy Diet
-fig1.add_hline(y=90,
-               annotation_text="",
-               annotation_position="bottom left",
-               line_dash="dot")
-
-#----TRANSPORTATION----# The only one displayed
-fig2 = px.line(df[df["scen_id"].str.contains("transport")], x='Year', y="Value", color="Region", facet_col='Scenario',
-                labels={
+scenario_list = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6", "Scenario \u25AC", "Scenario \u275A"]
+#----BASIC GRAPH----# The only one displayed
+random_scenario_list = random.sample(scenario_list, len(scenario_list))
+fig1 = px.line(df, x = 'Year', y = 'Value', color = 'Region', facet_col = 'Scenario',
+               labels={
                      "Value": "",
                      "Year" : ""
-                },
-                category_orders={"Scenario": scenario_list_tran,
-                                 "Region": sorted(pd.unique(df["Region"]))},
+                }, 
                 title="Trajectories",
+                category_orders= {"Scenario": random_scenario_list},
                 range_x=[2020, 2050],
-                range_y=[0, 12000],  
-                color_discrete_map=colors_dict,
+                range_y=[0, 1500],
                 hover_data=hover_dic,
-                hover_name=global_hover_name
-                )
-# Add Japanese Passenger Kilometers by year
-# fig2.add_hline(y=8000,
-#               annotation_text="",
-#               annotation_position="bottom left",
-#               line_dash="dot")
+                hover_name=global_hover_name)
 
-#----BUILDINGS----#
-fig3 = px.line(df[df["scen_id"].str.contains("building")], x='Year', y="Value", color="Region", facet_col='Scenario',
-                labels={
-                     "Value": "floorspace (m²) per year per capita",
+
+#----Graph with area----#
+random_scenario_list = random.sample(scenario_list, len(scenario_list))
+
+fig2 = px.line(df, x = 'Year', y = 'Value', color = 'Region', facet_col = 'Scenario',
+               labels={
+                     "Value": "",
                      "Year" : ""
-                },
-                category_orders={"Scenario": scenario_list_buil,
-                                 "Region": sorted(pd.unique(df["Region"]))},
-                title="Housing trajectories",
+                }, 
+                title="Trajectories",
+                category_orders= {"Scenario": random_scenario_list},
                 range_x=[2020, 2050],
-                range_y=[0, 115],
-                color_discrete_map=colors_dict,
+                range_y=[0, 1500],
                 hover_data=hover_dic,
-                hover_name=global_hover_name
-                )
+                hover_name=global_hover_name)
+
+# Add colored areas
+fig2.add_hrect(y0=0, y1=300, 
+              annotation_text="Low", annotation_position="bottom right",
+              fillcolor="yellow", opacity=0.1, line_width=0)
+fig2.add_hrect(y0=750, y1=1400, 
+              annotation_text="High", annotation_position="top right",
+              fillcolor="orange", opacity=0.1, line_width=0)
+
+
+#----WITH LINES----#
+fig3 = px.line(df, x = 'Year', y = 'Value', color = 'Region', facet_col = 'Scenario',
+               labels={
+                     "Value": "",
+                     "Year" : ""
+                }, 
+                title="Trajectories",
+                category_orders= {"Scenario": random_scenario_list},
+                range_x=[2020, 2050],
+                range_y=[0, 1500],
+                hover_data=hover_dic,
+                hover_name=global_hover_name)
 # Add threshold [Source = European average]
-fig3.add_hline(y=45,
-              annotation_text="",
+fig3.add_hline(y=300,
+              annotation_text="Low",
               annotation_position="bottom left",
               line_dash="dot")
 
-#----GDP----#
+fig3.add_hline(y=750,
+              annotation_text="High",
+              annotation_position="bottom left",
+              line_dash="dot")
+
+#----GDP----# NOT USED
 fig4 = px.line(df[df["scen_id"].str.contains("gdp")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "GDP per capita per year",
@@ -282,7 +281,7 @@ fig1.update_layout(legend=legend_dic,
                    autosize=True,
                    title={'font': {'size': font_size_title}},
                    xaxis={'title': {'font': {'size': font_size_axis}}},
-                   yaxis={'title': {'font': {'size': font_size_axis}}},  
+                   yaxis={'title': {'font': {'size': font_size_axis}}, 'showticklabels':False},  
                 #    width=plot_width,
                     height=plot_height
                    )
@@ -433,7 +432,7 @@ with st.form("Survey"):
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(fig1, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nutr, horizontal=True ,
                     key=1)
@@ -482,7 +481,7 @@ with st.form("Survey"):
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(fig3, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_buil,horizontal=True ,
                     key=7)
@@ -504,7 +503,7 @@ with st.form("Survey"):
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(fig1, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
                         key=10)
