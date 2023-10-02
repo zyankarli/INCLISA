@@ -166,7 +166,8 @@ for (r in regions_list){
   df_list[[index]] <- new_df
 }
 scen_data = do.call(rbind, df_list)
-export_simple_df <-  rbind(export_df, scen_data)
+scen_data$scenario = "aggu"
+export_simple_df <-  rbind(export_simple_df, scen_data)
 #Visualize it
 scen_data %>%
   ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
@@ -176,7 +177,7 @@ scen_data %>%
 
 
 ## PRIORITARIAN
-end_values <- starting_values * c(10, 3.6, 2.3, 1.55, 1.3, 1, 1, 1, 1)
+end_values <- starting_values * c(10.5, 3.6, 2.3, 1.55, 1.3, 1, 1, 1, 1)
 #get growth rates
 growth_rates <- CAGR_calculator(starting_value = starting_values,
                                 end_value = end_values,
@@ -195,7 +196,8 @@ for (r in regions_list){
   df_list[[index]] <- new_df
 }
 scen_data = do.call(rbind, df_list)
-export_simple_df <-  rbind(export_df, scen_data)
+scen_data$scenario = "prio"
+export_simple_df <-  rbind(export_simple_df, scen_data)
 #Visualize it
 scen_data %>%
   ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
@@ -223,7 +225,8 @@ for (r in regions_list){
   df_list[[index]] <- new_df
 }
 scen_data = do.call(rbind, df_list)
-export_simple_df <-  rbind(export_df, scen_data)
+scen_data$scenario = "egal"
+export_simple_df <-  rbind(export_simple_df, scen_data)
 #Visualize it
 scen_data %>%
   ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
@@ -258,7 +261,8 @@ for (r in regions_list){
   df_list[[index]] <- new_df
 }
 scen_data = do.call(rbind, df_list)
-export_simple_df <-  rbind(export_df, scen_data)
+scen_data$scenario = "suff"
+export_simple_df <-  rbind(export_simple_df, scen_data)
 #Visualize it
 scen_data %>%
   ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
@@ -293,7 +297,8 @@ for (r in regions_list){
   df_list[[index]] <- new_df
 }
 scen_data = do.call(rbind, df_list)
-export_simple_df <-  rbind(export_df, scen_data)
+scen_data$scenario = "limi"
+export_simple_df <-  rbind(export_simple_df, scen_data)
 #Visualize it
 scen_data %>%
   ggplot(aes(x=as.numeric(year), y=as.numeric(value), group=region, color=region))+
@@ -302,7 +307,15 @@ scen_data %>%
   ylim(0, 1200)
 
 
-
+#-------------------------#
+#       EXPORT BASIC      #
+#-------------------------#
+write.csv(export_simple_df,
+          #IIASA
+          "C:\\Users\\scheifinger\\OneDrive - IIASA\\Interactive Tools\\output_basic.csv",
+          #Home
+          #"C:\\Users\\schei\\OneDrive - IIASA\\Interactive Tools\\Scenario Archetypes\\output.csv",
+          row.names = FALSE)
 
 #-------------------------#
 #       Transport         #
