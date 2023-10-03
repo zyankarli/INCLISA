@@ -387,6 +387,7 @@ def load_countries():
 country_list = ["-"] + list(load_countries())
 
 list_of_regions = [
+     "-",
     "Countries of Latin America and the Caribbean",
     "Countries of South Asia",
     "Countries of Sub-Saharan Africa",
