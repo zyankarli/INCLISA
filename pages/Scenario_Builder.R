@@ -130,7 +130,7 @@ regions_filter = c(
 # This script models five scenarios.
 # 1) Aggregate utilitarian: everyone grows the same
 # 2) Prioritarian: lowest 5 ones grow while other stay constant; the lower the higher growth
-    #distances between lowest 5 curves must decline 
+    #distances between lowest 5 curves must decline; no guarantee for reaching threshold
 # 3) Egalitarian: convergence
 # 4) sufficientarian: lower ones grow to threshold by 2040 and stay there, highest stay constant
 # 5) Limitarian: highest ones reduce, lowers stay constant

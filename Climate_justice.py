@@ -210,7 +210,7 @@ fig1.add_hline(y=90,
 #----TRANSPORTATION----#
 fig2 = px.line(df[df["scen_id"].str.contains("transport")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
-                     "Value": "passenger km/capita per year",
+                     "Value": "passenger km per capita per year",
                      "Year" : ""
                 },
                 category_orders={"Scenario": scenario_list_tran,
@@ -231,7 +231,7 @@ fig2.add_hline(y=8000,
 #----BUILDINGS----#
 fig3 = px.line(df[df["scen_id"].str.contains("building")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
-                     "Value": "floorspace (m²) per year per capita",
+                     "Value": "floorspace (m²) per capita per year",
                      "Year" : ""
                 },
                 category_orders={"Scenario": scenario_list_buil,
@@ -536,7 +536,7 @@ with st.form("Survey"):
         q14=st.selectbox("How often per year do you travel by plane?",#
                             ("-", "Never", "Once per year", "3 times per year", "At least 5 times per year"), 
                             key=14)
-        q15=st.selectbox("What is the size of your apartment/ house?", #TODO agree on categories
+        q15=st.selectbox("What is the size of your apartment/ house?",
                             ("-", "Less than 10m² per person", "Between 10m² and 30m² per person","Between 30m² and 50m² per person","More than 50m² per person" ), 
                             key=15)
         q16 = st.selectbox("Which region are you from? (Please select the region you feel closer to and more knowledgeable about)",
