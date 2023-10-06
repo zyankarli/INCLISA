@@ -1,6 +1,8 @@
 ---
 title: "R Notebook"
 output: html_notebook
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Read Me
@@ -131,17 +133,19 @@ regions_filter = c(
   "Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.",
   "Countries of Sub-Saharan Africa"
 )
+
+#specify years for scenarios
+years <- c(2025, 2030, 2035, 2040, 2045, 2050)
+
 ```
 
-```{r transport}
-#-------------------------#
-#       Transport         #
-#-------------------------#
+# Mobility
+
+```{r load mobility data }
 #load data
 df = pyam$read_iiasa(
   'ar6-public',
   model='REMIND-MAgPIE 2.1-4.2',
-  #scenario='2.1-4.2_SusDev_SDP-PkBudg1000',
   variable=c('Energy Service|Transportation|Passenger'),
   meta=c('category')
 )
@@ -155,32 +159,14 @@ hist_vals <- df %>%
   #filter on year, scenario and region
   filter((year %in% hist_data) & (scenario == 'SusDev_SDP-PkBudg1000') & (region %in% regions_filter)) %>%
   select(region, value, year)
+```
 
-hist_vals %>%
-  ggplot(aes(x=year, y=value, color=region))+
-  geom_line()
-
-#specify years for scenarios
-years <- c(2025, 2030, 2035, 2040, 2045, 2050)
-#get regions for scenarios
-regions_list <- unique(hist_vals$region)
-
+```{r mobility high threshold }
 ####----SCENARIO 1 TRANSPORT aggu----####
 #AGGREGATE UTILITARIAN
-##set growth rates individually via end value
+##every regions grows by 1000
 ##set end values in 2050; 0 means no change to present day
-#find values via
-# hist_vals %>% filter(year == 2020) %>% arrange(desc(value)) %>% mutate(value = value + 1000)
-end_val = c(
-  10295.520 , #Eastern and Western Europe (i.e., the EU28)
-  9572.598 , #North America; primarily the United States of America and Canada
-  6456.067 , #Countries of centrally-planned Asia; primarily China
-  6042.791 , #Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.
-  5329.384 , #Countries of South Asia; primarily India
-  5184.672 , #Countries of Latin America and the Caribbean
-  3106.586 , #Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia
-  2554.980 , #Countries of Sub-Saharan Africa
-  2396.735 ) #Pacific OECD
+end_val <- hist_vals %>% filter(year == 2020) %>% arrange(desc(value)) %>% mutate(value = value + 1000) %>%pull(value)
 
 #add growth rates
 growth_rates <- hist_vals %>%
@@ -217,7 +203,7 @@ scen_data <- scen_data %>%
   #convert value column to numeric
   mutate(value = as.numeric(value)) %>%
   #add column to identify scenario
-  mutate(scenario = "transport_agg")%>%
+  mutate(scenario = "transport_agg_high")%>%
   #add identifier at beginning of df
   relocate(scenario, .before = 1)
 
@@ -229,7 +215,9 @@ scen_data %>%
 
 #ADD TO EXPORT DF
 export_df <- rbind(export_df, scen_data)
-
+#Add same scenario also for low scenario
+scen_data <- scen_data %>% mutate(scenario = "transport_agg_low")
+export_df <- rbind(export_df, scen_data)
 
 ####----SCENARIO 2 TRANSPORT prio----####
 #PRIORITARIAN
@@ -281,7 +269,7 @@ scen_data <- scen_data %>%
   #convert value column to numeric
   mutate(value = as.numeric(value)) %>%
   #add column to identify scenario
-  mutate(scenario = "transport_pri")%>%
+  mutate(scenario = "transport_pri_high")%>%
   #add identifier at beginning of df
   relocate(scenario, .before = 1)
 
@@ -293,7 +281,9 @@ scen_data %>%
 
 #ADD TO EXPORT DF
 export_df <- rbind(export_df, scen_data)
-
+#Add same scenario also for low scenario
+scen_data <- scen_data %>% mutate(scenario = "transport_pri_low")
+export_df <- rbind(export_df, scen_data)
 
 
 ####----SCENARIO 3 TRANSPORT egal----####
@@ -331,7 +321,7 @@ scen_data <- scen_data %>%
   #convert value column to numeric
   mutate(value = as.numeric(value)) %>%
   #add column to identify scenario
-  mutate(scenario = "transport_ega")%>%
+  mutate(scenario = "transport_ega_high")%>%
   #add identifier at beginning of df
   relocate(scenario, .before = 1)
 
@@ -350,14 +340,14 @@ export_df <- rbind(export_df, scen_data)
 ##set growth rates individually via end value
 ##set end values in 2050; 0 means no change to present day
 ##set threshold
-threshold = 2500
+threshold = 8000
 end_val = c(
   0, #Eastern and Western Europe (i.e., the EU28)
   0, #North America; primarily the United States of America and Canada
-  0, #Countries of centrally-planned Asia; primarily China
-  0, #Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.
-  0, #Countries of South Asia; primarily India
-  0, #Countries of Latin America and the Caribbean
+  threshold, #Countries of centrally-planned Asia; primarily China
+  threshold, #Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.
+  threshold, #Countries of South Asia; primarily India
+  threshold, #Countries of Latin America and the Caribbean
   threshold, #Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia
   threshold, #Countries of Sub-Saharan Africa
   threshold) #Pacific OECD
@@ -403,7 +393,7 @@ scen_data <- scen_data %>%
   #convert value column to numeric
   mutate(value = as.numeric(value)) %>%
   #add column to identify scenario
-  mutate(scenario = "transport_suf")%>%
+  mutate(scenario = "transport_suf_high")%>%
   #add identifier at beginning of df
   relocate(scenario, .before = 1)
 
@@ -424,7 +414,7 @@ export_df <- rbind(export_df, scen_data)
 ##set growth rates individually via end value
 ##set end values in 2050; 0 means no change to present day
 ##set threshold
-threshold = 7500
+threshold = 8000
 end_val = c(
   threshold, #Eastern and Western Europe (i.e., the EU28)
   threshold, #North America; primarily the United States of America and Canada
@@ -477,7 +467,7 @@ scen_data <- scen_data %>%
   #convert value column to numeric
   mutate(value = as.numeric(value)) %>%
   #add column to identify scenario
-  mutate(scenario = "transport_lim")%>%
+  mutate(scenario = "transport_lim_high")%>%
   #add identifier at beginning of df
   relocate(scenario, .before = 1)
 
@@ -493,3 +483,680 @@ export_df <- rbind(export_df, scen_data)
 
 ```
 
+```{r mobility low threshold }
+#The scenarios aggregate utilitarian and prioritarian are the same as with high threshold
+####----SCENARIO 3 TRANSPORT egal----####
+#convergence at 3500
+
+#GET GROWTH RATES
+##get CAGR growth rates for each region
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  mutate(gr = CAGR_calculator(starting_value = value,
+                                end_value = 3500,
+                                n = length(years)))
+
+#FORECAST
+#create empty df
+df_list <- list()
+##add starting values
+df_list[[1]] <- hist_vals %>% filter(year==2020)
+##add starting index
+index = 1
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = filter(hist_vals, region == r, year==2020)$value,
+                      years = years,
+                      growth_rate = filter(growth_rates,region == r)$gr,
+                      region = r)
+  #add to data list
+  df_list[[index]] <- new_df
+}
+
+scen_data = do.call(rbind, df_list)
+#name scenario
+scen_data <- scen_data %>%
+  #convert value column to numeric
+  mutate(value = as.numeric(value)) %>%
+  #add column to identify scenario
+  mutate(scenario = "transport_ega_low")%>%
+  #add identifier at beginning of df
+  relocate(scenario, .before = 1)
+
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line() +
+  ggtitle("Transport: Convergence at 3.500 pkm")
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+
+####----SCENARIO 4 TRANSPORT suf----####
+#countries above threshold stay constant, lowest reach threshold by 2040
+#GET GROWTH RATES
+##set growth rates individually via end value
+##set end values in 2050; 0 means no change to present day
+##set threshold
+threshold = 3500
+end_val = c(
+  0, #Eastern and Western Europe (i.e., the EU28)
+  0, #North America; primarily the United States of America and Canada
+  0, #Countries of centrally-planned Asia; primarily China
+  0, #Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.
+  0, #Countries of South Asia; primarily India
+  0, #Countries of Latin America and the Caribbean
+  threshold, #Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia
+  threshold, #Countries of Sub-Saharan Africa
+  threshold) #Pacific OECD
+
+#add growth rates
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                               0, 
+                               CAGR_calculator(starting_value = value,
+                                               end_value = end_val,
+                                               n = length(years)-2)))
+
+#FORECAST
+#create empty df
+df_list <- list()
+##add starting values
+df_list[[1]] <- hist_vals %>% filter(year==2020)
+##add starting index
+index = 1
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = filter(hist_vals, region == r, year==2020)$value,
+                      years = years,
+                      growth_rate = filter(growth_rates,region == r)$gr,
+                      region = r)
+  #change 2045 and 2050 values to threshold for affected years
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
+    
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+
+scen_data = do.call(rbind, df_list)
+#name scenario
+scen_data <- scen_data %>%
+  #convert value column to numeric
+  mutate(value = as.numeric(value)) %>%
+  #add column to identify scenario
+  mutate(scenario = "transport_suf_low")%>%
+  #add identifier at beginning of df
+  relocate(scenario, .before = 1)
+
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Transport: Sufficitarian")+
+  ylim(0, 12000)
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+
+
+####----SCENARIO 5 TRANSPORT lim----####
+#countries below threshold stay constant, highest reach threshold by 2040
+#GET GROWTH RATES
+##set growth rates individually via end value
+##set end values in 2050; 0 means no change to present day
+##set threshold
+threshold = 3500
+end_val = c(
+  threshold, #Eastern and Western Europe (i.e., the EU28)
+  threshold, #North America; primarily the United States of America and Canada
+  threshold, #Countries of centrally-planned Asia; primarily China
+  threshold, #Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.
+  threshold, #Countries of South Asia; primarily India
+  threshold, #Countries of Latin America and the Caribbean
+  0, #Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia
+  0, #Countries of Sub-Saharan Africa
+  0) #Pacific OECD
+
+#add growth rates
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years)-2)))
+
+#FORECAST
+#create empty df
+df_list <- list()
+##add starting values
+df_list[[1]] <- hist_vals %>% filter(year==2020)
+##add starting index
+index = 1
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = filter(hist_vals, region == r, year==2020)$value,
+                      years = years,
+                      growth_rate = filter(growth_rates,region == r)$gr,
+                      region = r)
+  #change 2045 and 2050 values to threshold for affected years
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
+    
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+
+scen_data = do.call(rbind, df_list)
+#name scenario
+scen_data <- scen_data %>%
+  #convert value column to numeric
+  mutate(value = as.numeric(value)) %>%
+  #add column to identify scenario
+  mutate(scenario = "transport_lim_low")%>%
+  #add identifier at beginning of df
+  relocate(scenario, .before = 1)
+
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Transport: Limitarian")+
+  ylim(0, 12000)
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+
+```
+
+```{r, load housing data}
+#load data
+df = pyam$read_iiasa(
+  'ar6-public',
+  model='REMIND-MAgPIE 2.1-4.2',
+  scenario='2.1-4.2_SusDev_SDP-PkBudg1000',
+  variable=c('Energy Service|Residential and Commercial|Floor Space',
+             'Population'),
+  meta=c('category')
+)
+#annual demand for floor space (and associated energy servide demand for heating and lighting) in residential and commerical buildings
+#bn m2/yr with bn = billion	
+#population in million
+
+#get right format
+df = df$data
+
+#get starting values
+hist_data <- c("2005", "2010", "2015", "2020")
+#look at historic values and add floor space per capita
+hist_vals <- df %>%
+  #filter on year, scenario and region
+  filter((year %in% hist_data) & (scenario == 'SusDev_SDP-PkBudg1000') & (region %in% regions_filter)) %>%
+  select(region, variable, value, year)%>%
+  pivot_wider(names_from = c("variable"), values_from = c("value")) %>%
+  rename(Floor_Space = `Energy Service|Residential and Commercial|Floor Space`)%>%
+  #transform variables
+  #from million to single
+  mutate(Population = Population * 1000000)%>%
+  #from billion to meter
+  mutate(Floor_Space = Floor_Space * 1000000000) %>%
+  mutate(floor_space_pc = Floor_Space / Population)
+  #unit = m2/year per inhabitant
+
+#limit hist_vals to floor_space_pc only
+hist_vals <- hist_vals %>%
+  select(region, year, floor_space_pc)%>%
+  rename(value = floor_space_pc)
+```
+
+```{r housing high threshold}
+####----SCENARIO 1 BUIDLING aggu----####
+#AGGREGATE UTILITARIAN
+#GET GROWTH RATES
+increase = 20
+end_val <- hist_vals %>% filter(year == 2020) %>% arrange(desc(value)) %>% mutate(value = value + increase) %>%pull(value)
+
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      LG_calculator(starting_value = value,
+                                    end_value = end_val,
+                                    n = length(years))))
+#FORECAST
+scen_data <- run_forecast(historic_values = hist_vals,
+             starting_year = 2020,
+             list_of_growth_rates = growth_rates,
+             list_of_years = years,
+             list_of_regions = regions_filter,
+             scenario_name = "building_agg_high")
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Building: Agg utilitarian")
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+#Add same scenario also for low scenario
+scen_data <- scen_data %>% mutate(scenario = "building_agg_low")
+export_df <- rbind(export_df, scen_data)
+
+####----SCENARIO 2 BUILDING prio----####
+#PRIORITARIAN
+#GET GROWTH RATES
+end_val <-c(
+  0,#North America; primarily the United States of America and Canada    
+  0,#Pacific OECD                                                        
+  0,#Countries of centrally-planned Asia; primarily China                
+  0,#Eastern and Western Europe (i.e., the EU28)                         
+  46,#Countries of Latin America and the Caribbean                        
+  44.5,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
+  40,#Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qat…
+  35,#Countries of Sub-Saharan Africa                                     
+  34.5#Countries of South Asia; primarily India  
+)
+
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years))))
+
+#FORECAST
+scen_data <- run_forecast(historic_values = hist_vals,
+                          starting_year = 2020,
+                          list_of_growth_rates = growth_rates,
+                          list_of_years = years,
+                          list_of_regions = regions_filter,
+                          scenario_name = "building_pri")
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Building: Prioritarian")
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+#Add same scenario also for low scenario
+scen_data <- scen_data %>% mutate(scenario = "transport_pri_low")
+export_df <- rbind(export_df, scen_data)
+
+
+####----SCENARIO 3 BUILDING egal----####
+#EGALITARIAN
+#convergence at 45
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = 45) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years))))
+
+#FORECAST
+scen_data <- run_forecast(historic_values = hist_vals,
+                          starting_year = 2020,
+                          list_of_growth_rates = growth_rates$gr,
+                          list_of_years = years,
+                          list_of_regions = regions_filter,
+                          scenario_name = "building_ega_high")
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Building: Egalitarian")
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+
+####----SCENARIO 4 BUILDING suf----####
+#countries above threshold stay constant, lowest reach threshold by 2040
+#GET GROWTH RATES
+##set growth rates individually via end value
+##set end values in 2050; 0 means no change to present day
+##set threshold
+threshold <- 45
+end_val <-c(
+  0,#North America; primarily the United States of America and Canada    
+  0,#Pacific OECD                                                        
+  0,#Countries of centrally-planned Asia; primarily China                
+  0,#Eastern and Western Europe (i.e., the EU28)                         
+  threshold,#Countries of Latin America and the Caribbean                        
+  threshold,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
+  threshold,#Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qat…
+  threshold,#Countries of Sub-Saharan Africa                                     
+  threshold#Countries of South Asia; primarily India  
+)
+
+#add growth rates
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years)-2)))
+
+#FORECAST
+#create empty df
+df_list <- list()
+##add starting values
+df_list[[1]] <- hist_vals %>% filter(year==2020)
+##add starting index
+index = 1
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = filter(hist_vals, region == r, year==2020)$value,
+                      years = years,
+                      growth_rate = filter(growth_rates,region == r)$gr,
+                      region = r)
+  #change 2045 and 2050 values to threshold for affected years
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
+    
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+
+scen_data = do.call(rbind, df_list)
+
+scen_data <- scen_data %>%
+  #convert value column to numeric
+  mutate(value = as.numeric(value)) %>%
+  #add column to identify scenario
+  mutate(scenario = "building_suf_high")%>%
+  #add identifier at beginning of df
+  relocate(scenario, .before = 1)
+
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Building: Sufficitarian")+
+  ylim(0, 100)
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+
+####----SCENARIO 5 BUILDING lim----####
+#countries below threshold stay constant, highest reach threshold by 2040
+#GET GROWTH RATES
+##set growth rates individually via end value
+##set end values in 2050; 0 means no change to present day
+##set threshold
+threshold = 45
+end_val <-c(
+  threshold,#North America; primarily the United States of America and Canada    
+  threshold,#Pacific OECD                                                        
+  threshold,#Countries of centrally-planned Asia; primarily China                
+  threshold,#Eastern and Western Europe (i.e., the EU28)                         
+  0,#Countries of Latin America and the Caribbean                        
+  0,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
+  0,#Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qat…
+  0,#Countries of Sub-Saharan Africa                                     
+  0#Countries of South Asia; primarily India  
+)
+
+#add growth rates
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years)-2)))
+
+#FORECAST
+#create empty df
+df_list <- list()
+##add starting values
+df_list[[1]] <- hist_vals %>% filter(year==2020)
+##add starting index
+index = 1
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = filter(hist_vals, region == r, year==2020)$value,
+                      years = years,
+                      growth_rate = filter(growth_rates,region == r)$gr,
+                      region = r)
+  #change 2045 and 2050 values to threshold for affected years
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
+    
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+
+scen_data = do.call(rbind, df_list)
+#name scenario
+scen_data <- scen_data %>%
+  #convert value column to numeric
+  mutate(value = as.numeric(value)) %>%
+  #add column to identify scenario
+  mutate(scenario = "building_lim_high")%>%
+  #add identifier at beginning of df
+  relocate(scenario, .before = 1)
+
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Building: Limitarian")+
+  ylim(0, 100)
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+```
+
+```{r housing low threshold}
+####----SCENARIO 3 BUILDING egal----####
+#EGALITARIAN
+#convergence at 45
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = 10) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years))))
+
+#FORECAST
+scen_data <- run_forecast(historic_values = hist_vals,
+                          starting_year = 2020,
+                          list_of_growth_rates = growth_rates$gr,
+                          list_of_years = years,
+                          list_of_regions = regions_filter,
+                          scenario_name = "building_ega_low")
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Building: Egalitarian")
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+
+####----SCENARIO 4 BUILDING suf----####
+#countries above threshold stay constant, lowest reach threshold by 2040
+#GET GROWTH RATES
+##set growth rates individually via end value
+##set end values in 2050; 0 means no change to present day
+##set threshold
+threshold <- 10
+end_val <-c(
+  0,#North America; primarily the United States of America and Canada    
+  0,#Pacific OECD                                                        
+  0,#Countries of centrally-planned Asia; primarily China                
+  0,#Eastern and Western Europe (i.e., the EU28)                         
+  0,#Countries of Latin America and the Caribbean                        
+  0,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
+  0,#Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qat…
+  0,#Countries of Sub-Saharan Africa                                     
+  0#Countries of South Asia; primarily India  
+)
+
+#add growth rates
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years)-2)))
+
+#FORECAST
+#create empty df
+df_list <- list()
+##add starting values
+df_list[[1]] <- hist_vals %>% filter(year==2020)
+##add starting index
+index = 1
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = filter(hist_vals, region == r, year==2020)$value,
+                      years = years,
+                      growth_rate = filter(growth_rates,region == r)$gr,
+                      region = r)
+  #change 2045 and 2050 values to threshold for affected years
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
+    
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+
+scen_data = do.call(rbind, df_list)
+
+scen_data <- scen_data %>%
+  #convert value column to numeric
+  mutate(value = as.numeric(value)) %>%
+  #add column to identify scenario
+  mutate(scenario = "building_suf_low")%>%
+  #add identifier at beginning of df
+  relocate(scenario, .before = 1)
+
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Building: Sufficitarian")+
+  ylim(0, 100)
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+
+####----SCENARIO 5 BUILDING lim----####
+#countries below threshold stay constant, highest reach threshold by 2040
+#GET GROWTH RATES
+##set growth rates individually via end value
+##set end values in 2050; 0 means no change to present day
+##set threshold
+threshold = 10
+end_val <-c(
+  threshold,#North America; primarily the United States of America and Canada    
+  threshold,#Pacific OECD                                                        
+  threshold,#Countries of centrally-planned Asia; primarily China                
+  threshold,#Eastern and Western Europe (i.e., the EU28)                         
+  threshold,#Countries of Latin America and the Caribbean                        
+  threshold,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
+  threshold,#Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qat…
+  threshold,#Countries of Sub-Saharan Africa                                     
+  threshold#Countries of South Asia; primarily India  
+)
+
+#add growth rates
+growth_rates <- hist_vals %>%
+  filter(year == 2020) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years)-2)))
+
+#FORECAST
+#create empty df
+df_list <- list()
+##add starting values
+df_list[[1]] <- hist_vals %>% filter(year==2020)
+##add starting index
+index = 1
+for (r in regions_list){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2020,
+                      starting_value = filter(hist_vals, region == r, year==2020)$value,
+                      years = years,
+                      growth_rate = filter(growth_rates,region == r)$gr,
+                      region = r)
+  #change 2045 and 2050 values to threshold for affected years
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2045, 2050), as.numeric(threshold), as.numeric(value)))
+    
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+
+scen_data = do.call(rbind, df_list)
+#name scenario
+scen_data <- scen_data %>%
+  #convert value column to numeric
+  mutate(value = as.numeric(value)) %>%
+  #add column to identify scenario
+  mutate(scenario = "building_lim_low")%>%
+  #add identifier at beginning of df
+  relocate(scenario, .before = 1)
+
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Building: Limitarian")+
+  ylim(0, 100)
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+```
+
+``` 
