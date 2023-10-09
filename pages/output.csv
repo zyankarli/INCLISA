@@ -755,132 +755,132 @@
 "building_agg_low","Countries of Sub-Saharan Africa","2040",27.4322058690905
 "building_agg_low","Countries of Sub-Saharan Africa","2045",31.4089293132967
 "building_agg_low","Countries of Sub-Saharan Africa","2050",35.9621404605758
-"building_pri","Countries of Latin America and the Caribbean","2020",36.3222539687259
-"building_pri","Countries of South Asia; primarily India","2020",14.9474400505516
-"building_pri","Countries of Sub-Saharan Africa","2020",15.9621404605758
-"building_pri","Countries of centrally-planned Asia; primarily China","2020",56.4624167939351
-"building_pri","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2020",24.5547189452116
-"building_pri","Eastern and Western Europe (i.e., the EU28)","2020",54.9138887747133
-"building_pri","North America; primarily the United States of America and Canada","2020",98.7328291965327
-"building_pri","Pacific OECD","2020",58.5341882712869
-"building_pri","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2020",33.760825248302
-"building_pri","North America; primarily the United States of America and Canada","2025",98.7328291965327
-"building_pri","North America; primarily the United States of America and Canada","2030",98.7328291965327
-"building_pri","North America; primarily the United States of America and Canada","2035",98.7328291965327
-"building_pri","North America; primarily the United States of America and Canada","2040",98.7328291965327
-"building_pri","North America; primarily the United States of America and Canada","2045",98.7328291965327
-"building_pri","North America; primarily the United States of America and Canada","2050",98.7328291965327
-"building_pri","Eastern and Western Europe (i.e., the EU28)","2025",54.9138887747133
-"building_pri","Eastern and Western Europe (i.e., the EU28)","2030",54.9138887747133
-"building_pri","Eastern and Western Europe (i.e., the EU28)","2035",54.9138887747133
-"building_pri","Eastern and Western Europe (i.e., the EU28)","2040",54.9138887747133
-"building_pri","Eastern and Western Europe (i.e., the EU28)","2045",54.9138887747133
-"building_pri","Eastern and Western Europe (i.e., the EU28)","2050",54.9138887747133
-"building_pri","Countries of Latin America and the Caribbean","2025",37.7807258623889
-"building_pri","Countries of Latin America and the Caribbean","2030",39.2977607589547
-"building_pri","Countries of Latin America and the Caribbean","2035",40.8757101780678
-"building_pri","Countries of Latin America and the Caribbean","2040",42.5170200615226
-"building_pri","Countries of Latin America and the Caribbean","2045",44.2242345646597
-"building_pri","Countries of Latin America and the Caribbean","2050",46
-"building_pri","Countries of South Asia; primarily India","2025",17.18339075084
-"building_pri","Countries of South Asia; primarily India","2030",19.7538118030557
-"building_pri","Countries of South Asia; primarily India","2035",22.7087358024182
-"building_pri","Countries of South Asia; primarily India","2040",26.1056795966974
-"building_pri","Countries of South Asia; primarily India","2045",30.0107638370978
-"building_pri","Countries of South Asia; primarily India","2050",34.5
-"building_pri","Countries of centrally-planned Asia; primarily China","2025",56.4624167939351
-"building_pri","Countries of centrally-planned Asia; primarily China","2030",56.4624167939351
-"building_pri","Countries of centrally-planned Asia; primarily China","2035",56.4624167939351
-"building_pri","Countries of centrally-planned Asia; primarily China","2040",56.4624167939351
-"building_pri","Countries of centrally-planned Asia; primarily China","2045",56.4624167939351
-"building_pri","Countries of centrally-planned Asia; primarily China","2050",56.4624167939351
-"building_pri","Pacific OECD","2025",58.5341882712869
-"building_pri","Pacific OECD","2030",58.5341882712869
-"building_pri","Pacific OECD","2035",58.5341882712869
-"building_pri","Pacific OECD","2040",58.5341882712869
-"building_pri","Pacific OECD","2045",58.5341882712869
-"building_pri","Pacific OECD","2050",58.5341882712869
-"building_pri","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2025",35.3512043069641
-"building_pri","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2030",37.0165017223792
-"building_pri","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2035",38.7602466910292
-"building_pri","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2040",40.5861346600766
-"building_pri","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2045",42.4980351589742
-"building_pri","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2050",44.5
-"building_pri","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2025",26.6351903494093
-"building_pri","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2030",28.8919358650452
-"building_pri","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2035",31.3398908391281
-"building_pri","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2040",33.9952560602477
-"building_pri","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2045",36.8756049768666
-"building_pri","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2050",40
-"building_pri","Countries of Sub-Saharan Africa","2025",18.1936826102333
-"building_pri","Countries of Sub-Saharan Africa","2030",20.7371992333642
-"building_pri","Countries of Sub-Saharan Africa","2035",23.6363050437278
-"building_pri","Countries of Sub-Saharan Africa","2040",26.9407121874635
-"building_pri","Countries of Sub-Saharan Africa","2045",30.707082677474
-"building_pri","Countries of Sub-Saharan Africa","2050",35
-"transport_pri_low","Countries of Latin America and the Caribbean","2020",36.3222539687259
-"transport_pri_low","Countries of South Asia; primarily India","2020",14.9474400505516
-"transport_pri_low","Countries of Sub-Saharan Africa","2020",15.9621404605758
-"transport_pri_low","Countries of centrally-planned Asia; primarily China","2020",56.4624167939351
-"transport_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2020",24.5547189452116
-"transport_pri_low","Eastern and Western Europe (i.e., the EU28)","2020",54.9138887747133
-"transport_pri_low","North America; primarily the United States of America and Canada","2020",98.7328291965327
-"transport_pri_low","Pacific OECD","2020",58.5341882712869
-"transport_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2020",33.760825248302
-"transport_pri_low","North America; primarily the United States of America and Canada","2025",98.7328291965327
-"transport_pri_low","North America; primarily the United States of America and Canada","2030",98.7328291965327
-"transport_pri_low","North America; primarily the United States of America and Canada","2035",98.7328291965327
-"transport_pri_low","North America; primarily the United States of America and Canada","2040",98.7328291965327
-"transport_pri_low","North America; primarily the United States of America and Canada","2045",98.7328291965327
-"transport_pri_low","North America; primarily the United States of America and Canada","2050",98.7328291965327
-"transport_pri_low","Eastern and Western Europe (i.e., the EU28)","2025",54.9138887747133
-"transport_pri_low","Eastern and Western Europe (i.e., the EU28)","2030",54.9138887747133
-"transport_pri_low","Eastern and Western Europe (i.e., the EU28)","2035",54.9138887747133
-"transport_pri_low","Eastern and Western Europe (i.e., the EU28)","2040",54.9138887747133
-"transport_pri_low","Eastern and Western Europe (i.e., the EU28)","2045",54.9138887747133
-"transport_pri_low","Eastern and Western Europe (i.e., the EU28)","2050",54.9138887747133
-"transport_pri_low","Countries of Latin America and the Caribbean","2025",37.7807258623889
-"transport_pri_low","Countries of Latin America and the Caribbean","2030",39.2977607589547
-"transport_pri_low","Countries of Latin America and the Caribbean","2035",40.8757101780678
-"transport_pri_low","Countries of Latin America and the Caribbean","2040",42.5170200615226
-"transport_pri_low","Countries of Latin America and the Caribbean","2045",44.2242345646597
-"transport_pri_low","Countries of Latin America and the Caribbean","2050",46
-"transport_pri_low","Countries of South Asia; primarily India","2025",17.18339075084
-"transport_pri_low","Countries of South Asia; primarily India","2030",19.7538118030557
-"transport_pri_low","Countries of South Asia; primarily India","2035",22.7087358024182
-"transport_pri_low","Countries of South Asia; primarily India","2040",26.1056795966974
-"transport_pri_low","Countries of South Asia; primarily India","2045",30.0107638370978
-"transport_pri_low","Countries of South Asia; primarily India","2050",34.5
-"transport_pri_low","Countries of centrally-planned Asia; primarily China","2025",56.4624167939351
-"transport_pri_low","Countries of centrally-planned Asia; primarily China","2030",56.4624167939351
-"transport_pri_low","Countries of centrally-planned Asia; primarily China","2035",56.4624167939351
-"transport_pri_low","Countries of centrally-planned Asia; primarily China","2040",56.4624167939351
-"transport_pri_low","Countries of centrally-planned Asia; primarily China","2045",56.4624167939351
-"transport_pri_low","Countries of centrally-planned Asia; primarily China","2050",56.4624167939351
-"transport_pri_low","Pacific OECD","2025",58.5341882712869
-"transport_pri_low","Pacific OECD","2030",58.5341882712869
-"transport_pri_low","Pacific OECD","2035",58.5341882712869
-"transport_pri_low","Pacific OECD","2040",58.5341882712869
-"transport_pri_low","Pacific OECD","2045",58.5341882712869
-"transport_pri_low","Pacific OECD","2050",58.5341882712869
-"transport_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2025",35.3512043069641
-"transport_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2030",37.0165017223792
-"transport_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2035",38.7602466910292
-"transport_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2040",40.5861346600766
-"transport_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2045",42.4980351589742
-"transport_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2050",44.5
-"transport_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2025",26.6351903494093
-"transport_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2030",28.8919358650452
-"transport_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2035",31.3398908391281
-"transport_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2040",33.9952560602477
-"transport_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2045",36.8756049768666
-"transport_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2050",40
-"transport_pri_low","Countries of Sub-Saharan Africa","2025",18.1936826102333
-"transport_pri_low","Countries of Sub-Saharan Africa","2030",20.7371992333642
-"transport_pri_low","Countries of Sub-Saharan Africa","2035",23.6363050437278
-"transport_pri_low","Countries of Sub-Saharan Africa","2040",26.9407121874635
-"transport_pri_low","Countries of Sub-Saharan Africa","2045",30.707082677474
-"transport_pri_low","Countries of Sub-Saharan Africa","2050",35
+"building_pri_high","Countries of Latin America and the Caribbean","2020",36.3222539687259
+"building_pri_high","Countries of South Asia; primarily India","2020",14.9474400505516
+"building_pri_high","Countries of Sub-Saharan Africa","2020",15.9621404605758
+"building_pri_high","Countries of centrally-planned Asia; primarily China","2020",56.4624167939351
+"building_pri_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2020",24.5547189452116
+"building_pri_high","Eastern and Western Europe (i.e., the EU28)","2020",54.9138887747133
+"building_pri_high","North America; primarily the United States of America and Canada","2020",98.7328291965327
+"building_pri_high","Pacific OECD","2020",58.5341882712869
+"building_pri_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2020",33.760825248302
+"building_pri_high","North America; primarily the United States of America and Canada","2025",98.7328291965327
+"building_pri_high","North America; primarily the United States of America and Canada","2030",98.7328291965327
+"building_pri_high","North America; primarily the United States of America and Canada","2035",98.7328291965327
+"building_pri_high","North America; primarily the United States of America and Canada","2040",98.7328291965327
+"building_pri_high","North America; primarily the United States of America and Canada","2045",98.7328291965327
+"building_pri_high","North America; primarily the United States of America and Canada","2050",98.7328291965327
+"building_pri_high","Eastern and Western Europe (i.e., the EU28)","2025",54.9138887747133
+"building_pri_high","Eastern and Western Europe (i.e., the EU28)","2030",54.9138887747133
+"building_pri_high","Eastern and Western Europe (i.e., the EU28)","2035",54.9138887747133
+"building_pri_high","Eastern and Western Europe (i.e., the EU28)","2040",54.9138887747133
+"building_pri_high","Eastern and Western Europe (i.e., the EU28)","2045",54.9138887747133
+"building_pri_high","Eastern and Western Europe (i.e., the EU28)","2050",54.9138887747133
+"building_pri_high","Countries of Latin America and the Caribbean","2025",37.7807258623889
+"building_pri_high","Countries of Latin America and the Caribbean","2030",39.2977607589547
+"building_pri_high","Countries of Latin America and the Caribbean","2035",40.8757101780678
+"building_pri_high","Countries of Latin America and the Caribbean","2040",42.5170200615226
+"building_pri_high","Countries of Latin America and the Caribbean","2045",44.2242345646597
+"building_pri_high","Countries of Latin America and the Caribbean","2050",46
+"building_pri_high","Countries of South Asia; primarily India","2025",17.18339075084
+"building_pri_high","Countries of South Asia; primarily India","2030",19.7538118030557
+"building_pri_high","Countries of South Asia; primarily India","2035",22.7087358024182
+"building_pri_high","Countries of South Asia; primarily India","2040",26.1056795966974
+"building_pri_high","Countries of South Asia; primarily India","2045",30.0107638370978
+"building_pri_high","Countries of South Asia; primarily India","2050",34.5
+"building_pri_high","Countries of centrally-planned Asia; primarily China","2025",56.4624167939351
+"building_pri_high","Countries of centrally-planned Asia; primarily China","2030",56.4624167939351
+"building_pri_high","Countries of centrally-planned Asia; primarily China","2035",56.4624167939351
+"building_pri_high","Countries of centrally-planned Asia; primarily China","2040",56.4624167939351
+"building_pri_high","Countries of centrally-planned Asia; primarily China","2045",56.4624167939351
+"building_pri_high","Countries of centrally-planned Asia; primarily China","2050",56.4624167939351
+"building_pri_high","Pacific OECD","2025",58.5341882712869
+"building_pri_high","Pacific OECD","2030",58.5341882712869
+"building_pri_high","Pacific OECD","2035",58.5341882712869
+"building_pri_high","Pacific OECD","2040",58.5341882712869
+"building_pri_high","Pacific OECD","2045",58.5341882712869
+"building_pri_high","Pacific OECD","2050",58.5341882712869
+"building_pri_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2025",35.3512043069641
+"building_pri_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2030",37.0165017223792
+"building_pri_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2035",38.7602466910292
+"building_pri_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2040",40.5861346600766
+"building_pri_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2045",42.4980351589742
+"building_pri_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2050",44.5
+"building_pri_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2025",26.6351903494093
+"building_pri_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2030",28.8919358650452
+"building_pri_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2035",31.3398908391281
+"building_pri_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2040",33.9952560602477
+"building_pri_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2045",36.8756049768666
+"building_pri_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2050",40
+"building_pri_high","Countries of Sub-Saharan Africa","2025",18.1936826102333
+"building_pri_high","Countries of Sub-Saharan Africa","2030",20.7371992333642
+"building_pri_high","Countries of Sub-Saharan Africa","2035",23.6363050437278
+"building_pri_high","Countries of Sub-Saharan Africa","2040",26.9407121874635
+"building_pri_high","Countries of Sub-Saharan Africa","2045",30.707082677474
+"building_pri_high","Countries of Sub-Saharan Africa","2050",35
+"building_pri_low","Countries of Latin America and the Caribbean","2020",36.3222539687259
+"building_pri_low","Countries of South Asia; primarily India","2020",14.9474400505516
+"building_pri_low","Countries of Sub-Saharan Africa","2020",15.9621404605758
+"building_pri_low","Countries of centrally-planned Asia; primarily China","2020",56.4624167939351
+"building_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2020",24.5547189452116
+"building_pri_low","Eastern and Western Europe (i.e., the EU28)","2020",54.9138887747133
+"building_pri_low","North America; primarily the United States of America and Canada","2020",98.7328291965327
+"building_pri_low","Pacific OECD","2020",58.5341882712869
+"building_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2020",33.760825248302
+"building_pri_low","North America; primarily the United States of America and Canada","2025",98.7328291965327
+"building_pri_low","North America; primarily the United States of America and Canada","2030",98.7328291965327
+"building_pri_low","North America; primarily the United States of America and Canada","2035",98.7328291965327
+"building_pri_low","North America; primarily the United States of America and Canada","2040",98.7328291965327
+"building_pri_low","North America; primarily the United States of America and Canada","2045",98.7328291965327
+"building_pri_low","North America; primarily the United States of America and Canada","2050",98.7328291965327
+"building_pri_low","Eastern and Western Europe (i.e., the EU28)","2025",54.9138887747133
+"building_pri_low","Eastern and Western Europe (i.e., the EU28)","2030",54.9138887747133
+"building_pri_low","Eastern and Western Europe (i.e., the EU28)","2035",54.9138887747133
+"building_pri_low","Eastern and Western Europe (i.e., the EU28)","2040",54.9138887747133
+"building_pri_low","Eastern and Western Europe (i.e., the EU28)","2045",54.9138887747133
+"building_pri_low","Eastern and Western Europe (i.e., the EU28)","2050",54.9138887747133
+"building_pri_low","Countries of Latin America and the Caribbean","2025",37.7807258623889
+"building_pri_low","Countries of Latin America and the Caribbean","2030",39.2977607589547
+"building_pri_low","Countries of Latin America and the Caribbean","2035",40.8757101780678
+"building_pri_low","Countries of Latin America and the Caribbean","2040",42.5170200615226
+"building_pri_low","Countries of Latin America and the Caribbean","2045",44.2242345646597
+"building_pri_low","Countries of Latin America and the Caribbean","2050",46
+"building_pri_low","Countries of South Asia; primarily India","2025",17.18339075084
+"building_pri_low","Countries of South Asia; primarily India","2030",19.7538118030557
+"building_pri_low","Countries of South Asia; primarily India","2035",22.7087358024182
+"building_pri_low","Countries of South Asia; primarily India","2040",26.1056795966974
+"building_pri_low","Countries of South Asia; primarily India","2045",30.0107638370978
+"building_pri_low","Countries of South Asia; primarily India","2050",34.5
+"building_pri_low","Countries of centrally-planned Asia; primarily China","2025",56.4624167939351
+"building_pri_low","Countries of centrally-planned Asia; primarily China","2030",56.4624167939351
+"building_pri_low","Countries of centrally-planned Asia; primarily China","2035",56.4624167939351
+"building_pri_low","Countries of centrally-planned Asia; primarily China","2040",56.4624167939351
+"building_pri_low","Countries of centrally-planned Asia; primarily China","2045",56.4624167939351
+"building_pri_low","Countries of centrally-planned Asia; primarily China","2050",56.4624167939351
+"building_pri_low","Pacific OECD","2025",58.5341882712869
+"building_pri_low","Pacific OECD","2030",58.5341882712869
+"building_pri_low","Pacific OECD","2035",58.5341882712869
+"building_pri_low","Pacific OECD","2040",58.5341882712869
+"building_pri_low","Pacific OECD","2045",58.5341882712869
+"building_pri_low","Pacific OECD","2050",58.5341882712869
+"building_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2025",35.3512043069641
+"building_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2030",37.0165017223792
+"building_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2035",38.7602466910292
+"building_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2040",40.5861346600766
+"building_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2045",42.4980351589742
+"building_pri_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2050",44.5
+"building_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2025",26.6351903494093
+"building_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2030",28.8919358650452
+"building_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2035",31.3398908391281
+"building_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2040",33.9952560602477
+"building_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2045",36.8756049768666
+"building_pri_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2050",40
+"building_pri_low","Countries of Sub-Saharan Africa","2025",18.1936826102333
+"building_pri_low","Countries of Sub-Saharan Africa","2030",20.7371992333642
+"building_pri_low","Countries of Sub-Saharan Africa","2035",23.6363050437278
+"building_pri_low","Countries of Sub-Saharan Africa","2040",26.9407121874635
+"building_pri_low","Countries of Sub-Saharan Africa","2045",30.707082677474
+"building_pri_low","Countries of Sub-Saharan Africa","2050",35
 "building_ega_high","Countries of Latin America and the Caribbean","2020",36.3222539687259
 "building_ega_high","Countries of South Asia; primarily India","2020",14.9474400505516
 "building_ega_high","Countries of Sub-Saharan Africa","2020",15.9621404605758
@@ -1268,60 +1268,60 @@
 "gdp_agg_high","North America; primarily the United States of America and Canada","2020",56480.5277608717
 "gdp_agg_high","Pacific OECD","2020",40026.3020234764
 "gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2020",16590.0769387556
-"gdp_agg_high","North America; primarily the United States of America and Canada","2025",56809.046806
-"gdp_agg_high","North America; primarily the United States of America and Canada","2030",57139.4766824766
-"gdp_agg_high","North America; primarily the United States of America and Canada","2035",57471.8285046538
-"gdp_agg_high","North America; primarily the United States of America and Canada","2040",57806.1134515308
-"gdp_agg_high","North America; primarily the United States of America and Canada","2045",58142.3427671292
-"gdp_agg_high","North America; primarily the United States of America and Canada","2050",58480.5277608717
-"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2025",36609.6715342448
-"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2030",36938.5250738999
-"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2035",37270.3326048369
-"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2040",37605.1206618605
-"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2045",37942.9160181298
-"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2050",38283.7456872987
-"gdp_agg_high","Countries of Latin America and the Caribbean","2025",15282.699647991
-"gdp_agg_high","Countries of Latin America and the Caribbean","2030",15605.5372013863
-"gdp_agg_high","Countries of Latin America and the Caribbean","2035",15935.1944979083
-"gdp_agg_high","Countries of Latin America and the Caribbean","2040",16271.8156004018
-"gdp_agg_high","Countries of Latin America and the Caribbean","2045",16615.5476149496
-"gdp_agg_high","Countries of Latin America and the Caribbean","2050",16966.5407551595
-"gdp_agg_high","Countries of South Asia; primarily India","2025",6427.72179603946
-"gdp_agg_high","Countries of South Asia; primarily India","2030",6737.34290456126
-"gdp_agg_high","Countries of South Asia; primarily India","2035",7061.8783534799
-"gdp_agg_high","Countries of South Asia; primarily India","2040",7402.04656135066
-"gdp_agg_high","Countries of South Asia; primarily India","2045",7758.60055269913
-"gdp_agg_high","Countries of South Asia; primarily India","2050",8132.32962497864
-"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2025",17650.3779273558
-"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2030",17974.5771284513
-"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2035",18304.7311664588
-"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2040",18640.9494188304
-"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2045",18983.3432720453
-"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2050",19332.0261585109
-"gdp_agg_high","Pacific OECD","2025",40352.9001641823
-"gdp_agg_high","Pacific OECD","2030",40682.1632112153
-"gdp_agg_high","Pacific OECD","2035",41014.1129091135
-"gdp_agg_high","Pacific OECD","2040",41348.7711798415
-"gdp_agg_high","Pacific OECD","2045",41686.1601242383
-"gdp_agg_high","Pacific OECD","2050",42026.3020234765
-"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2025",16907.8037372054
-"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2030",17231.6155175891
-"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2035",17561.6288171497
-"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2040",17897.9624050068
-"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2045",18240.7373249009
-"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2050",18590.0769387556
-"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2025",13629.5023325194
-"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2030",13951.1205524467
-"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2035",14280.3280648417
-"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2040",14617.3039558274
-"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2045",14962.2315374598
-"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2050",15315.2984474479
-"gdp_agg_high","Countries of Sub-Saharan Africa","2025",3278.11036560856
-"gdp_agg_high","Countries of Sub-Saharan Africa","2030",3568.53027710103
-"gdp_agg_high","Countries of Sub-Saharan Africa","2035",3884.67956179465
-"gdp_agg_high","Countries of Sub-Saharan Africa","2040",4228.83767994379
-"gdp_agg_high","Countries of Sub-Saharan Africa","2045",4603.48603761045
-"gdp_agg_high","Countries of Sub-Saharan Africa","2050",5011.32587778968
+"gdp_agg_high","North America; primarily the United States of America and Canada","2025",56969.8082037807
+"gdp_agg_high","North America; primarily the United States of America and Canada","2030",57463.3271933413
+"gdp_agg_high","North America; primarily the United States of America and Canada","2035",57961.1214473048
+"gdp_agg_high","North America; primarily the United States of America and Canada","2040",58463.2280015018
+"gdp_agg_high","North America; primarily the United States of America and Canada","2045",58969.6842125977
+"gdp_agg_high","North America; primarily the United States of America and Canada","2050",59480.5277608717
+"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2025",36767.3427562796
+"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2030",37257.3853043779
+"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2035",37753.9592382371
+"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2040",38257.1516094819
+"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2045",38767.0506299785
+"gdp_agg_high","Eastern and Western Europe (i.e., the EU28)","2050",39283.7456872987
+"gdp_agg_high","Countries of Latin America and the Caribbean","2025",15429.2661901955
+"gdp_agg_high","Countries of Latin America and the Caribbean","2030",15906.2978588316
+"gdp_agg_high","Countries of Latin America and the Caribbean","2035",16398.0780715707
+"gdp_agg_high","Countries of Latin America and the Caribbean","2040",16905.0628139739
+"gdp_agg_high","Countries of Latin America and the Caribbean","2045",17427.7221694573
+"gdp_agg_high","Countries of Latin America and the Caribbean","2050",17966.5407551595
+"gdp_agg_high","Countries of South Asia; primarily India","2025",6553.17107434433
+"gdp_agg_high","Countries of South Asia; primarily India","2030",7002.89347700757
+"gdp_agg_high","Countries of South Asia; primarily India","2035",7483.47883703339
+"gdp_agg_high","Countries of South Asia; primarily India","2040",7997.04517685413
+"gdp_agg_high","Countries of South Asia; primarily India","2045",8545.85587175898
+"gdp_agg_high","Countries of South Asia; primarily India","2050",9132.32962497864
+"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2025",17799.3669484768
+"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2030",18279.3091164911
+"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2035",18772.1924461379
+"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2040",19278.365882927
+"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2045",19798.1877813353
+"gdp_agg_high","Countries of centrally-planned Asia; primarily China","2050",20332.0261585109
+"gdp_agg_high","Pacific OECD","2025",40511.3665834711
+"gdp_agg_high","Pacific OECD","2030",41002.3094688535
+"gdp_agg_high","Pacific OECD","2035",41499.2019169644
+"gdp_agg_high","Pacific OECD","2040",42002.1160284448
+"gdp_agg_high","Pacific OECD","2045",42511.1247776975
+"gdp_agg_high","Pacific OECD","2050",43026.3020234764
+"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2025",17056.0983018271
+"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2030",17535.2103763908
+"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2035",18027.7808853474
+"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2040",18534.1878810689
+"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2045",19054.8200355577
+"gdp_agg_high","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2050",19590.0769387556
+"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2025",13773.9422570652
+"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2030",14248.383996029
+"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2035",14739.1678220635
+"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2040",15246.8566363383
+"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2045",15772.0327290845
+"gdp_agg_high","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2050",16315.2984474479
+"gdp_agg_high","Countries of Sub-Saharan Africa","2025",3379.03877618125
+"gdp_agg_high","Countries of Sub-Saharan Africa","2030",3791.6530838294
+"gdp_agg_high","Countries of Sub-Saharan Africa","2035",4254.65171025958
+"gdp_agg_high","Countries of Sub-Saharan Africa","2040",4774.18708288905
+"gdp_agg_high","Countries of Sub-Saharan Africa","2045",5357.16290183341
+"gdp_agg_high","Countries of Sub-Saharan Africa","2050",6011.32587778967
 "gdp_agg_low","Countries of Latin America and the Caribbean","2020",14966.5407551595
 "gdp_agg_low","Countries of South Asia; primarily India","2020",6132.32962497864
 "gdp_agg_low","Countries of Sub-Saharan Africa","2020",3011.32587778967
@@ -1331,60 +1331,60 @@
 "gdp_agg_low","North America; primarily the United States of America and Canada","2020",56480.5277608717
 "gdp_agg_low","Pacific OECD","2020",40026.3020234764
 "gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2020",16590.0769387556
-"gdp_agg_low","North America; primarily the United States of America and Canada","2025",56809.046806
-"gdp_agg_low","North America; primarily the United States of America and Canada","2030",57139.4766824766
-"gdp_agg_low","North America; primarily the United States of America and Canada","2035",57471.8285046538
-"gdp_agg_low","North America; primarily the United States of America and Canada","2040",57806.1134515308
-"gdp_agg_low","North America; primarily the United States of America and Canada","2045",58142.3427671292
-"gdp_agg_low","North America; primarily the United States of America and Canada","2050",58480.5277608717
-"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2025",36609.6715342448
-"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2030",36938.5250738999
-"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2035",37270.3326048369
-"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2040",37605.1206618605
-"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2045",37942.9160181298
-"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2050",38283.7456872987
-"gdp_agg_low","Countries of Latin America and the Caribbean","2025",15282.699647991
-"gdp_agg_low","Countries of Latin America and the Caribbean","2030",15605.5372013863
-"gdp_agg_low","Countries of Latin America and the Caribbean","2035",15935.1944979083
-"gdp_agg_low","Countries of Latin America and the Caribbean","2040",16271.8156004018
-"gdp_agg_low","Countries of Latin America and the Caribbean","2045",16615.5476149496
-"gdp_agg_low","Countries of Latin America and the Caribbean","2050",16966.5407551595
-"gdp_agg_low","Countries of South Asia; primarily India","2025",6427.72179603946
-"gdp_agg_low","Countries of South Asia; primarily India","2030",6737.34290456126
-"gdp_agg_low","Countries of South Asia; primarily India","2035",7061.8783534799
-"gdp_agg_low","Countries of South Asia; primarily India","2040",7402.04656135066
-"gdp_agg_low","Countries of South Asia; primarily India","2045",7758.60055269913
-"gdp_agg_low","Countries of South Asia; primarily India","2050",8132.32962497864
-"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2025",17650.3779273558
-"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2030",17974.5771284513
-"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2035",18304.7311664588
-"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2040",18640.9494188304
-"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2045",18983.3432720453
-"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2050",19332.0261585109
-"gdp_agg_low","Pacific OECD","2025",40352.9001641823
-"gdp_agg_low","Pacific OECD","2030",40682.1632112153
-"gdp_agg_low","Pacific OECD","2035",41014.1129091135
-"gdp_agg_low","Pacific OECD","2040",41348.7711798415
-"gdp_agg_low","Pacific OECD","2045",41686.1601242383
-"gdp_agg_low","Pacific OECD","2050",42026.3020234765
-"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2025",16907.8037372054
-"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2030",17231.6155175891
-"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2035",17561.6288171497
-"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2040",17897.9624050068
-"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2045",18240.7373249009
-"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2050",18590.0769387556
-"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2025",13629.5023325194
-"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2030",13951.1205524467
-"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2035",14280.3280648417
-"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2040",14617.3039558274
-"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2045",14962.2315374598
-"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2050",15315.2984474479
-"gdp_agg_low","Countries of Sub-Saharan Africa","2025",3278.11036560856
-"gdp_agg_low","Countries of Sub-Saharan Africa","2030",3568.53027710103
-"gdp_agg_low","Countries of Sub-Saharan Africa","2035",3884.67956179465
-"gdp_agg_low","Countries of Sub-Saharan Africa","2040",4228.83767994379
-"gdp_agg_low","Countries of Sub-Saharan Africa","2045",4603.48603761045
-"gdp_agg_low","Countries of Sub-Saharan Africa","2050",5011.32587778968
+"gdp_agg_low","North America; primarily the United States of America and Canada","2025",56969.8082037807
+"gdp_agg_low","North America; primarily the United States of America and Canada","2030",57463.3271933413
+"gdp_agg_low","North America; primarily the United States of America and Canada","2035",57961.1214473048
+"gdp_agg_low","North America; primarily the United States of America and Canada","2040",58463.2280015018
+"gdp_agg_low","North America; primarily the United States of America and Canada","2045",58969.6842125977
+"gdp_agg_low","North America; primarily the United States of America and Canada","2050",59480.5277608717
+"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2025",36767.3427562796
+"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2030",37257.3853043779
+"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2035",37753.9592382371
+"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2040",38257.1516094819
+"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2045",38767.0506299785
+"gdp_agg_low","Eastern and Western Europe (i.e., the EU28)","2050",39283.7456872987
+"gdp_agg_low","Countries of Latin America and the Caribbean","2025",15429.2661901955
+"gdp_agg_low","Countries of Latin America and the Caribbean","2030",15906.2978588316
+"gdp_agg_low","Countries of Latin America and the Caribbean","2035",16398.0780715707
+"gdp_agg_low","Countries of Latin America and the Caribbean","2040",16905.0628139739
+"gdp_agg_low","Countries of Latin America and the Caribbean","2045",17427.7221694573
+"gdp_agg_low","Countries of Latin America and the Caribbean","2050",17966.5407551595
+"gdp_agg_low","Countries of South Asia; primarily India","2025",6553.17107434433
+"gdp_agg_low","Countries of South Asia; primarily India","2030",7002.89347700757
+"gdp_agg_low","Countries of South Asia; primarily India","2035",7483.47883703339
+"gdp_agg_low","Countries of South Asia; primarily India","2040",7997.04517685413
+"gdp_agg_low","Countries of South Asia; primarily India","2045",8545.85587175898
+"gdp_agg_low","Countries of South Asia; primarily India","2050",9132.32962497864
+"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2025",17799.3669484768
+"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2030",18279.3091164911
+"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2035",18772.1924461379
+"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2040",19278.365882927
+"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2045",19798.1877813353
+"gdp_agg_low","Countries of centrally-planned Asia; primarily China","2050",20332.0261585109
+"gdp_agg_low","Pacific OECD","2025",40511.3665834711
+"gdp_agg_low","Pacific OECD","2030",41002.3094688535
+"gdp_agg_low","Pacific OECD","2035",41499.2019169644
+"gdp_agg_low","Pacific OECD","2040",42002.1160284448
+"gdp_agg_low","Pacific OECD","2045",42511.1247776975
+"gdp_agg_low","Pacific OECD","2050",43026.3020234764
+"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2025",17056.0983018271
+"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2030",17535.2103763908
+"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2035",18027.7808853474
+"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2040",18534.1878810689
+"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2045",19054.8200355577
+"gdp_agg_low","Reforming Economies of Eastern Europe and the Former Soviet Union; primarily Russia","2050",19590.0769387556
+"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2025",13773.9422570652
+"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2030",14248.383996029
+"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2035",14739.1678220635
+"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2040",15246.8566363383
+"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2045",15772.0327290845
+"gdp_agg_low","Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qatar, etc.","2050",16315.2984474479
+"gdp_agg_low","Countries of Sub-Saharan Africa","2025",3379.03877618125
+"gdp_agg_low","Countries of Sub-Saharan Africa","2030",3791.6530838294
+"gdp_agg_low","Countries of Sub-Saharan Africa","2035",4254.65171025958
+"gdp_agg_low","Countries of Sub-Saharan Africa","2040",4774.18708288905
+"gdp_agg_low","Countries of Sub-Saharan Africa","2045",5357.16290183341
+"gdp_agg_low","Countries of Sub-Saharan Africa","2050",6011.32587778967
 "gdp_pri_high","Countries of Latin America and the Caribbean","2020",14966.5407551595
 "gdp_pri_high","Countries of South Asia; primarily India","2020",6132.32962497864
 "gdp_pri_high","Countries of Sub-Saharan Africa","2020",3011.32587778967

@@ -808,7 +808,7 @@ scen_data <- run_forecast(historic_values = hist_vals,
                           list_of_growth_rates = growth_rates,
                           list_of_years = years,
                           list_of_regions = regions_filter,
-                          scenario_name = "building_pri")
+                          scenario_name = "building_pri_high")
 
 scen_data %>%
   ggplot(aes(x=year, y=value, group=region, color=region))+
@@ -818,7 +818,7 @@ scen_data %>%
 #ADD TO EXPORT DF
 export_df <- rbind(export_df, scen_data)
 #Add same scenario also for low scenario
-scen_data <- scen_data %>% mutate(scenario = "transport_pri_low")
+scen_data <- scen_data %>% mutate(scenario = "building_pri_low")
 export_df <- rbind(export_df, scen_data)
 
 
@@ -1212,7 +1212,7 @@ hist_vals <- hist_vals %>%
 ####----SCENARIO 1 GDP aggu----####
 #AGGREGATE UTILITARIAN
 #GET GROWTH RATES
-end_val <- hist_vals %>% filter(year == 2020) %>% mutate(value = value + 2000) %>%
+end_val <- hist_vals %>% filter(year == 2020) %>% mutate(value = value + 3000) %>%
   rename(end_val = value)
 
 growth_rates <- hist_vals %>%
