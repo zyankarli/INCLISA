@@ -91,13 +91,19 @@ if 'rs' not in st.session_state:
 def random_scenario_order():
     random.seed(st.session_state['rs'])
     scenario_list = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6", "Scenario \u25AC", "Scenario \u275A"]
-    scenario_list_nutr = random.sample(scenario_list, len(scenario_list))
-    scenario_list_tran = random.sample(scenario_list, len(scenario_list))
-    scenario_list_buil = random.sample(scenario_list, len(scenario_list))
-    scenario_list_gdp = random.sample(scenario_list, len(scenario_list))
-    return scenario_list_nutr, scenario_list_tran, scenario_list_buil, scenario_list_gdp
+    #randomise order for each plot in plots
+    scenario_list_gdp_high = random.sample(scenario_list, len(scenario_list))
+    scenario_list_gdp_low = random.sample(scenario_list, len(scenario_list))
+    scenario_list_mob_high = random.sample(scenario_list, len(scenario_list))
+    scenario_list_mob_low = random.sample(scenario_list, len(scenario_list))
+    scenario_list_hou_high = random.sample(scenario_list, len(scenario_list))
+    scenario_list_hou_low = random.sample(scenario_list, len(scenario_list))
+    scenario_list_nut = random.sample(scenario_list, len(scenario_list))
+    return scenario_list_gdp_high, scenario_list_gdp_low, scenario_list_mob_high, scenario_list_mob_low, scenario_list_hou_high, scenario_list_hou_low, scenario_list_nut
 
-scenario_list_nutr, scenario_list_tran, scenario_list_buil, scenario_list_gdp = random_scenario_order()
+scenario_list_gdp_high, scenario_list_gdp_low, scenario_list_mob_high, scenario_list_mob_low,\
+      scenario_list_hou_high, scenario_list_hou_low, scenario_list_nut = random_scenario_order()
+
 
 #change values to int
 df["Year"] = df['Year'].astype(int)
@@ -192,7 +198,7 @@ gdp_high = px.line(df[df["scen_id"].str.contains("gdp") & df["scen_id"].str.cont
                      "Value": "GDP per capita per year",
                      "Year" : ""
                 },
-                category_orders={"Scenario": scenario_list_gdp,
+                category_orders={"Scenario": scenario_list_gdp_high,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Economic activity trajectories",
                 range_x=[2020, 2050],
@@ -213,7 +219,7 @@ gdp_low = px.line(df[df["scen_id"].str.contains("gdp") & df["scen_id"].str.conta
                      "Value": "GDP per capita per year",
                      "Year" : ""
                 },
-                category_orders={"Scenario": scenario_list_gdp,
+                category_orders={"Scenario": scenario_list_gdp_low,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Economic activity scenarios",
                 range_x=[2020, 2050],
@@ -235,11 +241,11 @@ mob_high = px.line(df[df["scen_id"].str.contains("transport") & df["scen_id"].st
                      "Value": "passenger km per capita per year",
                      "Year" : ""
                 },
-                category_orders={"Scenario": scenario_list_tran,
+                category_orders={"Scenario": scenario_list_mob_high,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Mobility scenarios",
                 range_x=[2020, 2050],
-                range_y=[0, 12000],
+                range_y=[0, 27000],
                 color_discrete_map=colors_dict,
                 hover_data=hover_dic,
                 hover_name=global_hover_name
@@ -256,11 +262,11 @@ mob_low = px.line(df[df["scen_id"].str.contains("transport") & df["scen_id"].str
                      "Value": "passenger km per capita per year",
                      "Year" : ""
                 },
-                category_orders={"Scenario": scenario_list_tran,
+                category_orders={"Scenario": scenario_list_mob_low,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Mobility scenarios",
                 range_x=[2020, 2050],
-                range_y=[0, 12000],
+                range_y=[0, 27000],
                 color_discrete_map=colors_dict,
                 hover_data=hover_dic,
                 hover_name=global_hover_name
@@ -278,7 +284,7 @@ hou_high = px.line(df[df["scen_id"].str.contains("building") & df["scen_id"].str
                      "Value": "floorspace (m²) per capita per year",
                      "Year" : ""
                 },
-                category_orders={"Scenario": scenario_list_buil,
+                category_orders={"Scenario": scenario_list_hou_high,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Housing scenarios",
                 range_x=[2020, 2050],
@@ -299,7 +305,7 @@ hou_low = px.line(df[df["scen_id"].str.contains("building") & df["scen_id"].str.
                      "Value": "floorspace (m²) per capita per year",
                      "Year" : ""
                 },
-                category_orders={"Scenario": scenario_list_buil,
+                category_orders={"Scenario": scenario_list_hou_low,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Housing scenarios",
                 range_x=[2020, 2050],
@@ -321,7 +327,7 @@ nut = px.line(df[df["scen_id"].str.contains("nutrition")], x='Year', y="Value", 
                      "Year" : ""
                 },
                 #automise random order
-                category_orders={"Scenario": scenario_list_nutr,
+                category_orders={"Scenario": scenario_list_nut,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Meat consumption scenarios",
                 range_x=[2018, 2050],
@@ -479,7 +485,7 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(gdp_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
+        q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp_high,horizontal=True ,
                         key=1)
         q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                             key=2)
@@ -493,7 +499,7 @@ with st.form("Survey"):
                     This average GDP per capita is projected to be around 20.000 USD per person per year.</p>""", unsafe_allow_html=True)          
         st.plotly_chart(gdp_low, theme="streamlit", config=config, use_container_width=True) #Graph
         #Questions
-        q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
+        q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp_low,horizontal=True ,
                         key=4)
         q5 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                             key=5)
@@ -519,7 +525,7 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(mob_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_tran,horizontal=True,
+        q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_mob_high,horizontal=True,
             key=7)
         q8 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
             key=8)
@@ -533,7 +539,7 @@ with st.form("Survey"):
             This average pkm per capita per year is estimated to be around 3.500.</p>""", unsafe_allow_html=True)          
         st.plotly_chart(mob_low, theme="streamlit", config=config, use_container_width=True)  # Graph
         #Questions
-        q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
+        q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_mob_low,horizontal=True ,
             key=10)
         q11 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                 key=11)
@@ -557,7 +563,7 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(hou_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q13 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_buil,horizontal=True ,
+        q13 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_hou_high,horizontal=True ,
                 key=13)
         q14 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                 key=14)
@@ -571,7 +577,7 @@ with st.form("Survey"):
                 This average pkm per capita per year is estimated to be around 3.500.</p>""", unsafe_allow_html=True)          
         st.plotly_chart(hou_low, theme="streamlit", config=config, use_container_width=True)   
         #Questions
-        q16 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
+        q16 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_hou_low,horizontal=True ,
                 key=16)
         q17 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                     key=17)
@@ -596,7 +602,7 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(nut, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q19 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nutr, horizontal=True ,
+        q19 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut, horizontal=True ,
                     key=19)
         q20 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=20)
