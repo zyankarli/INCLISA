@@ -215,7 +215,7 @@ gdp_low = px.line(df[df["scen_id"].str.contains("gdp") & df["scen_id"].str.conta
                 },
                 category_orders={"Scenario": scenario_list_gdp,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Economic activity trajectories",
+                title="Economic activity scenarios",
                 range_x=[2020, 2050],
                 range_y=[0, 70000],
                 color_discrete_map=colors_dict,
@@ -237,7 +237,7 @@ mob_high = px.line(df[df["scen_id"].str.contains("transport") & df["scen_id"].st
                 },
                 category_orders={"Scenario": scenario_list_tran,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Mobility trajectories",
+                title="Mobility scenarios",
                 range_x=[2020, 2050],
                 range_y=[0, 12000],
                 color_discrete_map=colors_dict,
@@ -258,7 +258,7 @@ mob_low = px.line(df[df["scen_id"].str.contains("transport") & df["scen_id"].str
                 },
                 category_orders={"Scenario": scenario_list_tran,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Mobility trajectories",
+                title="Mobility scenarios",
                 range_x=[2020, 2050],
                 range_y=[0, 12000],
                 color_discrete_map=colors_dict,
@@ -280,7 +280,7 @@ hou_high = px.line(df[df["scen_id"].str.contains("building") & df["scen_id"].str
                 },
                 category_orders={"Scenario": scenario_list_buil,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Housing trajectories",
+                title="Housing scenarios",
                 range_x=[2020, 2050],
                 range_y=[0, 115],
                 color_discrete_map=colors_dict,
@@ -301,7 +301,7 @@ hou_low = px.line(df[df["scen_id"].str.contains("building") & df["scen_id"].str.
                 },
                 category_orders={"Scenario": scenario_list_buil,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Housing trajectories",
+                title="Housing scenarios",
                 range_x=[2020, 2050],
                 range_y=[0, 115],
                 color_discrete_map=colors_dict,
@@ -323,7 +323,7 @@ nut = px.line(df[df["scen_id"].str.contains("nutrition")], x='Year', y="Value", 
                 #automise random order
                 category_orders={"Scenario": scenario_list_nutr,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Meat consumption trajectories",
+                title="Meat consumption scenarios",
                 range_x=[2018, 2050],
                 range_y=[0, 700],
                 color_discrete_map=colors_dict,
@@ -368,53 +368,6 @@ def apply_layout_settings(plot):
 
 #apply layout settings to all plots
 updated_plots = [apply_layout_settings(plot) for plot in plots]
-
-
-
-# fig2.update_layout(legend=legend_dic,
-#                    autosize=True,
-#                    title={'font': {'size': font_size_title}},
-#                    xaxis={'title': {'font': {'size': font_size_axis}}},
-#                    yaxis={'title': {'font': {'size': font_size_axis}}},
-#                    height=plot_height)
-# fig3.update_layout(legend=legend_dic,
-#                    autosize=True,
-#                    title={'font': {'size': font_size_title}},
-#                    xaxis={'title': {'font': {'size': font_size_axis}}},
-#                    yaxis={'title': {'font': {'size': font_size_axis}}},
-#                    height=plot_height)
-
-
-#change subplot figure titles
-
-# fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-# fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-
-# #change size of subplot titles
-# fig1.update_annotations(font_size=font_size_subheadings)
-# fig2.update_annotations(font_size=font_size_subheadings)
-# fig3.update_annotations(font_size=font_size_subheadings)
-
-# #Rotate ticks and disable 2020 to avoid overlap
-# fig1.update_xaxes(global_xticks)
-# fig2.update_xaxes(global_xticks)
-# fig3.update_xaxes(global_xticks)
-
-
-# #Disable zoom feature
-# fig1.layout.xaxis.fixedrange = x_axis_zoom
-# fig1.layout.yaxis.fixedrange = y_axis_zoom
-# fig2.layout.xaxis.fixedrange = x_axis_zoom
-# fig2.layout.yaxis.fixedrange = y_axis_zoom
-# fig3.layout.xaxis.fixedrange = x_axis_zoom
-# fig3.layout.yaxis.fixedrange = y_axis_zoom
-
-
-# #add year 2020 in first graph
-# fig1.add_annotation(global_annotation)
-# fig2.add_annotation(global_annotation)
-# fig3.add_annotation(global_annotation)
-
 
 #set plotly configuarations
 config = {'displayModeBar': False}
@@ -497,9 +450,6 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
 #set font size for normal text
 font_size = "20px"
 
-
-
-
 with st.form("Survey"):
 
     #MEAT CONSUMPTION
@@ -514,32 +464,45 @@ with st.form("Survey"):
                     Unfortunately, it is not always clear what a "fair" distribution would look like. Let's explore this question together!      
                     </p>""", unsafe_allow_html=True)
 
-        st.markdown('### Nutrition')
-        
-        st.markdown(f"""<p style="font-size:{font_size};">A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
-                        Meat production has many environmental impacts and requires a lot of resources compared to plant-based foods. Raising animals for meat requires large amounts of land, water, and feed. 
-                        The production of feed for livestock, like soy and corn, often involves deforestation and the use of fertilizers, which contribute to greenhouse gas emissions. 
-                        Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.</p>""", unsafe_allow_html=True)
-        
-        st.markdown(f"""<p style="font-size:{font_size};">Below, we present future trajectories for <b> meat consumption </b> across different world regions.  
-                Meat consumption is assessed using kilo calories of meat consumption per capita per day.  
-                The EAT-Lancet Commission recommends that a <b>healthy diet</b> includes approximately 90cKal (or 85g) of meat per day, which is represented as dashed line. This quantity is equivalent to a piece of meat about the size of the palm of your hand.</p>""", unsafe_allow_html=True)
-        
+        #ECONOMIC ACTIVITY
+        #High Threshold
+        st.markdown("### Economic Activity")
+        st.markdown(f"""<p style="font-size:{font_size};">Despite being contested, the gross domestic product (GDP) is universally used as an indicator for economic performance.</p>""", unsafe_allow_html=True)
+        st.markdown(f"""<p style="font-size:{font_size};"> Below, we present future GDP trajectories across different world regions.  
+                    GDP per capita is used to assess the economic activity of a country in relation to its population.  
+                    In climate scenarios, GDP per capita is an important indicator for estimating energy demand and supply.  
+                    The dashed line displays the <b> average GPD per capita across the world </b> according to the udpated projections of SSP1. <br>
+                    MORE NARRATIVE <br> 
+                    This average GDP per capita is projected to be around 28.000 USD per person per year.</p>""", unsafe_allow_html=True)  
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(nut, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(gdp_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nutr, horizontal=True ,
-                    key=1)
-        q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
-                    key=2)
+        q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
+                        key=1)
+        q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
+                            key=2)
         q3 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                    key=3 )
+                        key=3)
+        #Low Threshold
+        st.markdown("<br> <br>",unsafe_allow_html=True)
+        st.markdown(f"""<p style="font-size:{font_size};"> Let's now assume a different future! 
+                    The dashed line displays the <b> average GPD per capita across the world </b> according to a apparent decoupling of the human development index (HDI) and GDP. <br>
+                    MORE NARRATIVE <br> 
+                    This average GDP per capita is projected to be around 20.000 USD per person per year.</p>""", unsafe_allow_html=True)          
+        st.plotly_chart(gdp_low, theme="streamlit", config=config, use_container_width=True) #Graph
+        #Questions
+        q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
+                        key=4)
+        q5 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
+                            key=5)
+        q6 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                        key=6)
         st.markdown("""---""")
 
         #MOBILITY
-        #Introduction
+        #High Threshold
         st.markdown("### Mobility")
         st.markdown(f"""<p style="font-size:{font_size};">Mobility is important for a good standard of living as it allows the connection of people and markets, thereby enabling access to services and economic opportunities.  
                     However, the current mobility system has significant negative effects on human health and the environment. 
@@ -556,16 +519,31 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(mob_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_tran,horizontal=True,
-                    key=4)
-        q5 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
-                    key=5)
-        q6 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                    key=6)
+        q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_tran,horizontal=True,
+            key=7)
+        q8 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+            key=8)
+        q9 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+            key=9)
+        #Low Threshold
+        st.markdown("<br> <br>",unsafe_allow_html=True)
+        st.markdown(f"""<p style="font-size:{font_size};"> Let's now assume a different future! 
+            The dashed line displays the <b> definition dashed line </b> according to <br>
+            MORE NARRATIVE <br> 
+            This average pkm per capita per year is estimated to be around 3.500.</p>""", unsafe_allow_html=True)          
+        st.plotly_chart(mob_low, theme="streamlit", config=config, use_container_width=True)  # Graph
+        #Questions
+        q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
+            key=10)
+        q11 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
+                key=11)
+        q12 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+            key=12)     
+
         st.markdown("""---""")
 
         #HOUSING
-        #Introduction
+        #High Treshold
         st.markdown("### Housing")
         st.markdown(f"""<p style="font-size:{font_size};">Housing is a central factor for a persons living conditions, but it also has a significant environmental impact.  
         Aside from the land used for construction and the resources consumed during construction, housing requires a large amounts of energy for heating, cooling, and cooking.</p>""", unsafe_allow_html=True)
@@ -579,75 +557,92 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(hou_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_buil,horizontal=True ,
-                    key=7)
-        q8 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
-                    key=8)
-        q9 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                    key=9)
+        q13 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_buil,horizontal=True ,
+                key=13)
+        q14 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+                key=14)
+        q15 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                key=15)
+        #Low Threshold
+        st.markdown("<br> <br>",unsafe_allow_html=True)
+        st.markdown(f"""<p style="font-size:{font_size};"> Let's now assume a different future! 
+                The dashed line displays the <b> definition dashed line </b> according to <br>
+                MORE NARRATIVE <br> 
+                This average pkm per capita per year is estimated to be around 3.500.</p>""", unsafe_allow_html=True)          
+        st.plotly_chart(hou_low, theme="streamlit", config=config, use_container_width=True)   
+        #Questions
+        q16 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
+                key=16)
+        q17 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
+                    key=17)
+        q18 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                key=18)
         st.markdown("""---""")
 
-        #ECONOMIC ACTIVITY
-        #Introduction
-        st.markdown("### Economic Activity")
-        st.markdown(f"""<p style="font-size:{font_size};">Despite being contested, the gross domestic product (GDP) is universally used as an indicator for economic performance.</p>""", unsafe_allow_html=True)
-        st.markdown(f"""<p style="font-size:{font_size};"> Below, we present future GDP trajectories across different world regions.  
-                    GDP per capita is used to assess the economic activity of a country in relation to its population.  
-                    In climate scenarios, GDP per capita is an important indicator for estimating energy demand and supply.  
-                    The dashed line displays the <b>average GPD across all regions for all climate scenarios that adhere to the 1.5°C goal</b> according to the integrated REMIND-MAgPIE 2.1-4.2 model. 
-                    This average GDP per capita is projected to be around 36.000 USD (in 2010 currency) per person per year.</p>""", unsafe_allow_html=True)  
+        #NUTRITION
+        st.markdown('### Nutrition')
+        
+        st.markdown(f"""<p style="font-size:{font_size};">A balanced diet is crucial for human health and involves consuming a variety of fruits, vegetables, nuts, and animal products.  
+                        Meat production has many environmental impacts and requires a lot of resources compared to plant-based foods. Raising animals for meat requires large amounts of land, water, and feed. 
+                        The production of feed for livestock, like soy and corn, often involves deforestation and the use of fertilizers, which contribute to greenhouse gas emissions. 
+                        Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.</p>""", unsafe_allow_html=True)
+        
+        st.markdown(f"""<p style="font-size:{font_size};">Below, we present future trajectories for <b> meat consumption </b> across different world regions.  
+                Meat consumption is assessed using kilo calories of meat consumption per capita per day.  
+                The EAT-Lancet Commission recommends that a <b>healthy diet</b> includes approximately 90cKal (or 85g) of meat per day, which is represented as dashed line. This quantity is equivalent to a piece of meat about the size of the palm of your hand.</p>""", unsafe_allow_html=True)
+        
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(gdp_high, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(nut, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
-                        key=10)
-        q11 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
-                            key=11)
-        q12 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                        key=12)
+        q19 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nutr, horizontal=True ,
+                    key=19)
+        q20 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+                    key=20)
+        q21 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                    key=21 )
         st.markdown("""---""")
 
         #PERSONAL QUESTIONS
         st.markdown('### Personal Questions')
-        q13=st.selectbox("How often per week do you eat meat?",
-                            ("-", "Never", "Once per week or less", "At least 3 times per week", "Everyday"), 
-                            key=13)
-        q14=st.selectbox("How often per year do you travel by plane?",#
-                            ("-", "Never", "Once per year", "3 times per year", "At least 5 times per year"), 
-                            key=14)
-        q15=st.selectbox("What is the size of your apartment/ house?",
-                            ("-", "Less than 10m² per person", "Between 10m² and 30m² per person","Between 30m² and 50m² per person","More than 50m² per person" ), 
-                            key=15)
-        q16 = st.selectbox("Which region are you from? (Please select the region you feel closer to and more knowledgeable about)",
-                        list_of_regions, 
-                        key=16)
-        q17 = st.selectbox("What type of organisation do you work for?", 
-                        ("-", "Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), 
-                        key=17)
-        #TODO: add conditional pop-up for st text with other
-        q18 = st.selectbox("What is the highest level of education you have completed?",
-                        ("-", 'No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"),
-                        key=18)
-        q19 = st. selectbox("What is your age?",
-                        ("-", "18-24", '25-34','35-44','45-54','55-64','65-100'), 
-                        key=19)
-        q20 = st.selectbox("What is your gender?",
-                        ("-", "Male", "Female", "Other", "Prefer not to say"), 
-                        key=20)
-        q21 = st.selectbox("To which sector is your work most related to?",
-                        ("-", "Agriculture/Food/Land Management", "Industry/Manufacturing", "Transport/Shipping/Public Transportation", "Buildings/Housing/Construction", "Climate mitigation/ adapdation", "Other"), 
-                        key=21)
         q22 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
-                        ("-", "No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"),
-                        key=22)
+                ("-", "No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"),
+                key=22)
+        q23=st.selectbox("How often per week do you eat meat?",
+                    ("-", "Never", "Once per week or less", "At least 3 times per week", "Everyday"), 
+                    key=23)
+        q24=st.selectbox("How often per year do you travel by plane?",#
+                    ("-", "Never", "Once per year", "3 times per year", "At least 5 times per year"), 
+                    key=24)
+        q25=st.selectbox("What is the size of your apartment/ house?",
+                    ("-", "Less than 10m² per person", "Between 10m² and 30m² per person","Between 30m² and 50m² per person","More than 50m² per person" ), 
+                    key=25)
+        q26 = st.selectbox("Which region are you from? (Please select the region you feel closer to and more knowledgeable about)",
+                list_of_regions, 
+                key=26)
+        q27 = st.selectbox("What type of organisation do you work for?", 
+                ("-", "Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), 
+                key=27)
+        #TODO: add conditional pop-up for st text with other
+        q28 = st.selectbox("What is the highest level of education you have completed?",
+                ("-", 'No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"),
+                key=28)
+        q29 = st. selectbox("What is your age?",
+                ("-", "18-24", '25-34','35-44','45-54','55-64','65-100'), 
+                key=29)
+        q30 = st.selectbox("What is your gender?",
+                ("-", "Male", "Female", "Other", "Prefer not to say"), 
+                key=30)
+        q31 = st.selectbox("To which sector is your work most related to?",
+                ("-", "Agriculture/Food/Land Management", "Industry/Manufacturing", "Transport/Shipping/Public Transportation", "Buildings/Housing/Construction", "Climate mitigation/ adapdation", "Other"), 
+                key=31)
         timestamp = time.time()
     #Submit button; send data to google sheet
         submitted = st.form_submit_button("Click here to submit!")
         if submitted:
             cursor = create_connection()
-            query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}", "{timestamp}")'
+            query = f'INSERT INTO "{sheet_url}" VALUE ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}","{q23}","{q24}","{q25}","{q26}","{q27}","{q28}","{q29}","{q30}","{q31}", "{timestamp}")'
             cursor.execute(query)
             st.write("**:green[Submission successful. Thank you for your input!]**")
             st.toast("**:green[Submission successful!]**", icon=None)
