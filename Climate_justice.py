@@ -48,7 +48,7 @@ st.markdown(hide_img_fs, unsafe_allow_html=True)
 #        LOAD DATA        #
 #-------------------------#
 #Data loading and wrangling
-@st.cache_data
+#@st.cache_data
 def load_csv():
     df = pd.DataFrame(pd.read_csv(r"https://raw.githubusercontent.com/zyankarli/INCLISA/main/pages/output.csv",
                                     sep=","
@@ -187,7 +187,7 @@ global_annotation = dict(
 
 #----GDP----#
 #HIGH THRESHOLD
-fig4 = px.line(df[(df["scen_id"].str.contains("gdp")) & (df["scen_id"].str.contains("high"))], x='Year', y="Value", color="Region", facet_col='Scenario',
+gdp_high = px.line(df[df["scen_id"].str.contains("gdp") & df["scen_id"].str.contains("high")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "GDP per capita per year",
                      "Year" : ""
@@ -201,15 +201,36 @@ fig4 = px.line(df[(df["scen_id"].str.contains("gdp")) & (df["scen_id"].str.conta
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-# Add threshold [Source = own calculations]
-fig4.add_hline(y=36000,
+
+gdp_high.add_hline(y=28000,
               annotation_text="",
               annotation_position="bottom left",
               line_dash="dot")
 
+#LOW THRESHOLD
+gdp_low = px.line(df[df["scen_id"].str.contains("gdp") & df["scen_id"].str.contains("low")], x='Year', y="Value", color="Region", facet_col='Scenario',
+                labels={
+                     "Value": "GDP per capita per year",
+                     "Year" : ""
+                },
+                category_orders={"Scenario": scenario_list_gdp,
+                                 "Region": sorted(pd.unique(df["Region"]))},
+                title="Economic activity trajectories",
+                range_x=[2020, 2050],
+                range_y=[0, 70000],
+                color_discrete_map=colors_dict,
+                hover_data=hover_dic,
+                hover_name=global_hover_name
+                )
 
-#----TRANSPORTATION----#
-fig2 = px.line(df[df["scen_id"].str.contains("transport")], x='Year', y="Value", color="Region", facet_col='Scenario',
+gdp_low.add_hline(y=20000,
+              annotation_text="",
+              annotation_position="bottom left",
+              line_dash="dot")
+
+#----MOBILITY----#
+#HIGH TRESHOLD
+mob_high = px.line(df[df["scen_id"].str.contains("transport") & df["scen_id"].str.contains("high")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "passenger km per capita per year",
                      "Year" : ""
@@ -223,14 +244,36 @@ fig2 = px.line(df[df["scen_id"].str.contains("transport")], x='Year', y="Value",
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-# Add Japanese Passenger Kilometers by year
-fig2.add_hline(y=8000,
+
+mob_high.add_hline(y=8000,
               annotation_text="",
               annotation_position="bottom left",
               line_dash="dot")
 
-#----BUILDINGS----#
-fig3 = px.line(df[df["scen_id"].str.contains("building")], x='Year', y="Value", color="Region", facet_col='Scenario',
+#LOW TRESHOLD
+mob_low = px.line(df[df["scen_id"].str.contains("transport") & df["scen_id"].str.contains("low")], x='Year', y="Value", color="Region", facet_col='Scenario',
+                labels={
+                     "Value": "passenger km per capita per year",
+                     "Year" : ""
+                },
+                category_orders={"Scenario": scenario_list_tran,
+                                 "Region": sorted(pd.unique(df["Region"]))},
+                title="Mobility trajectories",
+                range_x=[2020, 2050],
+                range_y=[0, 12000],
+                color_discrete_map=colors_dict,
+                hover_data=hover_dic,
+                hover_name=global_hover_name
+                )
+
+mob_low.add_hline(y=3500,
+              annotation_text="",
+              annotation_position="bottom left",
+              line_dash="dot")
+
+#----HOUSING----#
+#HIGH THRESHOLD
+hou_high = px.line(df[df["scen_id"].str.contains("building") & df["scen_id"].str.contains("high")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "floorspace (m²) per capita per year",
                      "Year" : ""
@@ -244,16 +287,35 @@ fig3 = px.line(df[df["scen_id"].str.contains("building")], x='Year', y="Value", 
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-# Add threshold [Source = European average]
-fig3.add_hline(y=45,
+
+hou_high.add_hline(y=45,
               annotation_text="",
               annotation_position="bottom left",
               line_dash="dot")
 
+#LOW THRESHOLD
+hou_low = px.line(df[df["scen_id"].str.contains("building") & df["scen_id"].str.contains("low")], x='Year', y="Value", color="Region", facet_col='Scenario',
+                labels={
+                     "Value": "floorspace (m²) per capita per year",
+                     "Year" : ""
+                },
+                category_orders={"Scenario": scenario_list_buil,
+                                 "Region": sorted(pd.unique(df["Region"]))},
+                title="Housing trajectories",
+                range_x=[2020, 2050],
+                range_y=[0, 115],
+                color_discrete_map=colors_dict,
+                hover_data=hover_dic,
+                hover_name=global_hover_name
+                )
 
+hou_low.add_hline(y=10,
+              annotation_text="",
+              annotation_position="bottom left",
+              line_dash="dot")
 
 #----NUTRITION----#
-fig1 = px.line(df[df["scen_id"].str.contains("nutrition")], x='Year', y="Value", color="Region", facet_col='Scenario',
+nut = px.line(df[df["scen_id"].str.contains("nutrition")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
                      "Value": "kCal per capita/day",
                      "Year" : ""
@@ -270,81 +332,94 @@ fig1 = px.line(df[df["scen_id"].str.contains("nutrition")], x='Year', y="Value",
                 )
 
 # Add Lancet Healthy Diet
-fig1.add_hline(y=90,
+nut.add_hline(y=90,
                annotation_text="",
                annotation_position="bottom left",
                line_dash="dot")
 
 
 #LAYOUT UPDATES
-
+#get list of all plots defined above
+plots = [gdp_high, gdp_low, mob_high, mob_low, hou_high, hou_low, nut]
 #set font sizes
 font_size_title = 24
 font_size_axis = 18
 font_size_legend = 14
 font_size_subheadings = 18
 #add legends
-fig1.update_layout(legend=legend_dic,
-                   autosize=True,
-                   title={'font': {'size': font_size_title}},
-                   xaxis={'title': {'font': {'size': font_size_axis}}},
-                   yaxis={'title': {'font': {'size': font_size_axis}}},  
-                #    width=plot_width,
-                    height=plot_height
-                   )
-fig2.update_layout(legend=legend_dic,
-                   autosize=True,
-                   title={'font': {'size': font_size_title}},
-                   xaxis={'title': {'font': {'size': font_size_axis}}},
-                   yaxis={'title': {'font': {'size': font_size_axis}}},
-                   height=plot_height)
-fig3.update_layout(legend=legend_dic,
-                   autosize=True,
-                   title={'font': {'size': font_size_title}},
-                   xaxis={'title': {'font': {'size': font_size_axis}}},
-                   yaxis={'title': {'font': {'size': font_size_axis}}},
-                   height=plot_height)
-fig4.update_layout(legend=legend_dic,
-                  autosize=True,
-                   title={'font': {'size': font_size_title}},
-                   xaxis={'title': {'font': {'size': font_size_axis}}},
-                   yaxis={'title': {'font': {'size': font_size_axis}}},
-                   height=plot_height)
+layout_settings = {   
+    'legend': legend_dic,
+    'autosize': True,
+    'title': {'font': {'size': font_size_title}},
+    'xaxis': {'title': {'font': {'size': font_size_axis}}},
+    'yaxis': {'title': {'font': {'size': font_size_axis}}},
+    'height': plot_height
+}
+# Function to apply layout settings to a plot
+def apply_layout_settings(plot):
+    updated_plot = plot.update_layout(**layout_settings)
+    updated_plot.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+    updated_plot.update_annotations(font_size=font_size_subheadings)
+    updated_plot.update_xaxes(global_xticks)
+    updated_plot.layout.xaxis.fixedrange = x_axis_zoom
+    updated_plot.layout.yaxis.fixedrange = y_axis_zoom
+    updated_plot.add_annotation(global_annotation)
+    return updated_plot
+
+#apply layout settings to all plots
+updated_plots = [apply_layout_settings(plot) for plot in plots]
+
+
+
+# fig2.update_layout(legend=legend_dic,
+#                    autosize=True,
+#                    title={'font': {'size': font_size_title}},
+#                    xaxis={'title': {'font': {'size': font_size_axis}}},
+#                    yaxis={'title': {'font': {'size': font_size_axis}}},
+#                    height=plot_height)
+# fig3.update_layout(legend=legend_dic,
+#                    autosize=True,
+#                    title={'font': {'size': font_size_title}},
+#                    xaxis={'title': {'font': {'size': font_size_axis}}},
+#                    yaxis={'title': {'font': {'size': font_size_axis}}},
+#                    height=plot_height)
+
 
 #change subplot figure titles
-fig1.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-fig4.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-#change size of subplot titles
-fig1.update_annotations(font_size=font_size_subheadings)
-fig2.update_annotations(font_size=font_size_subheadings)
-fig3.update_annotations(font_size=font_size_subheadings)
-fig4.update_annotations(font_size=font_size_subheadings)
-#Rotate ticks and disable 2020 to avoid overlap
-fig1.update_xaxes(global_xticks)
-fig2.update_xaxes(global_xticks)
-fig3.update_xaxes(global_xticks)
-fig4.update_xaxes(global_xticks)
 
-#Disable zoom feature
-fig1.layout.xaxis.fixedrange = x_axis_zoom
-fig1.layout.yaxis.fixedrange = y_axis_zoom
-fig2.layout.xaxis.fixedrange = x_axis_zoom
-fig2.layout.yaxis.fixedrange = y_axis_zoom
-fig3.layout.xaxis.fixedrange = x_axis_zoom
-fig3.layout.yaxis.fixedrange = y_axis_zoom
-fig4.layout.xaxis.fixedrange = x_axis_zoom
-fig4.layout.yaxis.fixedrange = y_axis_zoom
+# fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+# fig3.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
-#add year 2020 in first graph
-fig1.add_annotation(global_annotation)
-fig2.add_annotation(global_annotation)
-fig3.add_annotation(global_annotation)
-fig4.add_annotation(global_annotation)
+# #change size of subplot titles
+# fig1.update_annotations(font_size=font_size_subheadings)
+# fig2.update_annotations(font_size=font_size_subheadings)
+# fig3.update_annotations(font_size=font_size_subheadings)
+
+# #Rotate ticks and disable 2020 to avoid overlap
+# fig1.update_xaxes(global_xticks)
+# fig2.update_xaxes(global_xticks)
+# fig3.update_xaxes(global_xticks)
+
+
+# #Disable zoom feature
+# fig1.layout.xaxis.fixedrange = x_axis_zoom
+# fig1.layout.yaxis.fixedrange = y_axis_zoom
+# fig2.layout.xaxis.fixedrange = x_axis_zoom
+# fig2.layout.yaxis.fixedrange = y_axis_zoom
+# fig3.layout.xaxis.fixedrange = x_axis_zoom
+# fig3.layout.yaxis.fixedrange = y_axis_zoom
+
+
+# #add year 2020 in first graph
+# fig1.add_annotation(global_annotation)
+# fig2.add_annotation(global_annotation)
+# fig3.add_annotation(global_annotation)
+
 
 #set plotly configuarations
 config = {'displayModeBar': False}
+
+
 #------------------------------------------------------------------------------#
 
 #-------------------------#
@@ -453,7 +528,7 @@ with st.form("Survey"):
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig1, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(nut, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nutr, horizontal=True ,
                     key=1)
@@ -479,7 +554,7 @@ with st.form("Survey"):
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
                     
         #Graph
-        st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(mob_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_tran,horizontal=True,
                     key=4)
@@ -502,7 +577,7 @@ with st.form("Survey"):
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig3, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(hou_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_buil,horizontal=True ,
                     key=7)
@@ -524,7 +599,7 @@ with st.form("Survey"):
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
-        st.plotly_chart(fig4, theme="streamlit", config=config, use_container_width=True)
+        st.plotly_chart(gdp_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp,horizontal=True ,
                         key=10)
