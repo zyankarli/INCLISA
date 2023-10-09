@@ -32,7 +32,7 @@ hide_default_format = """
        header {visibility: hidden;}
        </style>
        """
-st.markdown(hide_default_format, unsafe_allow_html=True)
+#st.markdown(hide_default_format, unsafe_allow_html=True)
 
 #hide fullscreen button for plots
 hide_img_fs = '''
@@ -184,28 +184,29 @@ global_annotation = dict(
 #           PLOTS         #
 #-------------------------#
 #for phone applications: https://towardsdatascience.com/mobile-first-visualization-b64a6745e9fd
-#----NUTRITION----#
-fig1 = px.line(df[df["scen_id"].str.contains("nutrition")], x='Year', y="Value", color="Region", facet_col='Scenario',
+
+#----GDP----#
+#HIGH THRESHOLD
+fig4 = px.line(df[(df["scen_id"].str.contains("gdp")) & (df["scen_id"].str.contains("high"))], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
-                     "Value": "kCal per capita/day",
+                     "Value": "GDP per capita per year",
                      "Year" : ""
                 },
-                #automise random order
-                category_orders={"Scenario": scenario_list_nutr,
+                category_orders={"Scenario": scenario_list_gdp,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Meat consumption trajectories",
-                range_x=[2018, 2050],
-                range_y=[0, 700],
+                title="Economic activity trajectories",
+                range_x=[2020, 2050],
+                range_y=[0, 70000],
                 color_discrete_map=colors_dict,
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
+# Add threshold [Source = own calculations]
+fig4.add_hline(y=36000,
+              annotation_text="",
+              annotation_position="bottom left",
+              line_dash="dot")
 
-# Add Lancet Healthy Diet
-fig1.add_hline(y=90,
-               annotation_text="",
-               annotation_position="bottom left",
-               line_dash="dot")
 
 #----TRANSPORTATION----#
 fig2 = px.line(df[df["scen_id"].str.contains("transport")], x='Year', y="Value", color="Region", facet_col='Scenario',
@@ -249,26 +250,31 @@ fig3.add_hline(y=45,
               annotation_position="bottom left",
               line_dash="dot")
 
-#----GDP----#
-fig4 = px.line(df[df["scen_id"].str.contains("gdp")], x='Year', y="Value", color="Region", facet_col='Scenario',
+
+
+#----NUTRITION----#
+fig1 = px.line(df[df["scen_id"].str.contains("nutrition")], x='Year', y="Value", color="Region", facet_col='Scenario',
                 labels={
-                     "Value": "GDP per capita per year",
+                     "Value": "kCal per capita/day",
                      "Year" : ""
                 },
-                category_orders={"Scenario": scenario_list_gdp,
+                #automise random order
+                category_orders={"Scenario": scenario_list_nutr,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Economic activity trajectories",
-                range_x=[2020, 2050],
-                range_y=[0, 70000],
+                title="Meat consumption trajectories",
+                range_x=[2018, 2050],
+                range_y=[0, 700],
                 color_discrete_map=colors_dict,
                 hover_data=hover_dic,
                 hover_name=global_hover_name
                 )
-# Add threshold [Source = own calculations]
-fig4.add_hline(y=36000,
-              annotation_text="",
-              annotation_position="bottom left",
-              line_dash="dot")
+
+# Add Lancet Healthy Diet
+fig1.add_hline(y=90,
+               annotation_text="",
+               annotation_position="bottom left",
+               line_dash="dot")
+
 
 #LAYOUT UPDATES
 
