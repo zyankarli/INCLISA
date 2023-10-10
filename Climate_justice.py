@@ -644,12 +644,73 @@ with st.form("Survey"):
                 ("-", "Agriculture/Food/Land Management", "Industry/Manufacturing", "Transport/Shipping/Public Transportation", "Buildings/Housing/Construction", "Climate mitigation/ adapdation", "Other"), 
                 key=31)
         timestamp = time.time()
+
     #Submit button; send data to google sheet
         submitted = st.form_submit_button("Click here to submit!")
         if submitted:
             cursor = create_connection()
             query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}","{q23}","{q24}","{q25}","{q26}","{q27}","{q28}","{q29}","{q30}","{q31}", "{timestamp}")'
-            cursor.execute(query)
+            
+            
+            st.write(q27, q28, q29, q30, q31, timestamp)
+            st.write(len(query))
+
+            #cursor.execute(query)
+
+            import gspread
+            credentials = service_account.Credentials.from_service_account_info(
+            st.secrets["gcp_service_account"], 
+            scopes=["https://www.googleapis.com/auth/spreadsheets",],)
+
+            client = gspread.authorize(credentials) 
+            sheet = client.open_by_url(sheet_url)
+            worksheet = sheet.get_worksheet(0)
+            values = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29, q30, q31, timestamp]
+            worksheet.append_row(values, 1)
+
+
+            #generate to send data to google sheet
+            #my column names are: gdp_high_scenario	gdp_high_feedback	gdp_high_motivation	gdp_low_scenario	gdp_low_feedback	gdp_low_motivation	mob_high_scenario	mob_high_feedback	mob_high_motivation	mob_low_scenario	mob_low_feedback	mob_low_motivation	hou_high_scenario	hou_high_feedback	hou_high_motivation	hou_low_scenario	hou_low_feedback	hou_low_motivation	nut_scenario	nut_feedback	nut_motivation	IAM_expertise	meat_consumption	air_travel	housing_space	region	organisation	education	age	gender	sector	timestamp
+            #my value names are q1 to q31
+            # credentials = service_account.Credentials.from_service_account_info(
+            #     st.secrets["gcp_service_account"])
+            # conn = connect(credentials=credentials)
+            # data_to_send = {
+            #     "gdp_high_scenario": q1,
+            #     "gdp_high_feedback": q2,
+            #     "gdp_high_motivation": q3,
+            #     "gdp_low_scenario": q4,
+            #     "gdp_low_feedback": q5,
+            #     "gdp_low_motivation": q6,
+            #     "mob_high_scenario": q7,
+            #     "mob_high_feedback": q8,
+            #     "mob_high_motivation": q9,
+            #     "mob_low_scenario": q10,
+            #     "mob_low_feedback": q11,
+            #     "mob_low_motivation": q12,
+            #     "hou_high_scenario": q13,
+            #     "hou_high_feedback": q14,
+            #     "hou_high_motivation": q15,
+            #     "hou_low_scenario": q16,
+            #     "hou_low_feedback": q17,
+            #     "hou_low_motivation": q18,
+            #     "nut_scenario": q19,
+            #     "nut_feedback": q20,
+            #     "nut_motivation": q21,
+            #     "IAM_expertise": q22,
+            #     "meat_consumption": q23,
+            #     "air_travel": q24,
+            #     "housing_space": q25,
+            #     "region": q26,
+            #     "organisation": q27,
+            #     "education": q28,
+            #     "age": q29,
+            #     "gender": q30,
+            #     "sector": q31,
+            #     "timestamp": timestamp
+            # }
+            # conn.insert("Sheet1", data_to_send)
+            
             st.write("**:green[Submission successful. Thank you for your input!]**")
             st.toast("**:green[Submission successful!]**", icon=None)
 
