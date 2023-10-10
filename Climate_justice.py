@@ -200,7 +200,7 @@ gdp_high = px.line(df[df["scen_id"].str.contains("gdp") & df["scen_id"].str.cont
                 },
                 category_orders={"Scenario": scenario_list_gdp_high,
                                  "Region": sorted(pd.unique(df["Region"]))},
-                title="Economic activity trajectories",
+                title="Economic activity scenarios",
                 range_x=[2020, 2050],
                 range_y=[0, 70000],
                 color_discrete_map=colors_dict,
@@ -648,7 +648,7 @@ with st.form("Survey"):
         submitted = st.form_submit_button("Click here to submit!")
         if submitted:
             cursor = create_connection()
-            query = f'INSERT INTO "{sheet_url}" VALUE ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}","{q23}","{q24}","{q25}","{q26}","{q27}","{q28}","{q29}","{q30}","{q31}", "{timestamp}")'
+            query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}","{q23}","{q24}","{q25}","{q26}","{q27}","{q28}","{q29}","{q30}","{q31}", "{timestamp}")'
             cursor.execute(query)
             st.write("**:green[Submission successful. Thank you for your input!]**")
             st.toast("**:green[Submission successful!]**", icon=None)
