@@ -83,7 +83,7 @@ def wrangle_data():
     df['date'] = df['timestamp'].apply(datetime.fromtimestamp).apply(datetime.date)
     to_plot = df[df['date'] == today]
 
-    #Get data for figure 1 = scenarios for each sector
+    #DATA FOR FIGURE 1 = scenarios for each sector
     #select relevant columns
     #get all columns with the string "scenario" in it and the column timestamp
     to_plot_scen = to_plot.filter(regex='scenario|timestamp') 
@@ -121,8 +121,6 @@ def wrangle_data():
     #add labels column
     to_plot_scen["Label"] = to_plot_scen["Percentage"].astype(int).astype(str) + "%"
 
-    st.write(to_plot_scen)
-
     #Change scenario names // within try function in case certain scenarios are never picked
     try:
          to_plot_scen.loc[to_plot_scen["Scenario"].str.contains('\u25B2'), "Scenario"] = "Growing consumption (\u25B2)"
@@ -145,48 +143,126 @@ def wrangle_data():
     except:
         pass
 
+    #DATA FOR FIGURE 2 = scenarios for high/ low in facet
+    to_plot_thre = to_plot.filter(regex='scenario') 
+    #reset index
+    to_plot_thre.reset_index(inplace=True)
+    #rename columns)
+    #put columns with same suffix into one column, e.g. gdp_high_scenario and gdp_low_scenario into gdp_scenario
+    to_plot_thre = pd.wide_to_long(to_plot_thre,
+                                      stubnames=['gdp', 'mob', 'hou', 'nut'],
+                                      i = ['index'],
+                                      j = "Threshold",
+                                      sep="_",
+                                      suffix='.+'
+                                      )
+    # Reset the index
+    to_plot_thre = to_plot_thre.reset_index()
 
-    #get data for figure 2 = motivations
-    # to_plot_moti = to_plot[['scen_meat', 'scen_tran', 'scen_buil', 'scen_gdp'
-    #                         ,"scen_meat_reason", "scen_tran_reason", "scen_buil_reason", "scen_gdp_reason"]]
-    #change this to load all colums with scenario in it
-    to_plot_moti = to_plot[['gdp_high_scenario', 'mob_high_scenario', 'hou_high_scenario', 'nut_scenario',
-                            'gdp_high_motivation', 'mob_high_motivation', 'hou_high_motivation', 'nut_motivation']]
-    #Rename columns
-    # to_plot_moti = to_plot_moti.rename(columns={'scen_meat_reason':"reason_meat",
-    #                                   'scen_tran_reason':"reason_tran",
-    #                                   'scen_buil_reason':'reason_buil',
-    #                                   'scen_gdp_reason':"reason_gdp"})
+    to_plot_thre = pd.melt(to_plot_thre,
+                           id_vars=['index', "Threshold"], 
+                           value_vars=['gdp', 'mob', 'hou', 'nut'], 
+                           var_name='Sector', value_name='Scenario')
+
+    #to_plot_thre.reset_index(inplace=True)
+    #to_plot_thre['Scenario'] = to_plot_thre['Scenario'].apply(lambda x: 'High' if 'high' in x else 'Low')
+    
+ 
+
+    #to_plot_scen = to_plot[['gdp_high_scenario', 'mob_high_scenario', 'hou_high_scenario', 'nut_scenario']]
+    #rename scenarios
+    # to_plot_thre = to_plot_scen.rename(columns={'nut':"Nutrition",
+    #                                   'mob':"Mobility",
+    #                                   'hou':'Housing',
+    #                                   'gdp':"Economic Activity"})
+    
+    #select only relevant columns    
+    # to_plot_thre = to_plot_thre[['Economic Activity', 'Mobility', 'Housing', 'Nutrition']]
+  
     #change wide to long
+    # to_plot_thre = pd.melt(to_plot_scen, var_name="Sector", value_name="Scenario")
+    #drop "-"
+    to_plot_thre = to_plot_thre[to_plot_thre.Scenario != "-"]
+    #group by sector and get percentage of each scenario
+    to_plot_thre = pd.DataFrame(to_plot_thre.groupby(['Sector', 'Threshold'])['Scenario'].value_counts(normalize=True).round(decimals=2)).reset_index()
+    
 
-    #TODO Finalize to_plot_moti
-    # to_plot_moti.reset_index(inplace=True)
-    # to_plot_moti = pd.wide_to_long(to_plot_moti,
-    #                                stubnames=['scen', 'reason'],
-    #                                i = ['index'],
-    #                                j = "Sector",
-    #                                sep="_",
-    #                                suffix='.+'
-    #                                )
-    # #drop "-"
-    # to_plot_moti = to_plot_moti[(to_plot_moti.scen != "-") & (to_plot_moti.reason != "-")]
-    # #get values
-    # to_plot_moti = pd.DataFrame(to_plot_moti.groupby('scen')['reason'].value_counts(normalize=True).round(decimals=2)).reset_index()
-    #  #Rename new column
-    # to_plot_moti = to_plot_moti.rename(columns={
-    #      'scen' : "Scenario",
-    #      "reason" : "Reason",
-    #      'proportion': "Percentage"
-    #      })
+    
+    #Rename new column
+    to_plot_thre = to_plot_thre.rename(columns={'proportion': "Percentage"})
+    #calculate percentage out of proportion
+    to_plot_thre["Percentage"] = to_plot_thre["Percentage"] * 100
+    #add labels column
+    to_plot_thre["Label"] = to_plot_thre["Percentage"].astype(int).astype(str) + "%"
+
+   
+    #Change scenario names // within try function in case certain scenarios are never picked
+    try:
+         to_plot_thre.loc[to_plot_thre["Scenario"].str.contains('\u25B2'), "Scenario"] = "Growing consumption (\u25B2)"
+    except:
+         pass
+    try:
+        to_plot_thre.loc[to_plot_thre["Scenario"].str.contains('\u25A0'), "Scenario"] = "Convergence (\u25A0)"
+    except:
+         pass
+    try:
+        to_plot_thre.loc[to_plot_thre["Scenario"].str.contains('\u25C6'), "Scenario"] = "Catching up (\u25C6)"
+    except:
+        pass
+    try:
+         to_plot_thre.loc[to_plot_thre["Scenario"].str.contains('\u25AC'), "Scenario"] = "Lower limit (\u25AC)"
+    except:
+        pass
+    try:
+        to_plot_thre.loc[to_plot_thre["Scenario"].str.contains('\u275A'), "Scenario"] = "Upper limit (\u275A)"
+    except:
+        pass
+
+
+
+    #DATA FOR FIGURE 3 = motivations for scenarios
+    to_plot_moti = to_plot.filter(regex='scenario|motivation')
+    #set index
+    to_plot_moti.reset_index(inplace=True)
+    
+    #for each column with 'scenario' in it
+    # I want to change the column name by putting scenario in front of it and
+    # get rid of the "scenario at the end of it"
+    for col in to_plot_moti.columns:
+        if "scenario" in col:
+            new_col_name = col.replace("_scenario", "")
+            to_plot_moti = to_plot_moti.rename(columns={col: "scenario_"+new_col_name})
+        elif "motivation" in col:
+            new_col_name = col.replace("_motivation", "")
+            to_plot_moti = to_plot_moti.rename(columns={col: "motivation_"+new_col_name})
+    
+    to_plot_moti = pd.wide_to_long(to_plot_moti,
+                                   stubnames=['scenario', 'motivation'],
+                                   i = ['index'],
+                                   j = "Sector",
+                                   sep="_",
+                                   suffix='.+'
+                                   )
+ 
+    #drop "-"
+    to_plot_moti = to_plot_moti[(to_plot_moti.scenario != "-") & (to_plot_moti.motivation != "-")]
+    #get values
+    to_plot_moti = pd.DataFrame(to_plot_moti.groupby('scenario')['motivation'].value_counts(normalize=True).round(decimals=2)).reset_index() 
+    #rename columns
+    to_plot_moti = to_plot_moti.rename(columns={
+         'scenario' : "Scenario",
+         "motivation" : "Reason",
+         'proportion': "Percentage"
+         })
     # #calculate percentage out of proportion
-    # to_plot_moti["Percentage"] = to_plot_moti["Percentage"] * 100
+    to_plot_moti["Percentage"] = to_plot_moti["Percentage"] * 100
     # #add labels column
-    # to_plot_moti["Label"] = to_plot_moti["Percentage"].astype(int).astype(str) + "%"
+    to_plot_moti["Label"] = to_plot_moti["Percentage"].astype(int).astype(str) + "%"   
 
-    return to_plot_scen, to_plot_moti
+    return to_plot_scen, to_plot_thre, to_plot_moti
 
 
-to_plot_scen, to_plot_moti = wrangle_data()
+to_plot_scen, to_plot_thre, to_plot_moti = wrangle_data()
 
 
 
@@ -200,27 +276,39 @@ fig1 = px.bar(to_plot_scen, x="Percentage", y='Sector', color="Scenario", text =
             hover_name="Scenario",
             orientation='h',
             color_discrete_sequence=px.colors.qualitative.Bold,
-            title = "Scenario per sector")
+            title = "What scenarios are preferred in which sector?")
 
-# fig2 = px.bar(to_plot_moti, x="Percentage", y="Scenario", color="Reason", text="Label",
-#               labels={
-#                      'Percentage': "",
-#                      'Scenario':""
-#                 },
-#             hover_data = {"Scenario": False, "Percentage": False, "Reason":False, "Label":False},
-#             hover_name="Reason",
-#             orientation='h',
-#             color_discrete_sequence=px.colors.qualitative.Bold,
-#             title="Motivation for scenarios",
-#             #set order for legend
-#             category_orders= {"Reason" : ["I think it is important for everyone to be above a certain threshold.",
-#                     "I think it is important to have a limit for consumption.",
-#                     "I think it is important that everyone can increase consumption",
-#                     "I think it is important that consumption converges.",
-#                     "I think it is important that lower consumption groups increase their consumption.",
-#                     "I think it is important that the resources should go to who would get most use out of them.",
-#                     "Other"]})
+fig4 = px.bar(to_plot_thre, x="Percentage", y='Threshold', color="Scenario", text = "Label",
+            #barmode='group',
+            labels={
+                     'Percentage': "",
+                     'Sector':""
+                },
+            hover_data = {"Scenario": False, "Percentage": False, "Sector":False, "Label":False},
+            hover_name="Scenario",
+            orientation='h',
+            color_discrete_sequence=px.colors.qualitative.Bold,
+            title = "How relevant is the threshold?", 
+            facet_col="Sector")
 
+fig2 = px.bar(to_plot_moti, x="Percentage", y="Scenario", color="Reason", text="Label",
+              labels={
+                     'Percentage': "",
+                     'Scenario':""
+                },
+            hover_data = {"Scenario": False, "Percentage": False, "Reason":False, "Label":False},
+            hover_name="Reason",
+            orientation='h',
+            color_discrete_sequence=px.colors.qualitative.Bold,
+            title="What is the motivation to pick a certain scenario?",
+            #set order for legend
+            category_orders= {"Reason" : ["I think it is important for everyone to be above a certain threshold.",
+                    "I think it is important to have a limit for consumption.",
+                    "I think it is important that everyone can increase consumption",
+                    "I think it is important that consumption converges.",
+                    "I think it is important that lower consumption groups increase their consumption.",
+                    "I think it is important that the resources should go to who would get most use out of them.",
+                    "Other"]})
 
 #Set LAYOUTS
 #Size
@@ -242,35 +330,35 @@ fig1.update_layout(
         ),
     height = plot_height
     )
-# fig2.update_layout(
-#     legend = dict(
-#         title_text = "Motivation",
-#         orientation="h",
-#         yanchor="bottom",
-#         y=-1,
-#         xanchor="right",
-#         x=1,
-#         font = dict(size = 18)
-#         ),
-#     yaxis_tickfont_size=font_size_axis, 
-#     yaxis = dict(
-#         tickmode = 'array',
-#         tickvals = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6", "Scenario \u25AC", "Scenario \u275A"],
-#         ticktext = ['Growing consumption (\u25B2)', "Convergence (\u25A0)", 'Catching up (\u25C6)',  "Lower limit (\u25AC)", "Upper limit (\u275A)"]
-#     ),
-#     width = plot_width,
-#     height = plot_height)
+fig2.update_layout(
+    legend = dict(
+        title_text = "Motivation",
+        orientation="h",
+        yanchor="bottom",
+        y=-1,
+        xanchor="right",
+        x=1,
+        font = dict(size = 18)
+        ),
+    yaxis_tickfont_size=font_size_axis, 
+    yaxis = dict(
+        tickmode = 'array',
+        tickvals = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6", "Scenario \u25AC", "Scenario \u275A"],
+        ticktext = ['Growing consumption (\u25B2)', "Convergence (\u25A0)", 'Catching up (\u25C6)',  "Lower limit (\u25AC)", "Upper limit (\u275A)"]
+    ),
+    width = plot_width,
+    height = plot_height)
 
-# fig2.update_yaxes(tickfont_color="black")
+fig2.update_yaxes(tickfont_color="black")
 #Set graph features
 #Disable zoom feature
 fig1.layout.xaxis.fixedrange = True
 fig1.layout.yaxis.fixedrange = True
-# fig2.layout.xaxis.fixedrange = True
-# fig2.layout.yaxis.fixedrange = True
+fig2.layout.xaxis.fixedrange = True
+fig2.layout.yaxis.fixedrange = True
 #disable x axis
 fig1.update_xaxes(showticklabels=False)
-# fig2.update_xaxes(showticklabels=False)
+fig2.update_xaxes(showticklabels=False)
 #size of sub titles
 config = {'displayModeBar': False}
 
@@ -285,24 +373,24 @@ fig1.update_layout(
                 #    width=plot_width,
                     height=plot_height
                    )
-# fig2.update_layout(
-#                    autosize=True,
-#                    title={'font': {'size': font_size_title}},
-#                    xaxis={'title': {'font': {'size': font_size_axis}}},
-#                    yaxis={'title': {'font': {'size': font_size_axis}}},
-#                    height=plot_height)
+fig2.update_layout(
+                   autosize=True,
+                   title={'font': {'size': font_size_title}},
+                   xaxis={'title': {'font': {'size': font_size_axis}}},
+                   yaxis={'title': {'font': {'size': font_size_axis}}},
+                   height=plot_height)
 
 #Print graph
 coll, colm, colr = st.columns([0.4, 0.6, 0.4])
 with colm: 
-    st.markdown('# Survey Results')
+    st.markdown('# Results')
     st.plotly_chart(fig1, theme="streamlit", config=config, use_container_width=True)
-    #st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
+    st.plotly_chart(fig4, theme="streamlit", config=config, use_container_width=True)
+    st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
 
 #only reload graph on click
 if st.button('Click here to update the graphs.'):
     st.experimental_rerun()
-
 
 
 
