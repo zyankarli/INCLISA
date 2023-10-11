@@ -78,22 +78,36 @@ def wrangle_data():
          'IAM_expertise', 'meat_consumption', 'air_travel', 'housing_space',
          'region', 'organisation', 'education', 'age',
          'gender', 'sector', 'timestamp']
-    #drop all data points that are not from today
-    
-    st.write(df)
-    
+    #drop all data points that are not from today    
     today = datetime.now().date()
     df['date'] = df['timestamp'].apply(datetime.fromtimestamp).apply(datetime.date)
     to_plot = df[df['date'] == today]
 
-    #Get data for figure 1 = scenarios
+    #Get data for figure 1 = scenarios for each sector
     #select relevant columns
-    to_plot_scen = to_plot[['gdp_high_scenario', 'mob_high_scenario', 'hou_high_scenario', 'nut_scenario']]
+    #get all columns with the string "scenario" in it and the column timestamp
+    to_plot_scen = to_plot.filter(regex='scenario|timestamp') 
+
+    #put columns with same suffix into one column, e.g. gdp_high_scenario and gdp_low_scenario into gdp_scenario
+    to_plot_scen = pd.wide_to_long(to_plot_scen,
+                                      stubnames=['gdp', 'mob', 'hou', 'nut'],
+                                      i = ['timestamp'],
+                                      j = "Sector",
+                                      sep="_",
+                                      suffix='.+'
+                                      )
+    
+
+    #to_plot_scen = to_plot[['gdp_high_scenario', 'mob_high_scenario', 'hou_high_scenario', 'nut_scenario']]
     #rename scenarios
-    # to_plot_scen = to_plot_scen.rename(columns={'scen_meat':"Nutrition",
-    #                                   'scen_tran':"Mobility",
-    #                                   'scen_buil':'Housing',
-    #                                   'scen_gdp':"Economic Activity"})
+    to_plot_scen = to_plot_scen.rename(columns={'nut':"Nutrition",
+                                      'mob':"Mobility",
+                                      'hou':'Housing',
+                                      'gdp':"Economic Activity"})
+    
+    #select only relevant columns    
+    to_plot_scen = to_plot_scen[['Economic Activity', 'Mobility', 'Housing', 'Nutrition']]
+  
     #change wide to long
     to_plot_scen = pd.melt(to_plot_scen, var_name="Sector", value_name="Scenario")
     #drop "-"
@@ -106,6 +120,9 @@ def wrangle_data():
     to_plot_scen["Percentage"] = to_plot_scen["Percentage"] * 100
     #add labels column
     to_plot_scen["Label"] = to_plot_scen["Percentage"].astype(int).astype(str) + "%"
+
+    st.write(to_plot_scen)
+
     #Change scenario names // within try function in case certain scenarios are never picked
     try:
          to_plot_scen.loc[to_plot_scen["Scenario"].str.contains('\u25B2'), "Scenario"] = "Growing consumption (\u25B2)"
