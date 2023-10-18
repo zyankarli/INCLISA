@@ -64,7 +64,7 @@ def run_query(query):
 
 #Get data
 ##define data wrangling function
-def wrangle_data():
+def wrangle_data(): #TODO: for each session state, only keep the row with highest timestamp
     df = pd.DataFrame(run_query(f'SELECT * FROM "{sheet_url}"'))
 #rename columns
     df.columns= [

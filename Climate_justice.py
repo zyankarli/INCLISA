@@ -71,15 +71,15 @@ df.rename(columns = {'region': "Region",
 #annonymise scenario names
 df["Scenario"] = df["scen_id"]
 #utilitarian = circle
-df.loc[df["Scenario"].str.contains("agg"), "Scenario"] = "Scenario \u25B2"
+df.loc[df["Scenario"].str.contains("agg"), "Scenario"] = "\u25B2"
 #egalitarian = square
-df.loc[df["Scenario"].str.contains("ega"), "Scenario"] = "Scenario \u25A0"
+df.loc[df["Scenario"].str.contains("ega"), "Scenario"] = "\u25A0"
 #prioritarian = diamond
-df.loc[df["Scenario"].str.contains("pri"), "Scenario"] = "Scenario \u25C6"
+df.loc[df["Scenario"].str.contains("pri"), "Scenario"] = "\u25C6"
 #sufficitarian = horizontal bar
-df.loc[df["Scenario"].str.contains("suf"), "Scenario"] = "Scenario \u25AC"
+df.loc[df["Scenario"].str.contains("suf"), "Scenario"] = "\u25AC"
 #limitarian = vertical bar
-df.loc[df["Scenario"].str.contains("lim"), "Scenario"] = "Scenario \u275A"
+df.loc[df["Scenario"].str.contains("lim"), "Scenario"] = "\u275A"
 
 #Randomisation of i) graph order ii) radio order
 #set seed for session state on current time
@@ -90,7 +90,7 @@ if 'rs' not in st.session_state:
 #randomise order scenarios are displayed
 def random_scenario_order():
     random.seed(st.session_state['rs'])
-    scenario_list = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6", "Scenario \u25AC", "Scenario \u275A"]
+    scenario_list = ["\u25B2", "\u25A0", "\u25C6", "\u25AC", "\u275A"]
     #randomise order for each plot in plots
     scenario_list_gdp_high = random.sample(scenario_list, len(scenario_list))
     scenario_list_gdp_low = random.sample(scenario_list, len(scenario_list))
@@ -178,8 +178,10 @@ hover_dic = {
 }
 global_hover_name = "Region"
 #xaxis ticks
-global_xticks = dict(tickangle=-45, automargin=True,
-                     tickvals = [2030, 2040, 2050])
+global_xticks = dict(tickangle=-90, automargin=True,
+                     tickvals = [2050])
+# set the x-tick labels to include a space before and after the year
+#global_xtick_labels = ['2020', '2050']
 #annotations
 global_annotation = dict(
     xref="paper", yref="paper",
@@ -359,7 +361,8 @@ layout_settings = {
     'title': {'font': {'size': font_size_title}},
     'xaxis': {'title': {'font': {'size': font_size_axis}}},
     'yaxis': {'title': {'font': {'size': font_size_axis}}},
-    'height': plot_height
+    'height': plot_height,
+    'showlegend': False
 }
 # Function to apply layout settings to a plot
 def apply_layout_settings(plot):
@@ -367,6 +370,7 @@ def apply_layout_settings(plot):
     updated_plot.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     updated_plot.update_annotations(font_size=font_size_subheadings)
     updated_plot.update_xaxes(global_xticks)
+    #updated_plot.update_xaxes(ticktext=global_xtick_labels)
     updated_plot.layout.xaxis.fixedrange = x_axis_zoom
     updated_plot.layout.yaxis.fixedrange = y_axis_zoom
     updated_plot.add_annotation(global_annotation)
@@ -452,6 +456,11 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
 #-------------------------#
 #          FORM           #
 #-------------------------#
+
+#function to disable automatic submission of form
+# def on_text_input_enter():
+#     pass #don't do anything, just don't submit the form
+
 
 #set font size for normal text
 font_size = "20px"
@@ -651,7 +660,7 @@ with st.form("Survey"):
             cursor = create_connection()
             #query = f'INSERT INTO "{sheet_url}" VALUES ("{q1}", "{q2}", "{q3}", "{q4}", "{q5}", "{q6}", "{q7}", "{q8}", "{q9}", "{q10}","{q11}","{q12}","{q13}","{q14}","{q15}","{q16}","{q17}","{q18}","{q19}","{q20}","{q21}","{q22}","{q23}","{q24}","{q25}","{q26}","{q27}","{q28}","{q29}","{q30}","{q31}", "{timestamp}")'
             #cursor.execute(query)
-
+            session_state = st.session_state['rs']
             import gspread
             credentials = service_account.Credentials.from_service_account_info(
             st.secrets["gcp_service_account"], 
@@ -660,7 +669,7 @@ with st.form("Survey"):
             client = gspread.authorize(credentials) 
             sheet = client.open_by_url(sheet_url)
             worksheet = sheet.get_worksheet(0)
-            values = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29, q30, q31, timestamp]
+            values = [session_state, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29, q30, q31, timestamp]
             worksheet.append_row(values, 1)
 
 
