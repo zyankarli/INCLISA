@@ -296,7 +296,7 @@ hou_high = px.line(df[df["scen_id"].str.contains("building") & df["scen_id"].str
                 hover_name=global_hover_name
                 )
 
-hou_high.add_hline(y=45,
+hou_high.add_hline(y=25,
               annotation_text="",
               annotation_position="bottom left",
               line_dash="dot")
@@ -317,7 +317,7 @@ hou_low = px.line(df[df["scen_id"].str.contains("building") & df["scen_id"].str.
                 hover_name=global_hover_name
                 )
 
-hou_low.add_hline(y=10,
+hou_low.add_hline(y=15,
               annotation_text="",
               annotation_position="bottom left",
               line_dash="dot")
@@ -656,11 +656,11 @@ with st.form("Survey"):
         st.plotly_chart(nut_low, theme="streamlit", config=config, use_container_width=True)
         #Questions
         q22 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut, horizontal=True ,
-                    key=19)
+                    key=22)
         q23 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
-                    key=20)
+                    key=23)
         q24 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                    key=21 )
+                    key=24)
         st.markdown("<br> <br>",unsafe_allow_html=True)
         threshold_question_4 = st.selectbox("Which of the two thresholds regarding nutrition do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
@@ -669,35 +669,35 @@ with st.form("Survey"):
         st.markdown('### Personal Questions')
         q25 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
                 ("-", "No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"),
-                key=22)
+                key=25)
         q26=st.selectbox("How often per week do you eat meat?",
                     ("-", "Never", "Once per week or less", "At least 3 times per week", "Everyday"), 
-                    key=23)
+                    key=26)
         q27=st.selectbox("How often per year do you travel by plane?",#
                     ("-", "Never", "Once per year", "3 times per year", "At least 5 times per year"), 
-                    key=24)
+                    key=27)
         q28=st.selectbox("What is the size of your apartment/ house?",
                     ("-", "Less than 10m² per person", "Between 10m² and 30m² per person","Between 30m² and 50m² per person","More than 50m² per person" ), 
-                    key=25)
+                    key=28)
         q29 = st.selectbox("Which region are you from? (Please select the region you feel closer to and more knowledgeable about)",
                 list_of_regions, 
-                key=26)
+                key=29)
         q30 = st.selectbox("What type of organisation do you work for?", 
                 ("-", "Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), 
-                key=27)
+                key=30)
         #TODO: add conditional pop-up for st text with other
         q31 = st.selectbox("What is the highest level of education you have completed?",
                 ("-", 'No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"),
-                key=28)
+                key=31)
         q32 = st. selectbox("What is your age?",
                 ("-", "18-24", '25-34','35-44','45-54','55-64','65-100'), 
-                key=29)
+                key=32)
         q33 = st.selectbox("What is your gender?",
                 ("-", "Male", "Female", "Other", "Prefer not to say"), 
-                key=30)
+                key=33)
         q34 = st.selectbox("To which sector is your work most related to?",
                 ("-", "Agriculture/Food/Land Management", "Industry/Manufacturing", "Transport/Shipping/Public Transportation", "Buildings/Housing/Construction", "Climate mitigation/ adapdation", "Other"), 
-                key=31)
+                key=34)
         timestamp = time.time()
 
     #Submit button; send data to google sheet
@@ -715,7 +715,11 @@ with st.form("Survey"):
             client = gspread.authorize(credentials) 
             sheet = client.open_by_url(sheet_url)
             worksheet = sheet.get_worksheet(0)
-            values = [session_state, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29, q30, q31, q32, q33, q34, timestamp]
+            values = [session_state, q1, q2, q3, q4, q5, q6, q7, q8, q9, \
+                      q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, \
+                        q20, q21, q22, q23, q24, q25, q26, q27, q28, q29, \
+                            q30, q31, q32, q33, q34,\
+                                threshold_question_1, threshold_question_2,threshold_question_3, threshold_question_4, timestamp]
             worksheet.append_row(values, 1)
 
 
