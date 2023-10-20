@@ -25,9 +25,9 @@ library(ggplot2)
 
 require(reticulate)
 #IIASA
-use_condaenv(condaenv = "C:\\Users\\scheifinger\\AppData\\Local\\anaconda3\\envs\\Streamlit", conda = "auto", required = NULL)
+#use_condaenv(condaenv = "C:\\Users\\scheifinger\\AppData\\Local\\anaconda3\\envs\\Streamlit", conda = "auto", required = NULL)
 #home
-#use_condaenv("C:\\Users\\schei\\anaconda3\\envs\\streamlit", conda="auto", required = NULL)
+use_condaenv("C:\\Users\\schei\\anaconda3\\envs\\streamlit", conda="auto", required = NULL)
 pyam <- import("pyam")
 
 ```
@@ -828,7 +828,7 @@ export_df <- rbind(export_df, scen_data)
 growth_rates <- hist_vals %>%
   filter(year == 2020) %>%
   arrange(desc(value)) %>%
-  mutate(end_val = 45) %>%
+  mutate(end_val = 25) %>%
   mutate(gr = if_else(end_val == 0,
                       0, 
                       CAGR_calculator(starting_value = value,
@@ -857,14 +857,14 @@ export_df <- rbind(export_df, scen_data)
 ##set growth rates individually via end value
 ##set end values in 2050; 0 means no change to present day
 ##set threshold
-threshold <- 45
+threshold <- 25
 end_val <-c(
   0,#North America; primarily the United States of America and Canada    
   0,#Pacific OECD                                                        
   0,#Countries of centrally-planned Asia; primarily China                
   0,#Eastern and Western Europe (i.e., the EU28)                         
-  threshold,#Countries of Latin America and the Caribbean                        
-  threshold,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
+  0,#Countries of Latin America and the Caribbean                        
+  0,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
   threshold,#Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qat…
   threshold,#Countries of Sub-Saharan Africa                                     
   threshold#Countries of South Asia; primarily India  
@@ -931,14 +931,14 @@ export_df <- rbind(export_df, scen_data)
 ##set growth rates individually via end value
 ##set end values in 2050; 0 means no change to present day
 ##set threshold
-threshold = 45
+threshold = 25
 end_val <-c(
   threshold,#North America; primarily the United States of America and Canada    
   threshold,#Pacific OECD                                                        
   threshold,#Countries of centrally-planned Asia; primarily China                
   threshold,#Eastern and Western Europe (i.e., the EU28)                         
-  0,#Countries of Latin America and the Caribbean                        
-  0,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
+  threshold,#Countries of Latin America and the Caribbean                        
+  threshold,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
   0,#Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qat…
   0,#Countries of Sub-Saharan Africa                                     
   0#Countries of South Asia; primarily India  
@@ -1003,11 +1003,11 @@ export_df <- rbind(export_df, scen_data)
 ```{r housing low threshold}
 ####----SCENARIO 3 BUILDING egal----####
 #EGALITARIAN
-#convergence at 10
+#convergence at 15
 growth_rates <- hist_vals %>%
   filter(year == 2020) %>%
   arrange(desc(value)) %>%
-  mutate(end_val = 10) %>%
+  mutate(end_val = 15) %>%
   mutate(gr = if_else(end_val == 0,
                       0, 
                       CAGR_calculator(starting_value = value,
@@ -1036,7 +1036,7 @@ export_df <- rbind(export_df, scen_data)
 ##set growth rates individually via end value
 ##set end values in 2050; 0 means no change to present day
 ##set threshold
-threshold <- 10
+threshold <- 15
 end_val <-c(
   0,#North America; primarily the United States of America and Canada    
   0,#Pacific OECD                                                        
@@ -1046,7 +1046,7 @@ end_val <-c(
   0,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
   0,#Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qat…
   0,#Countries of Sub-Saharan Africa                                     
-  0#Countries of South Asia; primarily India  
+  threshold#Countries of South Asia; primarily India  
 )
 
 #add growth rates
@@ -1110,7 +1110,7 @@ export_df <- rbind(export_df, scen_data)
 ##set growth rates individually via end value
 ##set end values in 2050; 0 means no change to present day
 ##set threshold
-threshold = 10
+threshold = 15
 end_val <-c(
   threshold,#North America; primarily the United States of America and Canada    
   threshold,#Pacific OECD                                                        
@@ -1120,7 +1120,7 @@ end_val <-c(
   threshold,#Reforming Economies of Eastern Europe and the Former Soviet Union; …
   threshold,#Countries of the Middle East; Iran, Iraq, Israel, Saudi Arabia, Qat…
   threshold,#Countries of Sub-Saharan Africa                                     
-  threshold#Countries of South Asia; primarily India  
+  0#Countries of South Asia; primarily India  
 )
 
 #add growth rates
@@ -1641,6 +1641,9 @@ scen_data %>%
 export_df <- rbind(export_df, scen_data)
 ```
 
+
+# Nutrition
+
 ```{r load nutrition data}
 #starting vals from FAO 
 #unit =  kCal meat consumption per day in 2018
@@ -1655,9 +1658,7 @@ years <- c(2022, 2026, 2030, 2034, 2038, 2042, 2046, 2050)
 
 ```
 
-# Nutrition
-
-```{r nutrition single treshold}
+```{r nutrition high treshold}
 ####----SCENARIO 1 NUTRITION aggu----####
 #AGGREGATE UTILITARIAN
 #GET GROWTH RATES
@@ -1678,7 +1679,7 @@ scen_data <- run_forecast(historic_values = hist_vals,
                           list_of_growth_rates = growth_rates,
                           list_of_years = years,
                           list_of_regions = hist_vals$region,
-                          scenario_name = "nutrition_agg")
+                          scenario_name = "nutrition_agg_high")
 
 scen_data %>%
   ggplot(aes(x=year, y=value, group=region, color=region))+
@@ -1686,6 +1687,9 @@ scen_data %>%
   ggtitle("Nutrition: Aggregate Uti")
 
 #ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+#Add same scenario also for low scenario
+scen_data <- scen_data %>% mutate(scenario = "nutrition_agg_low")
 export_df <- rbind(export_df, scen_data)
 
 ####----SCENARIO 2 NUTRITION prio----####
@@ -1718,7 +1722,7 @@ scen_data <- run_forecast(historic_values = hist_vals,
                           list_of_growth_rates = growth_rates,
                           list_of_years = years,
                           list_of_regions = hist_vals$region,
-                          scenario_name = "nutrition_pri")
+                          scenario_name = "nutrition_pri_high")
 
 scen_data %>%
   ggplot(aes(x=year, y=value, group=region, color=region))+
@@ -1728,11 +1732,205 @@ scen_data %>%
 
 #ADD TO EXPORT DF
 export_df <- rbind(export_df, scen_data)
+#Add same scenario also for low scenario
+scen_data <- scen_data %>% mutate(scenario = "nutrition_pri_low")
+export_df <- rbind(export_df, scen_data)
 
 
 
 ####----SCENARIO 3 NUTRITION egal----####
-#Convergence at 250
+#Convergence at 210
+#GET GROWTH RATES
+end_val <- c(
+  210,#China+
+  210,#North America
+  210,#Latin America
+  210,#Europe
+  210,#Reformed Economies
+  210,#Pacific OECD
+  210,#Middle East
+  210,#Africa
+  210#India+
+)
+
+growth_rates <- hist_vals %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years))))
+
+#FORECAST
+scen_data <- run_forecast(historic_values = hist_vals,
+                          starting_year = 2018,
+                          list_of_growth_rates = growth_rates,
+                          list_of_years = years,
+                          list_of_regions = hist_vals$region,
+                          scenario_name = "nutrition_ega_high")
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Nutrition: Egalitarian High")
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+
+
+####----SCENARIO 4 NUTRITION suf----####
+#countries above threshold stay constant, lowest reach threshold by 2040
+#GET GROWTH RATES
+##set growth rates individually via end value
+##set end values in 2050; 0 means no change to present day
+##set threshold
+threshold = 210
+end_val <- c(
+  0,#China+
+  0,#North America
+  0,#Latin America
+  0,#Europe
+  0,#Reformed Economies
+  0,#Pacific OECD
+  threshold,#Middle East
+  threshold,#Africa
+  threshold#India+
+)
+
+#add growth rates
+growth_rates <- hist_vals %>%
+  filter(year == 2018) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years)-2)))
+
+#FORECAST
+#create empty df
+df_list <- list()
+##add starting values
+df_list[[1]] <- hist_vals %>% filter(year==2018)
+##add starting index
+index = 1
+for (r in unique(hist_vals$region)){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2018,
+                      starting_value = filter(hist_vals, region == r, year==2018)$value,
+                      years = years,
+                      growth_rate = filter(growth_rates,region == r)$gr,
+                      region = r)
+  
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2046, 2050), as.numeric(threshold), as.numeric(value)))
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+
+scen_data = do.call(rbind, df_list)
+#name scenario
+scen_data <- scen_data %>%
+  #convert value column to numeric
+  mutate(value = as.numeric(value)) %>%
+  #add column to identify scenario
+  mutate(scenario = "nutrition_suf_high")%>%
+  #add identifier at beginning of df
+  relocate(scenario, .before = 1)
+
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Nutrition: Sufficitarian High")
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+
+
+####----SCENARIO 5 NUTRITION lim----####
+#countries below threshold stay constant, highest reach threshold by 2040
+#GET GROWTH RATES
+##set growth rates individually via end value
+##set end values in 2050; 0 means no change to present day
+##set threshold
+threshold = 210
+end_val <- c(
+  threshold,#China+
+  threshold,#North America
+  threshold,#Latin America
+  threshold,#Europe
+  threshold,#Reformed Economies
+  threshold,#Pacific OECD
+  0,#Middle East
+  0,#Africa
+  0#India+
+)
+
+#add growth rates
+growth_rates <- hist_vals %>%
+  filter(year == 2018) %>%
+  arrange(desc(value)) %>%
+  mutate(end_val = end_val) %>%
+  mutate(gr = if_else(end_val == 0,
+                      0, 
+                      CAGR_calculator(starting_value = value,
+                                      end_value = end_val,
+                                      n = length(years)-2)))
+
+#FORECAST
+#create empty df
+df_list <- list()
+##add starting values
+df_list[[1]] <- hist_vals %>% filter(year==2018)
+##add starting index
+index = 1
+for (r in unique(hist_vals$region)){
+  index = index + 1 #iterate index
+  new_df = forecaster(starting_year =  2018,
+                      starting_value = filter(hist_vals, region == r, year==2018)$value,
+                      years = years,
+                      growth_rate = filter(growth_rates,region == r)$gr,
+                      region = r)
+  #change 2045 and 2050 values to threshold for affected years
+  if (new_df$value[6] != new_df$value[5]){ #affected years grow until end
+    new_df <- new_df %>%
+      mutate(value = if_else(year %in% c(2046, 2050), as.numeric(threshold), as.numeric(value)))
+    
+  }
+  #add to data list
+  df_list[[index]] <- new_df
+}
+
+scen_data = do.call(rbind, df_list)
+#name scenario
+scen_data <- scen_data %>%
+  #convert value column to numeric
+  mutate(value = as.numeric(value)) %>%
+  #add column to identify scenario
+  mutate(scenario = "nutrition_lim_high")%>%
+  #add identifier at beginning of df
+  relocate(scenario, .before = 1)
+
+
+scen_data %>%
+  ggplot(aes(x=year, y=value, group=region, color=region))+
+  geom_line()+
+  ggtitle("Nutrition: Limitarian High")+
+  ylim(0, 500)
+
+#ADD TO EXPORT DF
+export_df <- rbind(export_df, scen_data)
+```
+
+```{r nutrition low treshold}
+
+####----SCENARIO 3 NUTRITION egal----####
+#Convergence at 90
 #GET GROWTH RATES
 end_val <- c(
   90,#China+
@@ -1761,12 +1959,12 @@ scen_data <- run_forecast(historic_values = hist_vals,
                           list_of_growth_rates = growth_rates,
                           list_of_years = years,
                           list_of_regions = hist_vals$region,
-                          scenario_name = "nutrition_ega")
+                          scenario_name = "nutrition_ega_low")
 
 scen_data %>%
   ggplot(aes(x=year, y=value, group=region, color=region))+
   geom_line()+
-  ggtitle("Nutrition: Convergence")
+  ggtitle("Nutrition: Egalitarian Low")
 
 #ADD TO EXPORT DF
 export_df <- rbind(export_df, scen_data)
@@ -1831,7 +2029,7 @@ scen_data <- scen_data %>%
   #convert value column to numeric
   mutate(value = as.numeric(value)) %>%
   #add column to identify scenario
-  mutate(scenario = "nutrition_suf")%>%
+  mutate(scenario = "nutrition_suf_low")%>%
   #add identifier at beginning of df
   relocate(scenario, .before = 1)
 
@@ -1839,7 +2037,7 @@ scen_data <- scen_data %>%
 scen_data %>%
   ggplot(aes(x=year, y=value, group=region, color=region))+
   geom_line()+
-  ggtitle("Nutrition: Sufficitarian")
+  ggtitle("Nutrition: Sufficitarian Low")
 
 #ADD TO EXPORT DF
 export_df <- rbind(export_df, scen_data)
@@ -1905,7 +2103,7 @@ scen_data <- scen_data %>%
   #convert value column to numeric
   mutate(value = as.numeric(value)) %>%
   #add column to identify scenario
-  mutate(scenario = "nutrition_lim")%>%
+  mutate(scenario = "nutrition_lim_low")%>%
   #add identifier at beginning of df
   relocate(scenario, .before = 1)
 
@@ -1913,7 +2111,7 @@ scen_data <- scen_data %>%
 scen_data %>%
   ggplot(aes(x=year, y=value, group=region, color=region))+
   geom_line()+
-  ggtitle("Nutrition: Limitarian")+
+  ggtitle("Nutrition: Limitarian Low")+
   ylim(0, 500)
 
 #ADD TO EXPORT DF
@@ -1923,8 +2121,8 @@ export_df <- rbind(export_df, scen_data)
 ```{r export}
 write.csv(export_df,
           #IIASA
-          "C:\\Users\\scheifinger\\OneDrive - IIASA\\Interactive Tools\\output.csv",
+          #"C:\\Users\\scheifinger\\OneDrive - IIASA\\Interactive Tools\\output.csv",
           #Home
-          #"C:\\Users\\schei\\OneDrive - IIASA\\Interactive Tools\\Scenario Archetypes\\output.csv",
+          "C:\\Users\\schei\\OneDrive - IIASA\\Interactive Tools\\Scenario Archetypes\\output.csv",
           row.names = FALSE)
 ```
