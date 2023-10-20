@@ -514,6 +514,8 @@ with st.form("Survey"):
                             key=5)
         q6 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                         key=6)
+        st.markdown("<br> <br>",unsafe_allow_html=True)
+        threshold_question_1 = st.selectbox("Which of the two thresholds regarding economic activity do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #MOBILITY
@@ -555,6 +557,8 @@ with st.form("Survey"):
         q12 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
             key=12)     
 
+        st.markdown("<br> <br>",unsafe_allow_html=True)
+        threshold_question_2 = st.selectbox("Which of the two mobility thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #HOUSING
@@ -592,6 +596,8 @@ with st.form("Survey"):
                     key=17)
         q18 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                 key=18)
+        st.markdown("<br> <br>",unsafe_allow_html=True)
+        threshold_question_3 = st.selectbox("Which of the two housing thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #NUTRITION
@@ -617,6 +623,8 @@ with st.form("Survey"):
                     key=20)
         q21 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=21 )
+        st.markdown("<br> <br>",unsafe_allow_html=True)
+        threshold_question_4 = st.selectbox("Which of the two thresholds regarding nutrition do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #PERSONAL QUESTIONS
