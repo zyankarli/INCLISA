@@ -499,21 +499,30 @@ with st.form("Survey"):
 
     #INTRODUCTION
         st.markdown(f"""<p style="font-size:{font_size};">
-                    Climate justice is about much more than CO2 emissions. At its core, it is a question of how we use and distribute energy in a fair manner.
-                    Here, we focus on fair global distributions of energy for basic energy services: food, mobility, housing and economic activities.
-                    Unfortunately, it is not always clear what a "fair" distribution would look like. Let's explore this question together!      
+                    Climate justice isn’t just about reducing CO2 emission. At its core, it is about using limited resources, like materials and energy, to make sure people have access to basic services such as food, mobility, housing and economic activities. 
+                    Unfortunately, it is not always clear what a "fair" distribution of resources and therefore access to services would look like. Let's explore this question together!
+                    <br>
+                    For all figures in this web application, only the values for the year 2020 are based on real data, other annual values are fictional. The baselines provided are examples and to some extent arbitrary.
+                    <br>
+                    Disclaimer: By using our web application, you agree to our data privacy rules.
                     </p>""", unsafe_allow_html=True)
 
         #ECONOMIC ACTIVITY
         #High Threshold
         st.markdown("### Economic Activity")
-        st.markdown(f"""<p style="font-size:{font_size};">Despite being contested, the gross domestic product (GDP) is universally used as an indicator for economic performance.</p>""", unsafe_allow_html=True)
-        st.markdown(f"""<p style="font-size:{font_size};"> Below, we present future GDP trajectories across different world regions.  
-                    GDP per capita is used to assess the economic activity of a country in relation to its population.  
-                    In climate scenarios, GDP per capita is an important indicator for estimating energy demand and supply.  
-                    The dashed line displays the <b> average GPD per capita across the world </b> according to the udpated projections of SSP1. <br>
-                    MORE NARRATIVE <br> 
-                    This average GDP per capita is projected to be around 28.000 USD per person per year.</p>""", unsafe_allow_html=True)  
+        #st.markdown(f"""<p style="font-size:{font_size};">Despite being contested, the gross domestic product (GDP) is universally used as an indicator for economic performance.</p>""", unsafe_allow_html=True)
+        st.markdown(f"""<p style="font-size:{font_size};">
+                    Despite being contested, the gross domestic product (GDP) is universally used as an indicator for how well an economy is doing.
+                    Below, we present future GDP developments across different world regions. <b> GDP per capita </b> is used to assess the economic activity of a country in relation to its population.
+                    In climate scenarios, GDP per capita is an important indicator for estimating future energy demand and supply. 
+                    The figure below shows the GDP per capita for different world regions. 
+                    Please note that only the values for the year 2020 are based on actual data, all other values are fictional. 
+                    The dashed line displays the <b> average GDP per capita across the world </b>.
+                    This average GDP per capita is projected to be around 28.000 USD per person (in 2017 USD) and assumes a global future that features high levels of sustainability, wealth and equality. 
+                    The value is taken from the Shared-Socioeconomic Pathways (SSPs), a set of socio-economic scenarios often used in climate mitigation modelling. 
+                    More specifically, this global average is based on the most optimistic SSP, SSP1 which assumes future world development is “taking the Green Road”. 
+                    This GDP per capita of 28.000 USD would mean more than doubling the current global average GDP per capita (13.000 USD). 
+                    </p>""", unsafe_allow_html=True)  
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
@@ -527,10 +536,12 @@ with st.form("Survey"):
                         key=3)
         #Low Threshold
         st.markdown("<br> <br>",unsafe_allow_html=True)
-        st.markdown(f"""<p style="font-size:{font_size};"> Let's now assume a different future! 
-                    The dashed line displays the <b> average GPD per capita across the world </b> according to a apparent decoupling of the human development index (HDI) and GDP. <br>
-                    MORE NARRATIVE <br> 
-                    This average GDP per capita is projected to be around 20.000 USD per person per year.</p>""", unsafe_allow_html=True)          
+        st.markdown(f"""<p style="font-size:{font_size};"> 
+                    Now, let’s envision an alternative future with different economic development! 
+                    In this case, the dashed line now marks 20.000 USD per capita. This can be assumed to be a universal income required for a <b> decent life </b>. 
+                    It symbolises a life where all basic needs are satisfied, without consuming luxury goods. 
+                    Analyses show, that this level of GDP marks approximately the point at which an increase of GDP is not related anymore with an increase of the Human Development Index (HDI).
+                    </p>""", unsafe_allow_html=True)          
         st.plotly_chart(gdp_low, theme="streamlit", config=config, use_container_width=True) #Graph
         #Questions
         q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp_low,horizontal=True ,
@@ -550,11 +561,15 @@ with st.form("Survey"):
                     However, the current mobility system has significant negative effects on human health and the environment. 
                     The mobility sector is a major contributor to global greenhouse gas emissions, while air and noise pollution further affect local populations. 
                     Moreover, mobility infrastructure is artificially dividing natural habitats and thereby damaging ecosystems.</p>""", unsafe_allow_html=True)
-        st.markdown(f"""<p style="font-size:{font_size};">Below, we present future trajectories for mobility across different world regions.  
-                    Mobility is assessed using <b>passenger kilometers per year</b>,  which includes all modes of transport except air travel.  
-                    This indicator provides insights into the overall level of mobility within a population or region and is used to estimate energy consumption and environmental impacts in climate scenarios.  
-                    To provide a benchmark, the dashed line refers to the <b>Japanese mobility system</b>, which is often considered an efficient and effective role model. 
-                    The average Japanese individual travels approximately  22km per day (8.000km per year), which is approximately the distance from the Cologne Bonn Airport to the World Conference Center (27km).</p>""", unsafe_allow_html=True)  
+        st.markdown(f"""<p style="font-size:{font_size};">
+                    Here, we are presenting future developments for mobility across different world regions. 
+                    Mobility is represented through the indicator <b> passenger kilometres per year </b>, which includes all modes of motorized transport except air travel. 
+                    This indicator provides insights into the overall level of mobility within a population or region and is used to estimate energy consumption and environmental impacts in climate scenarios. 
+                    As a benchmark, the dashed line refers to the <b> Japanese mobility system </b>, which is often considered a role model: Japan’s population enjoys a good mobility system that operates very energy efficient. 
+                    The average Japanese individual travels approximately 22km with motorized transport per day (8.000km per year). 
+                    This is equivalent to daily travelling the distance from the Vienna International Airport to the Hofburg (20km) to reach the work place, and undertaking an additional, shorter trip to the gym or a grocery store. 
+                    This level of mobility also allows for occasional longer-distance weekend or holiday trips.
+                    </p>""", unsafe_allow_html=True)  
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
                     
@@ -569,10 +584,12 @@ with st.form("Survey"):
             key=9)
         #Low Threshold
         st.markdown("<br> <br>",unsafe_allow_html=True)
-        st.markdown(f"""<p style="font-size:{font_size};"> Let's now assume a different future! 
-            The dashed line displays the <b> definition dashed line </b> according to <br>
-            MORE NARRATIVE <br> 
-            This average pkm per capita per year is estimated to be around 3.500.</p>""", unsafe_allow_html=True)          
+        st.markdown(f"""<p style="font-size:{font_size};"> 
+                    To satisfy human mobility needs for a <b> decent life </b>, a rough estimate is 3.500 passenger kilometre a year. 
+                    This translate to a little less than 10km of motorized transport per day, equivalent to double the length of Vienna’s Ring Road (5.3km). 
+                    It is assumed that many distances are covered using active modes of transport, such as walking or cycling. 
+                    Groceries and leisure activities would be pursued in the neighbourhood. 
+                    </p>""", unsafe_allow_html=True)          
         st.plotly_chart(mob_low, theme="streamlit", config=config, use_container_width=True)  # Graph
         #Questions
         q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_mob_low,horizontal=True ,
@@ -591,11 +608,13 @@ with st.form("Survey"):
         st.markdown("### Housing")
         st.markdown(f"""<p style="font-size:{font_size};">Housing is a central factor for a persons living conditions, but it also has a significant environmental impact.  
         Aside from the land used for construction and the resources consumed during construction, housing requires a large amounts of energy for heating, cooling, and cooking.</p>""", unsafe_allow_html=True)
-        st.markdown(f"""<p style="font-size:{font_size};">Below, we present future trajectories for housing across different world regions.  
-        <b>Floor space per capita</b> is used to assess the level of living or working space available to individuals.  
-        In climate scenarios, this indicator helps calculate heating and cooling needs, which are essential for determining energy demands. 
-        The dashed line symbolizes a floor space of 45m² (or 480ft²) per person, which is the <b>estimated average of floor space</b> per person across European countries in 2014. 
-                    This is approximately the area covered by 5 average cars.</p>""", unsafe_allow_html=True)  
+        st.markdown(f"""<p style="font-size:{font_size};">
+                    Let’s now look at future developments regarding housing across different world regions.
+                    <b> Floor space per capita </b> is used to assess the level of living or working space available to individuals. 
+                    In climate scenarios, this indicator helps calculate heating and cooling needs, which are essential for determining energy demands.
+                    In the figure below, the dashed line symbolizes a floor space of 25m² (or 270ft²) per person, which is the <b> recommended floor space per person by the Japanese Ministry of Health, Labour and Welfare </b>. 
+                    This is a little less than the area covered by 3 average cars. For a family of three, this would mean living in a 75m² (807ft²) single family house with a kitchen and a children’s rooms.
+                    </p>""", unsafe_allow_html=True)  
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
         #Graph
@@ -609,10 +628,10 @@ with st.form("Survey"):
                 key=15)
         #Low Threshold
         st.markdown("<br> <br>",unsafe_allow_html=True)
-        st.markdown(f"""<p style="font-size:{font_size};"> Let's now assume a different future! 
-                The dashed line displays the <b> definition dashed line </b> according to <br>
-                MORE NARRATIVE <br> 
-                This average pkm per capita per year is estimated to be around 3.500.</p>""", unsafe_allow_html=True)          
+        st.markdown(f"""<p style="font-size:{font_size};">
+                    Now let’s consider a dashed line that marks 15m² (160ft²) per person, which can again be considered a lower minimum for a <b> decent life </b>. 
+                    The family of three has now 45m² (480ft²) at their disposal. 45m² allow for two medium-sized room and a kitchenette. 
+                    </p>""", unsafe_allow_html=True)          
         st.plotly_chart(hou_low, theme="streamlit", config=config, use_container_width=True)   
         #Questions
         q16 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_hou_low,horizontal=True ,
@@ -634,7 +653,11 @@ with st.form("Survey"):
                         Moreover, certain animals produce methane, a potent greenhouse gas, during their digestive process.</p>""", unsafe_allow_html=True)
         
         #High Threshold
-        st.markdown(f"""<p style="font-size:{font_size};
+        st.markdown(f"""<p style="font-size:{font_size};">
+                    Below, we present future developments for meat consumption across different world regions. 
+                    Meat consumption is measured using <b> kilo calories of meat consumption per capita per day </b>. 
+                    The dashed line marks 210 kcal, which is the <b> maximum suggested daily meat intake </b> according to the British National Health System (NHS). 
+                    This is an amount of meat similar to one and a half slices of bread.
                     </p>""",unsafe_allow_html=True)
         #Graph
         st.plotly_chart(nut_high, theme="streamlit", config=config, use_container_width=True)
@@ -646,9 +669,10 @@ with st.form("Survey"):
         q21 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=21 )
         #Low Threshold
-        st.markdown(f"""<p style="font-size:{font_size};">Below, we present future trajectories for <b> meat consumption </b> across different world regions.  
-                Meat consumption is assessed using kilo calories of meat consumption per capita per day.  
-                The EAT-Lancet Commission recommends that a <b>healthy diet</b> includes approximately 90cKal (or 85g) of meat per day, which is represented as dashed line. This quantity is equivalent to a piece of meat about the size of the palm of your hand.</p>""", unsafe_allow_html=True)
+        st.markdown(f"""<p style="font-size:{font_size};">
+                    On the other hand, the EAT-Lancet Commission, recommends a <b> healthy diet </b> that includes approximately 90cKal (or 85g) of meat per day, which is now represented as the dashed line. 
+                    This quantity is similar to a piece of meat the size of the palm of your hand.
+                    </p>""", unsafe_allow_html=True)
         
         st.markdown(f"""<p style="font-size:{font_size};"><i>Please assume that all scenarios below reach the same climate mitigation goal of 1.5°C.<i> <br>
                 Please also note that feasibility and trade-off concerns (e.g. high levels of negative emissions) associated with growth scenarios are outside the scope of this study.</p>""", unsafe_allow_html=True)
