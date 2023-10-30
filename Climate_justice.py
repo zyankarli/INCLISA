@@ -98,11 +98,13 @@ def random_scenario_order():
     scenario_list_mob_low = random.sample(scenario_list, len(scenario_list))
     scenario_list_hou_high = random.sample(scenario_list, len(scenario_list))
     scenario_list_hou_low = random.sample(scenario_list, len(scenario_list))
-    scenario_list_nut = random.sample(scenario_list, len(scenario_list))
-    return scenario_list_gdp_high, scenario_list_gdp_low, scenario_list_mob_high, scenario_list_mob_low, scenario_list_hou_high, scenario_list_hou_low, scenario_list_nut
+    scenario_list_nut_high = random.sample(scenario_list, len(scenario_list))
+    scenario_list_nut_low = random.sample(scenario_list, len(scenario_list))
+    return scenario_list_gdp_high, scenario_list_gdp_low, scenario_list_mob_high, scenario_list_mob_low,\
+          scenario_list_hou_high, scenario_list_hou_low, scenario_list_nut_high, scenario_list_nut_low
 
 scenario_list_gdp_high, scenario_list_gdp_low, scenario_list_mob_high, scenario_list_mob_low,\
-      scenario_list_hou_high, scenario_list_hou_low, scenario_list_nut = random_scenario_order()
+      scenario_list_hou_high, scenario_list_hou_low, scenario_list_nut_high, scenario_list_nut_low = random_scenario_order()
 
 
 #change values to int
@@ -330,7 +332,7 @@ nut_high = px.line(df[df["scen_id"].str.contains("nutrition") & df["scen_id"].st
                      "Year" : ""
                 },
                 #automise random order
-                category_orders={"Scenario": scenario_list_nut,
+                category_orders={"Scenario": scenario_list_nut_high,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Meat consumption scenarios",
                 range_x=[2018, 2050],
@@ -354,7 +356,7 @@ nut_low = px.line(df[df["scen_id"].str.contains("nutrition") & df["scen_id"].str
                      "Year" : ""
                 },
                 #automise random order
-                category_orders={"Scenario": scenario_list_nut,
+                category_orders={"Scenario": scenario_list_nut_low,
                                  "Region": sorted(pd.unique(df["Region"]))},
                 title="Meat consumption scenarios",
                 range_x=[2018, 2050],
@@ -417,27 +419,27 @@ config = {'displayModeBar': False}
 #prepare google sheet connection
 sheet_url = st.secrets["private_gsheets_url"]
 
-def create_connection():
-        credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"], 
-        scopes=["https://www.googleapis.com/auth/spreadsheets",],)
-        connection = connect(":memory:", adapter_kwargs={
-            "gsheetsapi" : { 
-            "service_account_info" : {
-                "type" : st.secrets["gcp_service_account"]["type"],
-                "project_id" : st.secrets["gcp_service_account"]["project_id"],
-                "private_key_id" : st.secrets["gcp_service_account"]["private_key_id"],
-                "private_key" : st.secrets["gcp_service_account"]["private_key"],
-                "client_email" : st.secrets["gcp_service_account"]["client_email"],
-                "client_id" : st.secrets["gcp_service_account"]["client_id"],
-                "auth_uri" : st.secrets["gcp_service_account"]["auth_uri"],
-                "token_uri" : st.secrets["gcp_service_account"]["token_uri"],
-                "auth_provider_x509_cert_url" : st.secrets["gcp_service_account"]["auth_provider_x509_cert_url"],
-                "client_x509_cert_url" : st.secrets["gcp_service_account"]["client_x509_cert_url"],
-                }
-            },
-        })
-        return connection.cursor()
+# def create_connection():
+#         credentials = service_account.Credentials.from_service_account_info(
+#         st.secrets["gcp_service_account"], 
+#         scopes=["https://www.googleapis.com/auth/spreadsheets",],)
+#         connection = connect(":memory:", adapter_kwargs={
+#             "gsheetsapi" : { 
+#             "service_account_info" : {
+#                 "type" : st.secrets["gcp_service_account"]["type"],
+#                 "project_id" : st.secrets["gcp_service_account"]["project_id"],
+#                 "private_key_id" : st.secrets["gcp_service_account"]["private_key_id"],
+#                 "private_key" : st.secrets["gcp_service_account"]["private_key"],
+#                 "client_email" : st.secrets["gcp_service_account"]["client_email"],
+#                 "client_id" : st.secrets["gcp_service_account"]["client_id"],
+#                 "auth_uri" : st.secrets["gcp_service_account"]["auth_uri"],
+#                 "token_uri" : st.secrets["gcp_service_account"]["token_uri"],
+#                 "auth_provider_x509_cert_url" : st.secrets["gcp_service_account"]["auth_provider_x509_cert_url"],
+#                 "client_x509_cert_url" : st.secrets["gcp_service_account"]["client_x509_cert_url"],
+#                 }
+#             },
+#         })
+#         return connection.cursor()
 #------------------------------------------------------------------------------#
 
 #-------------------------#
@@ -551,7 +553,7 @@ with st.form("Survey"):
         q6 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                         key=6)
         st.markdown("<br> <br>",unsafe_allow_html=True)
-        threshold_question_1 = st.selectbox("Which of the two thresholds regarding economic activity do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
+        gdp_threshold = st.selectbox("Which of the two thresholds regarding economic activity do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #MOBILITY
@@ -600,7 +602,7 @@ with st.form("Survey"):
             key=12)     
 
         st.markdown("<br> <br>",unsafe_allow_html=True)
-        threshold_question_2 = st.selectbox("Which of the two mobility thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
+        mob_threshold = st.selectbox("Which of the two mobility thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #HOUSING
@@ -641,7 +643,7 @@ with st.form("Survey"):
         q18 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                 key=18)
         st.markdown("<br> <br>",unsafe_allow_html=True)
-        threshold_question_3 = st.selectbox("Which of the two housing thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
+        hou_threshold = st.selectbox("Which of the two housing thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #NUTRITION
@@ -662,7 +664,7 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(nut_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q19 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut, horizontal=True ,
+        q19 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut_high, horizontal=True ,
                     key=19)
         q20 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=20)
@@ -679,14 +681,14 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(nut_low, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q22 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut, horizontal=True ,
+        q22 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut_low, horizontal=True ,
                     key=22)
         q23 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=23)
         q24 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=24)
         st.markdown("<br> <br>",unsafe_allow_html=True)
-        threshold_question_4 = st.selectbox("Which of the two thresholds regarding nutrition do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
+        nut_threshold = st.selectbox("Which of the two thresholds regarding nutrition do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #PERSONAL QUESTIONS
@@ -743,7 +745,7 @@ with st.form("Survey"):
                       q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, \
                         q20, q21, q22, q23, q24, q25, q26, q27, q28, q29, \
                             q30, q31, q32, q33, q34,\
-                                threshold_question_1, threshold_question_2,threshold_question_3, threshold_question_4, timestamp]
+                                gdp_threshold, mob_threshold,hou_threshold, nut_threshold, timestamp]
             worksheet.append_row(values, 1)
 
 

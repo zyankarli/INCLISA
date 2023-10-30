@@ -25,7 +25,7 @@ hide_default_format = """
        header {visibility: hidden;}
        </style>
        """
-st.markdown(hide_default_format, unsafe_allow_html=True)
+#st.markdown(hide_default_format, unsafe_allow_html=True)
 
 #prepare google sheet connection
 sheet_url = st.secrets["private_gsheets_url"]
@@ -68,20 +68,25 @@ def wrangle_data(): #TODO: for each session state, only keep the row with highes
     df = pd.DataFrame(run_query(f'SELECT * FROM "{sheet_url}"'))
 #rename columns
     df.columns= [
+         'session_state',
          'gdp_high_scenario', 'gdp_high_feedback', 'gdp_high_motivation', 
          'gdp_low_scenario', 'gdp_low_feedback', 'gdp_low_motivation', 
          'mob_high_scenario', 'mob_high_feedback', 'mob_high_motivation',
          'mob_low_scenario', 'mob_low_feedback', 'mob_low_motivation',
          'hou_high_scenario', 'hou_high_feedback', 'hou_high_motivation',
          'hou_low_scenario', 'hou_low_feedback', 'hou_low_motivation',
-         'nut_scenario', 'nut_feedback', 'nut_motivation',
+         'nut_high_scenario', 'nut_high_feedback', 'nut_high_motivation',
+         'nut_low_scenario', 'nut_low_feedback', 'nut_low_motivation',
          'IAM_expertise', 'meat_consumption', 'air_travel', 'housing_space',
          'region', 'organisation', 'education', 'age',
-         'gender', 'sector', 'timestamp']
+         'gender', 'sector', 'gdp_threshold', 'mob_threshold', 'hou_threshold', 'nut_threshold','timestamp']
     #drop all data points that are not from today    
     today = datetime.now().date()
     df['date'] = df['timestamp'].apply(datetime.fromtimestamp).apply(datetime.date)
     to_plot = df[df['date'] == today]
+
+    #if there are multiple data points with same session_state, only keep the one with highest timestamp
+    to_plot = to_plot.sort_values(by=['timestamp'], ascending=False).drop_duplicates(subset=['session_state'])
 
     #DATA FOR FIGURE 1 = scenarios for each sector
     #select relevant columns
@@ -185,17 +190,16 @@ def wrangle_data(): #TODO: for each session state, only keep the row with highes
     to_plot_thre = to_plot_thre[to_plot_thre.Scenario != "-"]
     #group by sector and get percentage of each scenario
     to_plot_thre = pd.DataFrame(to_plot_thre.groupby(['Sector', 'Threshold'])['Scenario'].value_counts(normalize=True).round(decimals=2)).reset_index()
-    
-
-    
     #Rename new column
     to_plot_thre = to_plot_thre.rename(columns={'proportion': "Percentage"})
     #calculate percentage out of proportion
     to_plot_thre["Percentage"] = to_plot_thre["Percentage"] * 100
     #add labels column
     to_plot_thre["Label"] = to_plot_thre["Percentage"].astype(int).astype(str) + "%"
+    #rename sector and threshold columns
+    to_plot_thre["Sector"] = to_plot_thre["Sector"].replace({"gdp": "Economic Activity", "mob": "Mobility", "hou": "Housing", "nut": "Nutrition"})
+    to_plot_thre["Threshold"] = to_plot_thre["Threshold"].replace({"low_scenario": "Low", "high_scenario": "High"})
 
-   
     #Change scenario names // within try function in case certain scenarios are never picked
     try:
          to_plot_thre.loc[to_plot_thre["Scenario"].str.contains('\u25B2'), "Scenario"] = "Growing consumption (\u25B2)"
@@ -259,6 +263,18 @@ def wrangle_data(): #TODO: for each session state, only keep the row with highes
     # #add labels column
     to_plot_moti["Label"] = to_plot_moti["Percentage"].astype(int).astype(str) + "%"   
 
+
+    #substitute Scenario with ['Growing consumption (\u25B2)', "Convergence (\u25A0)", 'Catching up (\u25C6)',  "Lower limit (\u25AC)", "Upper limit (\u275A)"]
+    to_plot_moti.loc[to_plot_moti["Scenario"].str.contains('\u25B2'), "Scenario"] = "Growing consumption (\u25B2)"
+    to_plot_moti.loc[to_plot_moti["Scenario"].str.contains('\u25A0'), "Scenario"] = "Convergence (\u25A0)"
+    to_plot_moti.loc[to_plot_moti["Scenario"].str.contains('\u25C6'), "Scenario"] = "Catching up (\u25C6)"
+    to_plot_moti.loc[to_plot_moti["Scenario"].str.contains('\u25AC'), "Scenario"] = "Lower limit (\u25AC)"
+    to_plot_moti.loc[to_plot_moti["Scenario"].str.contains('\u275A'), "Scenario"] = "Upper limit (\u275A)"
+
+
+    #set order of scenarios, same to as just above
+    to_plot_moti["Scenario"] = pd.Categorical(to_plot_moti["Scenario"], ["Growing consumption (\u25B2)", "Convergence (\u25A0)", "Catching up (\u25C6)", "Lower limit (\u25AC)", "Upper limit (\u275A)"][::-1])
+
     return to_plot_scen, to_plot_thre, to_plot_moti
 
 
@@ -278,7 +294,7 @@ fig1 = px.bar(to_plot_scen, x="Percentage", y='Sector', color="Scenario", text =
             color_discrete_sequence=px.colors.qualitative.Bold,
             title = "What scenarios are preferred in which sector?")
 
-fig4 = px.bar(to_plot_thre, x="Percentage", y='Threshold', color="Scenario", text = "Label",
+fig2 = px.bar(to_plot_thre, x="Percentage", y='Threshold', color="Scenario", text = "Label",
             #barmode='group',
             labels={
                      'Percentage': "",
@@ -288,10 +304,10 @@ fig4 = px.bar(to_plot_thre, x="Percentage", y='Threshold', color="Scenario", tex
             hover_name="Scenario",
             orientation='h',
             color_discrete_sequence=px.colors.qualitative.Bold,
-            title = "How relevant is the threshold?", 
+            title = "Is the threshold relevant?", 
             facet_col="Sector")
 
-fig2 = px.bar(to_plot_moti, x="Percentage", y="Scenario", color="Reason", text="Label",
+fig3 = px.bar(to_plot_moti, x="Percentage", y="Scenario", color="Reason", text="Label",
               labels={
                      'Percentage': "",
                      'Scenario':""
@@ -331,34 +347,48 @@ fig1.update_layout(
     height = plot_height
     )
 fig2.update_layout(
+    autosize=True,
+    title={'font': {'size': font_size_title}},
+    yaxis_tickfont_size=font_size_axis, 
+    legend = dict(
+        title_text = "Scenario",
+        font = dict(size = 18)
+        ),
+    height = plot_height
+    )
+
+fig3.update_layout(
     legend = dict(
         title_text = "Motivation",
         orientation="h",
-        yanchor="bottom",
-        y=-1,
-        xanchor="right",
-        x=1,
+        # yanchor="bottom",
+        # y=-1,
+        # xanchor="right",
+        # x=1,
         font = dict(size = 18)
         ),
     yaxis_tickfont_size=font_size_axis, 
     yaxis = dict(
         tickmode = 'array',
-        tickvals = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6", "Scenario \u25AC", "Scenario \u275A"],
+        #tickvals = ["Scenario \u25B2", "Scenario \u25A0", "Scenario \u25C6", "Scenario \u25AC", "Scenario \u275A"],
         ticktext = ['Growing consumption (\u25B2)', "Convergence (\u25A0)", 'Catching up (\u25C6)',  "Lower limit (\u25AC)", "Upper limit (\u275A)"]
     ),
     width = plot_width,
     height = plot_height)
 
-fig2.update_yaxes(tickfont_color="black")
 #Set graph features
 #Disable zoom feature
 fig1.layout.xaxis.fixedrange = True
 fig1.layout.yaxis.fixedrange = True
 fig2.layout.xaxis.fixedrange = True
 fig2.layout.yaxis.fixedrange = True
+fig3.layout.xaxis.fixedrange = True
+fig3.layout.yaxis.fixedrange = True
 #disable x axis
 fig1.update_xaxes(showticklabels=False)
 fig2.update_xaxes(showticklabels=False)
+fig3.update_xaxes(showticklabels=False)
+fig3.update_yaxes(tickfont_color="black")
 #size of sub titles
 config = {'displayModeBar': False}
 
@@ -374,6 +404,14 @@ fig1.update_layout(
                     height=plot_height
                    )
 fig2.update_layout(
+                     autosize=True,
+                     title={'font': {'size': font_size_title}},
+                     xaxis={'title': {'font': {'size': font_size_axis}}},
+                     yaxis={'title': {'font': {'size': font_size_axis}}},  
+                     height=plot_height
+                     ) 
+fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))    
+fig3.update_layout(
                    autosize=True,
                    title={'font': {'size': font_size_title}},
                    xaxis={'title': {'font': {'size': font_size_axis}}},
@@ -381,12 +419,12 @@ fig2.update_layout(
                    height=plot_height)
 
 #Print graph
-coll, colm, colr = st.columns([0.4, 0.6, 0.4])
+coll, colm, colr = st.columns([0.2, 0.8, 0.2])
 with colm: 
     st.markdown('# Results')
     st.plotly_chart(fig1, theme="streamlit", config=config, use_container_width=True)
-    st.plotly_chart(fig4, theme="streamlit", config=config, use_container_width=True)
     st.plotly_chart(fig2, theme="streamlit", config=config, use_container_width=True)
+    st.plotly_chart(fig3, theme="streamlit", config=config, use_container_width=True)
 
 #only reload graph on click
 if st.button('Click here to update the graphs.'):
