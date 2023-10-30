@@ -22,7 +22,7 @@ st.set_page_config(
      layout="wide",
      page_title='Justice in climate mitigation scenarios',
      initial_sidebar_state="collapsed",
-     #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+     page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
 )
 #hide menu and footer
 hide_default_format = """
@@ -32,7 +32,7 @@ hide_default_format = """
        header {visibility: hidden;}
        </style>
        """
-#st.markdown(hide_default_format, unsafe_allow_html=True)
+st.markdown(hide_default_format, unsafe_allow_html=True)
 
 #hide fullscreen button for plots
 hide_img_fs = '''

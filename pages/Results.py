@@ -12,7 +12,7 @@ st.set_page_config(
     page_title='Justice in climate mitigation scenarios',
     initial_sidebar_state="auto",
     #online
-    #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+    page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
     #local
     #page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
 )
@@ -25,7 +25,7 @@ hide_default_format = """
        header {visibility: hidden;}
        </style>
        """
-#st.markdown(hide_default_format, unsafe_allow_html=True)
+st.markdown(hide_default_format, unsafe_allow_html=True)
 
 #prepare google sheet connection
 sheet_url = st.secrets["private_gsheets_url"]
