@@ -506,7 +506,7 @@ with st.form("Survey"):
                     <br>
                     For all figures in this web application, only the values for the year 2020 are based on real data, other annual values are fictional. The baselines provided are examples and to some extent arbitrary.
                     <br><br>
-                    <i> Disclaimer: By using our web application, you agree to our data privacy rules. </i>
+                    <i> Disclaimer: By using our web application, you agree to our <a href="https://github.com/zyankarli/INCLISA/blob/37e1ee98ee051dc9f77bc11a08411fa33a9ba153/pages/Data%20Protection%20Information%20and%20Consent%20Declaration.pdf">data privacy rules</a>. </i>
                     </p>""", unsafe_allow_html=True)
 
         #ECONOMIC ACTIVITY
