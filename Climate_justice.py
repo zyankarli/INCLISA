@@ -181,13 +181,13 @@ hover_dic = {
 global_hover_name = "Region"
 #xaxis ticks
 global_xticks = dict(tickangle=-90, automargin=True,
-                     tickvals = [2050])
+                     tickvals = [2020, 2050])
 # set the x-tick labels to include a space before and after the year
-#global_xtick_labels = ['2020', '2050']
+global_xtick_labels = ['<br> 2020', '2050<br>']
 #annotations
-global_annotation = dict(
-    xref="paper", yref="paper",
-    x=-.05, y=-0.1, text="2020", showarrow=False)
+# global_annotation = dict(
+#     xref="paper", yref="paper",
+#     x=-.05, y=-0.1, text="2020", showarrow=False)
 #------------------------------------------------------------------------------#
 
 #-------------------------#
@@ -397,10 +397,10 @@ def apply_layout_settings(plot):
     updated_plot.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     updated_plot.update_annotations(font_size=font_size_subheadings)
     updated_plot.update_xaxes(global_xticks)
-    #updated_plot.update_xaxes(ticktext=global_xtick_labels)
+    updated_plot.update_xaxes(ticktext=global_xtick_labels)
     updated_plot.layout.xaxis.fixedrange = x_axis_zoom
     updated_plot.layout.yaxis.fixedrange = y_axis_zoom
-    updated_plot.add_annotation(global_annotation)
+    #updated_plot.add_annotation(global_annotation)
     return updated_plot
 
 #apply layout settings to all plots
@@ -505,14 +505,13 @@ with st.form("Survey"):
                     Unfortunately, it is not always clear what a "fair" distribution of resources and therefore access to services would look like. Let's explore this question together!
                     <br>
                     For all figures in this web application, only the values for the year 2020 are based on real data, other annual values are fictional. The baselines provided are examples and to some extent arbitrary.
-                    <br>
-                    Disclaimer: By using our web application, you agree to our data privacy rules.
+                    <br><br>
+                    <i> Disclaimer: By using our web application, you agree to our data privacy rules. </i>
                     </p>""", unsafe_allow_html=True)
 
         #ECONOMIC ACTIVITY
         #High Threshold
         st.markdown("### Economic Activity")
-        #st.markdown(f"""<p style="font-size:{font_size};">Despite being contested, the gross domestic product (GDP) is universally used as an indicator for economic performance.</p>""", unsafe_allow_html=True)
         st.markdown(f"""<p style="font-size:{font_size};">
                     Despite being contested, the gross domestic product (GDP) is universally used as an indicator for how well an economy is doing.
                     Below, we present future GDP developments across different world regions. <b> GDP per capita </b> is used to assess the economic activity of a country in relation to its population.
