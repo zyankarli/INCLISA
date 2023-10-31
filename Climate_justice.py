@@ -723,7 +723,7 @@ with st.form("Survey"):
         q34 = st.selectbox("To which sector is your work most related to?",
                 ("-", "Agriculture/Food/Land Management", "Industry/Manufacturing", "Transport/Shipping/Public Transportation", "Buildings/Housing/Construction", "Climate mitigation/ adapdation", "Other"), 
                 key=34)
-        timestamp = time.time()
+        timestamp = time.time_ns()
 
     #Submit button; send data to google sheet
         submitted = st.form_submit_button("Click here to submit!")
