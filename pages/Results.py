@@ -12,7 +12,7 @@ st.set_page_config(
     page_title='Justice in climate mitigation scenarios',
     initial_sidebar_state="auto",
     #online
-    page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+    #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
     #local
     #page_icon = Image.open(r'C:\Users\scheifinger\Documents\GitHub\INCLISA\pages\IIASA_PNG logo-short_blue.png')
 )
@@ -91,18 +91,18 @@ def wrangle_data(): #TODO: for each session state, only keep the row with highes
     #DATA FOR FIGURE 1 = scenarios for each sector
     #select relevant columns
     #get all columns with the string "scenario" in it and the column timestamp
-    to_plot_scen = to_plot.filter(regex='scenario|timestamp') 
+    to_plot_scen = to_plot.filter(regex='scenario|timestamp|session_state') 
 
     #put columns with same suffix into one column, e.g. gdp_high_scenario and gdp_low_scenario into gdp_scenario
     to_plot_scen = pd.wide_to_long(to_plot_scen,
                                       stubnames=['gdp', 'mob', 'hou', 'nut'],
-                                      i = ['timestamp'],
+                                      i = ['timestamp', 'session_state'],
                                       j = "Sector",
                                       sep="_",
                                       suffix='.+'
                                       )
     
-
+    st.write(to_plot_scen)
     #to_plot_scen = to_plot[['gdp_high_scenario', 'mob_high_scenario', 'hou_high_scenario', 'nut_scenario']]
     #rename scenarios
     to_plot_scen = to_plot_scen.rename(columns={'nut':"Nutrition",
