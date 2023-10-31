@@ -22,7 +22,7 @@ st.set_page_config(
      layout="wide",
      page_title='Justice in climate mitigation scenarios',
      initial_sidebar_state="collapsed",
-     page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
+     #page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
 )
 #hide menu and footer
 hide_default_format = """
@@ -32,7 +32,7 @@ hide_default_format = """
        header {visibility: hidden;}
        </style>
        """
-st.markdown(hide_default_format, unsafe_allow_html=True)
+#st.markdown(hide_default_format, unsafe_allow_html=True)
 
 #hide fullscreen button for plots
 hide_img_fs = '''
@@ -42,6 +42,8 @@ button[title="View fullscreen"]{
 </style>
 '''
 st.markdown(hide_img_fs, unsafe_allow_html=True)
+
+
 #------------------------------------------------------------------------------#
 
 #-------------------------#
@@ -490,12 +492,12 @@ accepted_answers2 =["I think it is important for everyone to be above a certain 
 
 
 #set font size for normal text
-font_size = "20px"
+font_size = "25px"
 
 with st.form("Survey"):
 
     #MEAT CONSUMPTION
-    coll, colm, colr = st.columns([0.4, 0.6, 0.4])
+    coll, colm, colr = st.columns([0.1, 0.9, 0.1])
     with colm:
         st.markdown('# Justice in climate mitigation scenarios')
 
@@ -531,12 +533,12 @@ with st.form("Survey"):
         #Questions
         q1 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp_high,horizontal=True ,
                         key=1)
-        q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
-                            key=2)
-        q3 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                        key=3)
+        q2 = st.text_area("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
+                            key=2, max_chars=300)
+        q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                        key=3, horizontal=True)
         #Low Threshold
-        st.markdown("<br> <br>",unsafe_allow_html=True)
+        st.markdown(" ",unsafe_allow_html=True)
         st.markdown(f"""<p style="font-size:{font_size};"> 
                     Now, let’s envision an alternative future with different economic development! 
                     In this case, the dashed line now marks 20.000 USD per capita. This can be assumed to be a universal income required for a <b> decent life </b>. 
@@ -545,14 +547,14 @@ with st.form("Survey"):
                     </p>""", unsafe_allow_html=True)          
         st.plotly_chart(gdp_low, theme="streamlit", config=config, use_container_width=True) #Graph
         #Questions
-        q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp_low,horizontal=True ,
-                        key=4)
-        q5 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
+        q4 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_gdp_low,
+                        key=4, horizontal=True)
+        q5 = st.text_area("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                             key=5)
-        q6 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                        key=6)
-        st.markdown("<br> <br>",unsafe_allow_html=True)
-        gdp_threshold = st.selectbox("Which of the two thresholds regarding economic activity do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
+        q6 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                        key=6, horizontal=True)
+        st.markdown(" ",unsafe_allow_html=True)
+        gdp_threshold = st.radio("Which of the two thresholds regarding economic activity do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #MOBILITY
@@ -577,14 +579,14 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(mob_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_mob_high,horizontal=True,
-            key=7)
-        q8 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+        q7 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_mob_high,
+            key=7, horizontal=True)
+        q8 = st.text_area("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
             key=8)
-        q9 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-            key=9)
+        q9 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+            key=9, horizontal=True)
         #Low Threshold
-        st.markdown("<br> <br>",unsafe_allow_html=True)
+        st.markdown(" ",unsafe_allow_html=True)
         st.markdown(f"""<p style="font-size:{font_size};"> 
                     To satisfy human mobility needs for a <b> decent life </b>, a rough estimate is 3.500 passenger kilometre a year. 
                     This translate to a little less than 10km of motorized transport per day, equivalent to double the length of Vienna’s Ring Road (5.3km). 
@@ -593,15 +595,15 @@ with st.form("Survey"):
                     </p>""", unsafe_allow_html=True)          
         st.plotly_chart(mob_low, theme="streamlit", config=config, use_container_width=True)  # Graph
         #Questions
-        q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_mob_low,horizontal=True ,
-            key=10)
-        q11 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
+        q10 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_mob_low,
+            key=10, horizontal=True)
+        q11 = st.text_area("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                 key=11)
-        q12 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-            key=12)     
+        q12 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+            key=12, horizontal=True)     
 
-        st.markdown("<br> <br>",unsafe_allow_html=True)
-        mob_threshold = st.selectbox("Which of the two mobility thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
+        st.markdown(" ",unsafe_allow_html=True)
+        mob_threshold = st.radio("Which of the two mobility thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #HOUSING
@@ -621,28 +623,28 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(hou_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q13 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_hou_high,horizontal=True ,
-                key=13)
-        q14 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+        q13 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_hou_high,
+                key=13, horizontal=True)
+        q14 = st.text_area("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                 key=14)
-        q15 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                key=15)
+        q15 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                key=15, horizontal=True)
         #Low Threshold
-        st.markdown("<br> <br>",unsafe_allow_html=True)
+        st.markdown(" ",unsafe_allow_html=True)
         st.markdown(f"""<p style="font-size:{font_size};">
                     Now let’s consider a dashed line that marks 15m² (160ft²) per person, which can again be considered a lower minimum for a <b> decent life </b>. 
                     The family of three has now 45m² (480ft²) at their disposal. 45m² allow for two medium-sized room and a kitchenette. 
                     </p>""", unsafe_allow_html=True)          
         st.plotly_chart(hou_low, theme="streamlit", config=config, use_container_width=True)   
         #Questions
-        q16 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_hou_low,horizontal=True ,
-                key=16)
-        q17 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
+        q16 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_hou_low,
+                key=16, horizontal=True)
+        q17 = st.text_area("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                     key=17)
-        q18 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                key=18)
-        st.markdown("<br> <br>",unsafe_allow_html=True)
-        hou_threshold = st.selectbox("Which of the two housing thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
+        q18 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                key=18, horizontal=True)
+        st.markdown(" ",unsafe_allow_html=True)
+        hou_threshold = st.radio("Which of the two housing thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"], horizontal=True)
         st.markdown("""---""")
 
         #NUTRITION
@@ -663,12 +665,12 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(nut_high, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q19 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut_high, horizontal=True ,
-                    key=19)
-        q20 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+        q19 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut_high,
+                    key=19, horizontal=True)
+        q20 = st.text_area("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=20)
-        q21 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                    key=21 )
+        q21 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                    key=21, horizontal=True)
         #Low Threshold
         st.markdown(f"""<p style="font-size:{font_size};">
                     On the other hand, the EAT-Lancet Commission, recommends a <b> healthy diet </b> that includes approximately 90cKal (or 85g) of meat per day, which is now represented as the dashed line. 
@@ -680,49 +682,49 @@ with st.form("Survey"):
         #Graph
         st.plotly_chart(nut_low, theme="streamlit", config=config, use_container_width=True)
         #Questions
-        q22 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut_low, horizontal=True ,
-                    key=22)
-        q23 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
+        q22 = st.radio("Which scenario do you personally find to be the fairest, based on the graph above?", ["-"] + scenario_list_nut_low,
+                    key=22, horizontal=True)
+        q23 = st.text_area("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=23)
-        q24 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
-                    key=24)
-        st.markdown("<br> <br>",unsafe_allow_html=True)
-        nut_threshold = st.selectbox("Which of the two thresholds regarding nutrition do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
+        q24 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+                    key=24, horizontal=True)
+        st.markdown(" ",unsafe_allow_html=True)
+        nut_threshold = st.radio("Which of the two thresholds regarding nutrition do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
         st.markdown("""---""")
 
         #PERSONAL QUESTIONS
         st.markdown('### Personal Questions')
-        q25 = st.selectbox("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
-                ("-", "No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"),
-                key=25)
-        q26=st.selectbox("How often per week do you eat meat?",
-                    ("-", "Never", "Once per week or less", "At least 3 times per week", "Everyday"), 
-                    key=26)
-        q27=st.selectbox("How often per year do you travel by plane?",#
-                    ("-", "Never", "Once per year", "3 times per year", "At least 5 times per year"), 
-                    key=27)
-        q28=st.selectbox("What is the size of your apartment/ house?",
-                    ("-", "Less than 10m² per person", "Between 10m² and 30m² per person","Between 30m² and 50m² per person","More than 50m² per person" ), 
-                    key=28)
-        q29 = st.selectbox("Which region are you from? (Please select the region you feel closer to and more knowledgeable about)",
-                list_of_regions, 
-                key=29)
-        q30 = st.selectbox("What type of organisation do you work for?", 
-                ("-", "Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), 
-                key=30)
+        q25 = st.radio("How knowledgeable are you about Integrated Assessment Models used for climate mitigation scenarios?",
+            ("-", "No prior experience", "Experience in the context of reports such as IPCC", "Occasional user of scenario outputs", "Expert level"),
+            key=25, horizontal=True)
+        q26=st.radio("How often per week do you eat meat?",
+                ("-", "Never", "Once per week or less", "At least 3 times per week", "Everyday"), 
+                key=26, horizontal=True)
+        q27=st.radio("How often per year do you travel by plane?",#
+                ("-", "Never", "Once per year", "3 times per year", "At least 5 times per year"), 
+                key=27, horizontal=True)
+        q28=st.radio("What is the size of your apartment/ house?",
+                ("-", "Less than 10m² per person", "Between 10m² and 30m² per person","Between 30m² and 50m² per person","More than 50m² per person" ), 
+                key=28, horizontal=True)
+        q29 = st.radio("Which region are you from? (Please select the region you feel closer to and more knowledgeable about)",
+            list_of_regions, 
+            key=29, horizontal=True)
+        q30 = st.radio("What type of organisation do you work for?", 
+            ("-", "Government", "Research or academic organisation", "Non-governmental organisation", "Interational organisation", "Private Sector", "Other"), 
+            key=30, horizontal=True)
         #TODO: add conditional pop-up for st text with other
-        q31 = st.selectbox("What is the highest level of education you have completed?",
-                ("-", 'No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"),
-                key=31)
-        q32 = st. selectbox("What is your age?",
-                ("-", "18-24", '25-34','35-44','45-54','55-64','65-100'), 
-                key=32)
-        q33 = st.selectbox("What is your gender?",
-                ("-", "Male", "Female", "Other", "Prefer not to say"), 
-                key=33)
-        q34 = st.selectbox("To which sector is your work most related to?",
-                ("-", "Agriculture/Food/Land Management", "Industry/Manufacturing", "Transport/Shipping/Public Transportation", "Buildings/Housing/Construction", "Climate mitigation/ adapdation", "Other"), 
-                key=34)
+        q31 = st.radio("What is the highest level of education you have completed?",
+            ("-", 'No degree', 'High school diploma (or equivalent)', 'Some college', 'Professional degree', "Bachelor's degree", "Master's degree", "Doctoral degree"),
+            key=31, horizontal=True)
+        q32 = st. radio("What is your age?",
+            ("-", "18-24", '25-34','35-44','45-54','55-64','65-100'), 
+            key=32, horizontal=True)
+        q33 = st.radio("What is your gender?",
+            ("-", "Male", "Female", "Other", "Prefer not to say"), 
+            key=33, horizontal=True)
+        q34 = st.radio("To which sector is your work most related to?",
+            ("-", "Agriculture/Food/Land Management", "Industry/Manufacturing", "Transport/Shipping/Public Transportation", "Buildings/Housing/Construction", "Climate mitigation/ adapdation", "Other"), 
+            key=34, horizontal=True)
         timestamp = time.time()
 
     #Submit button; send data to google sheet
