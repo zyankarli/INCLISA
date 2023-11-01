@@ -567,7 +567,7 @@ with st.form("Survey"):
                     Mobility is represented through the indicator <b> passenger kilometres per year </b>, which includes all modes of motorized transport except air travel. 
                     This indicator provides insights into the overall level of mobility within a population or region and is used to estimate energy consumption and environmental impacts in climate scenarios. 
                     As a benchmark, the dashed line refers to the <b> Japanese mobility system </b>, which is often considered a role model: Japan’s population enjoys a good mobility system that operates very energy efficient. 
-                    The average Japanese individual travels approximately 22km with motorized transport per day (8.000km per year). 
+                    The average Japanese individual travels approximately 22km (14 miles) with motorized transport per day (8.000km per year). 
                     This is equivalent to daily travelling the distance from the Vienna International Airport to the Hofburg (20km) to reach the work place, and undertaking an additional, shorter trip to the gym or a grocery store. 
                     This level of mobility also allows for occasional longer-distance weekend or holiday trips.
                     </p>""", unsafe_allow_html=True)  
@@ -587,7 +587,7 @@ with st.form("Survey"):
         st.markdown("<br> <br>",unsafe_allow_html=True)
         st.markdown(f"""<p style="font-size:{font_size};"> 
                     To satisfy human mobility needs for a <b> decent life </b>, a rough estimate is 3.500 passenger kilometres a year. 
-                    This translate to a little less than 10km of motorized transport per day, equivalent to double the length of Vienna’s Ring Road (5.3km). 
+                    This translate to a little less than 10km (6 miles) of motorized transport per day, equivalent to double the length of Vienna’s Ring Road (5.3km). 
                     It is assumed that many distances are covered using active modes of transport, such as walking or cycling. 
                     Groceries and leisure activities would be pursued in the neighbourhood. 
                     </p>""", unsafe_allow_html=True)          
