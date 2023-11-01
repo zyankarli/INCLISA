@@ -586,7 +586,7 @@ with st.form("Survey"):
         #Low Threshold
         st.markdown("<br> <br>",unsafe_allow_html=True)
         st.markdown(f"""<p style="font-size:{font_size};"> 
-                    To satisfy human mobility needs for a <b> decent life </b>, a rough estimate is 3.500 passenger kilometre a year. 
+                    To satisfy human mobility needs for a <b> decent life </b>, a rough estimate is 3.500 passenger kilometres a year. 
                     This translate to a little less than 10km of motorized transport per day, equivalent to double the length of Vienna’s Ring Road (5.3km). 
                     It is assumed that many distances are covered using active modes of transport, such as walking or cycling. 
                     Groceries and leisure activities would be pursued in the neighbourhood. 
@@ -671,7 +671,7 @@ with st.form("Survey"):
                     key=21 )
         #Low Threshold
         st.markdown(f"""<p style="font-size:{font_size};">
-                    On the other hand, the EAT-Lancet Commission, recommends a <b> healthy diet </b> that includes approximately 90cKal (or 85g) of meat per day, which is now represented as the dashed line. 
+                    On the other hand, the EAT-Lancet Commission, recommends a <b> healthy diet </b> that includes approximately 90 kcal (or 85g) of meat per day, which is now represented as the dashed line. 
                     This quantity is similar to a piece of meat the size of the palm of your hand.
                     </p>""", unsafe_allow_html=True)
         
