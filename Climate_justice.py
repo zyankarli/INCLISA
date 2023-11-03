@@ -804,5 +804,5 @@ with st.form("Survey"):
             # conn.insert("Sheet1", data_to_send)
             
             st.write("**:green[Submission successful. Thank you for your input!]**")
-            st.toast("**:green[Submission successful!]**", icon=None)
+            #st.toast("**:green[Submission successful!]**", icon=None)
 
