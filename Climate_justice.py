@@ -42,6 +42,19 @@ button[title="View fullscreen"]{
 </style>
 '''
 st.markdown(hide_img_fs, unsafe_allow_html=True)
+
+def update_selectbox_style():
+    st.markdown(
+        """
+        <style>
+            .stSelectbox [data-baseweb="select"] div[aria-selected="true"] {
+                white-space: normal; overflow-wrap: anywhere;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+update_selectbox_style()
 #------------------------------------------------------------------------------#
 
 #-------------------------#
@@ -471,12 +484,12 @@ list_of_regions = [
 
 #prepare repeating questions
 accepted_answers = ["Scenario \u2BC3", "Scenario \u25A0", "Scenario \u25C6"]
-accepted_answers2 =["I think it is important for everyone to be above a certain threshold.",
-                    "I think it is important to have a limit for consumption.",
-                    "I think it is important that everyone can increase consumption",
-                    "I think it is important that consumption converges.",
-                    "I think it is important that lower consumption groups increase their consumption.",
-                    "I think it is important that the resources should go to who would get most use out of them.",
+accepted_answers2 =["Everyone should be above a certain threshold.",
+                    "There should be a limit for consumption.",
+                    "Everyone should be able to increase consumption.",
+                    "Everyone should have same consumption level.",
+                    "Lower consumption groups should increase their consumption.",
+                    "Resources should go to those who would get most use out of them.",
                     "Other"]
 #------------------------------------------------------------------------------#
 
