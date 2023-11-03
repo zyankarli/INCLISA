@@ -54,7 +54,7 @@ def update_selectbox_style():
         """,
         unsafe_allow_html=True,
     )
-update_selectbox_style()
+#update_selectbox_style()
 #------------------------------------------------------------------------------#
 
 #-------------------------#
@@ -546,7 +546,7 @@ with st.form("Survey"):
                         key=1)
         q2 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                             key=2)
-        q3 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q3 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                         key=3)
         #Low Threshold
         st.markdown("<br> <br>",unsafe_allow_html=True)
@@ -562,7 +562,7 @@ with st.form("Survey"):
                         key=4)
         q5 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                             key=5)
-        q6 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q6 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                         key=6)
         st.markdown("<br> <br>",unsafe_allow_html=True)
         gdp_threshold = st.selectbox("Which of the two thresholds regarding economic activity do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
@@ -594,7 +594,7 @@ with st.form("Survey"):
             key=7)
         q8 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
             key=8)
-        q9 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q9 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
             key=9)
         #Low Threshold
         st.markdown("<br> <br>",unsafe_allow_html=True)
@@ -610,7 +610,7 @@ with st.form("Survey"):
             key=10)
         q11 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                 key=11)
-        q12 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q12 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
             key=12)     
 
         st.markdown("<br> <br>",unsafe_allow_html=True)
@@ -638,7 +638,7 @@ with st.form("Survey"):
                 key=13)
         q14 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                 key=14)
-        q15 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q15 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                 key=15)
         #Low Threshold
         st.markdown("<br> <br>",unsafe_allow_html=True)
@@ -652,7 +652,7 @@ with st.form("Survey"):
                 key=16)
         q17 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here", 
                     key=17)
-        q18 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q18 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                 key=18)
         st.markdown("<br> <br>",unsafe_allow_html=True)
         hou_threshold = st.selectbox("Which of the two housing thresholds do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
@@ -680,7 +680,7 @@ with st.form("Survey"):
                     key=19)
         q20 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=20)
-        q21 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q21 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=21 )
         #Low Threshold
         st.markdown(f"""<p style="font-size:{font_size};">
@@ -697,7 +697,7 @@ with st.form("Survey"):
                     key=22)
         q23 = st.text_input("Why do you find this scenario to be the fairest?", placeholder="Please enter your answer here",
                     key=23)
-        q24 = st.selectbox("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
+        q24 = st.radio("Which of the following aspects does best describe your main reason for your scenario selection?", ["-"] + accepted_answers2,
                     key=24)
         st.markdown("<br> <br>",unsafe_allow_html=True)
         nut_threshold = st.selectbox("Which of the two thresholds regarding nutrition do you prefer?", ["-"] + ["Higher threshold", "Lower threshold"])
