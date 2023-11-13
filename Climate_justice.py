@@ -98,7 +98,7 @@ df.loc[df["Scenario"].str.contains("lim"), "Scenario"] = "\u275A"
 #set seed for session state on current time
 #without this if statement, the seed would reset every time the page is reloaded, which prevents storing the survey in the google sheet
 if 'rs' not in st.session_state:
-    st.session_state['rs'] = random.randint(1, 10000)
+    st.session_state['rs'] = random.randint(1, 1000000)
 
 #randomise order scenarios are displayed
 def random_scenario_order():
