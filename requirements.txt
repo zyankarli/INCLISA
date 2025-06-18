@@ -10,3 +10,5 @@ pydrive
 gspread_dataframe
 gsheetsdb
 requests_cache
+altair==4.2.2
+
