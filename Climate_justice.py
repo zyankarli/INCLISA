@@ -58,7 +58,7 @@ def update_selectbox_style():
 
 # Define your pages using st.Page
 pages = [
-    st.Page("main.py", title="Home", icon="🏠"),
+    st.Page("Climate_justice.py", title="Home", icon="🏠"),
     st.Page("pages/Results.py", title="Results", icon="📊"),
     # Add other pages as needed
 ]
