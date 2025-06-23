@@ -55,6 +55,20 @@ def update_selectbox_style():
         unsafe_allow_html=True,
     )
 #update_selectbox_style()
+
+# Define your pages using st.Page
+pages = [
+    st.Page("main.py", title="Home", icon="🏠"),
+    st.Page("pages/Results.py", title="Results", icon="📊"),
+    # Add other pages as needed
+]
+
+# Create the navigation object
+nav = st.navigation(pages, position="sidebar", expanded=True)
+
+# Run the selected page
+nav.run()
+
 #------------------------------------------------------------------------------#
 
 #-------------------------#
