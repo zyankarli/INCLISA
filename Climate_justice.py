@@ -13,7 +13,7 @@ from PIL import Image
 st.set_page_config(
      layout="wide",
      page_title='Justice in climate mitigation scenarios',
-     initial_sidebar_state="expanded",
+     initial_sidebar_state="collapsed",
      page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
 )
 #hide menu and footer
@@ -55,7 +55,7 @@ pages = [
 ]
 
 # Create the navigation object
-nav = st.navigation(pages, position="sidebar", expanded=True)
+nav = st.navigation(pages, position="sidebar", expanded=False)
 
 # Run the selected page
 nav.run()
