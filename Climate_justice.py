@@ -13,7 +13,7 @@ from PIL import Image
 st.set_page_config(
      layout="wide",
      page_title='Justice in climate mitigation scenarios',
-     initial_sidebar_state="collapsed",
+     initial_sidebar_state="expanded",
      page_icon=Image.open("pages/IIASA_PNG logo-short_blue.png")
 )
 #hide menu and footer
