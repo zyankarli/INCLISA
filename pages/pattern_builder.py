@@ -106,84 +106,84 @@ def duplicate_timesteps():
     return sorted(dupes)
 
 
-def build_figure():
-    """Build the Plotly figure from current df and timesteps."""
-    df         = st.session_state.df
-    timesteps  = st.session_state.timesteps
-    tcols      = timestep_cols()
+# def build_figure():
+#     """Build the Plotly figure from current df and timesteps."""
+#     df         = st.session_state.df
+#     timesteps  = st.session_state.timesteps
+#     tcols      = timestep_cols()
 
-    # fine-grained x for smooth interpolated lines
-    if len(timesteps) >= 2:
-        x_fine = np.linspace(timesteps[0], timesteps[-1], 300)
-    else:
-        x_fine = np.array(timesteps)
+#     # fine-grained x for smooth interpolated lines
+#     if len(timesteps) >= 2:
+#         x_fine = np.linspace(timesteps[0], timesteps[-1], 300)
+#     else:
+#         x_fine = np.array(timesteps)
 
-    fig = go.Figure()
+#     fig = go.Figure()
 
-    for row_idx, row in df.iterrows():
-        color      = ACTOR_COLORS[row_idx % len(ACTOR_COLORS)]
-        actor_name = row[COL_ACTOR] or f"Actor {row_idx + 1}"
+#     for row_idx, row in df.iterrows():
+#         color      = ACTOR_COLORS[row_idx % len(ACTOR_COLORS)]
+#         actor_name = row[COL_ACTOR] or f"Actor {row_idx + 1}"
 
-        # collect defined (x, y) pairs for this actor
-        xs, ys = [], []
-        for col, t in zip(tcols, timesteps):
-            val = row[col]
-            if pd.notna(val):
-                xs.append(t)
-                ys.append(float(val))
+#         # collect defined (x, y) pairs for this actor
+#         xs, ys = [], []
+#         for col, t in zip(tcols, timesteps):
+#             val = row[col]
+#             if pd.notna(val):
+#                 xs.append(t)
+#                 ys.append(float(val))
 
-        if len(xs) == 0:
-            continue
+#         if len(xs) == 0:
+#             continue
 
-        if len(xs) == 1:
-            # single point — just draw a dot
-            fig.add_trace(go.Scatter(
-                x=xs, y=ys,
-                mode="markers",
-                marker=dict(color=color, size=10),
-                name=actor_name,
-            ))
-            continue
+#         if len(xs) == 1:
+#             # single point — just draw a dot
+#             fig.add_trace(go.Scatter(
+#                 x=xs, y=ys,
+#                 mode="markers",
+#                 marker=dict(color=color, size=10),
+#                 name=actor_name,
+#             ))
+#             continue
 
-        # interpolate across all timesteps for smooth line
-        y_interp = np.interp(x_fine, xs, ys)
+#         # interpolate across all timesteps for smooth line
+#         y_interp = np.interp(x_fine, xs, ys)
 
-        fig.add_trace(go.Scatter(
-            x=x_fine,
-            y=y_interp,
-            mode="lines",
-            line=dict(color=color, width=2.5),
-            name=actor_name,
-            hovertemplate=f"<b>{actor_name}</b><br>t=%{{x:.1f}}<br>value=%{{y:.2f}}<extra></extra>",
-        ))
+#         fig.add_trace(go.Scatter(
+#             x=x_fine,
+#             y=y_interp,
+#             mode="lines",
+#             line=dict(color=color, width=2.5),
+#             name=actor_name,
+#             hovertemplate=f"<b>{actor_name}</b><br>t=%{{x:.1f}}<br>value=%{{y:.2f}}<extra></extra>",
+#         ))
 
-        # start and end markers
-        fig.add_trace(go.Scatter(
-            x=[xs[0], xs[-1]],
-            y=[ys[0], ys[-1]],
-            mode="markers",
-            marker=dict(color=color, size=9, line=dict(color="white", width=1.5)),
-            showlegend=False,
-            hoverinfo="skip",
-        ))
+#         # start and end markers
+#         fig.add_trace(go.Scatter(
+#             x=[xs[0], xs[-1]],
+#             y=[ys[0], ys[-1]],
+#             mode="markers",
+#             marker=dict(color=color, size=9, line=dict(color="white", width=1.5)),
+#             showlegend=False,
+#             hoverinfo="skip",
+#         ))
 
-    fig.update_layout(
-        height=420,
-        margin=dict(l=60, r=40, t=30, b=60),
-        plot_bgcolor="#ffffff",
-        paper_bgcolor="#ffffff",
-        font=dict(color="#e0e0e0"),
-        xaxis=dict(
-            title="Time",
-            gridcolor="#2a2a2a",
-            zeroline=False,
-            tickmode="array",
-            tickvals=timesteps,
-        ),
-        yaxis=dict(title="Value", gridcolor="#2a2a2a", zeroline=False),
-        legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#444", borderwidth=1)
-    )
-    return fig
+#     fig.update_layout(
+#         height=420,
+#         margin=dict(l=60, r=40, t=30, b=60),
+#         plot_bgcolor="#ffffff",
+#         paper_bgcolor="#ffffff",
+#         font=dict(color="#e0e0e0"),
+#         xaxis=dict(
+#             title="Time",
+#             gridcolor="#2a2a2a",
+#             zeroline=False,
+#             tickmode="array",
+#             tickvals=timesteps,
+#         ),
+#         yaxis=dict(title="Value", gridcolor="#2a2a2a", zeroline=False),
+#         legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#444", borderwidth=1)
+#     )
+#     return fig
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -308,15 +308,36 @@ for col, t in zip(tcols, timesteps):
         width="small",
     )
 
+def save_edits():
+    st.session_state.df = st.session_state.main_table["edited_rows"]  # wrong approach
+
+# ── CORRECT approach: use a callback to merge edits immediately ───────────────
+def apply_table_edits():
+    edits = st.session_state.main_table
+    df = st.session_state.df.copy()
+
+    for row_idx, changes in edits.get("edited_rows", {}).items():
+        for col, val in changes.items():
+            df.at[row_idx, col] = val
+
+    for row in edits.get("added_rows", []):
+        df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+
+    for row_idx in sorted(edits.get("deleted_rows", []), reverse=True):
+        df = df.drop(index=row_idx).reset_index(drop=True)
+
+    st.session_state.df = df
+
+
 edited_df = st.data_editor(
     st.session_state.df,
     column_config=column_config,
-    num_rows="dynamic",          # allows adding/deleting actor rows
+    num_rows="dynamic",
     use_container_width=True,
     key="main_table",
     hide_index=True,
+    on_change=apply_table_edits,   # ← persist immediately on every edit
 )
-
 # ── persist edits back to session state ───────────────────────────────────────
 # parse column headers as new timestep values if user edited them
 # (data_editor doesn't expose header editing natively, so timesteps
@@ -329,7 +350,150 @@ st.session_state.df = edited_df
 # ── update timesteps from column headers (in case of future extension) ────────
 # currently timesteps are authoritative; df columns follow them.
 
+
 # ── chart ─────────────────────────────────────────────────────────────────────
 st.divider()
+
+# ── reference lines state ─────────────────────────────────────────────────────
+if "ref_lines" not in st.session_state:
+    st.session_state.ref_lines = pd.DataFrame({
+        "Label": ["Threshold"],
+        "Value": [2.5],
+    })
+
+def apply_refline_edits():
+    edits = st.session_state.ref_lines_table
+    df = st.session_state.ref_lines.copy()
+
+    for row_idx, changes in edits.get("edited_rows", {}).items():
+        for col, val in changes.items():
+            df.at[row_idx, col] = val
+
+    for row in edits.get("added_rows", []):
+        new_row = {"Label": row.get("Label", ""), "Value": row.get("Value", None)}
+        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+
+    for row_idx in sorted(edits.get("deleted_rows", []), reverse=True):
+        df = df.drop(index=row_idx).reset_index(drop=True)
+
+    st.session_state.ref_lines = df
+
+
+def build_figure():
+    """Build the Plotly figure from current df and timesteps."""
+    df         = st.session_state.df
+    timesteps  = st.session_state.timesteps
+    tcols      = timestep_cols()
+    ref_lines  = st.session_state.ref_lines
+
+    if len(timesteps) >= 2:
+        x_fine = np.linspace(timesteps[0], timesteps[-1], 300)
+    else:
+        x_fine = np.array(timesteps)
+
+    fig = go.Figure()
+
+    for row_idx, row in df.iterrows():
+        color      = ACTOR_COLORS[row_idx % len(ACTOR_COLORS)]
+        actor_name = row[COL_ACTOR] or f"Actor {row_idx + 1}"
+
+        xs, ys = [], []
+        for col, t in zip(tcols, timesteps):
+            val = row[col]
+            if pd.notna(val):
+                xs.append(t)
+                ys.append(float(val))
+
+        if len(xs) == 0:
+            continue
+
+        if len(xs) == 1:
+            fig.add_trace(go.Scatter(
+                x=xs, y=ys,
+                mode="markers",
+                marker=dict(color=color, size=10),
+                name=actor_name,
+            ))
+            continue
+
+        y_interp = np.interp(x_fine, xs, ys)
+
+        fig.add_trace(go.Scatter(
+            x=x_fine,
+            y=y_interp,
+            mode="lines",
+            line=dict(color=color, width=2.5),
+            name=actor_name,
+            hovertemplate=f"<b>{actor_name}</b><br>t=%{{x:.1f}}<br>value=%{{y:.2f}}<extra></extra>",
+        ))
+
+        fig.add_trace(go.Scatter(
+            x=[xs[0], xs[-1]],
+            y=[ys[0], ys[-1]],
+            mode="markers",
+            marker=dict(color=color, size=9, line=dict(color="white", width=1.5)),
+            showlegend=False,
+            hoverinfo="skip",
+        ))
+
+    # ── reference lines ───────────────────────────────────────────────────────
+    for _, ref_row in ref_lines.iterrows():
+        label = ref_row["Label"]
+        value = ref_row["Value"]
+        if pd.isna(value):
+            continue
+        value = float(value)
+        x0, x1 = timesteps[0], timesteps[-1]
+
+        fig.add_shape(
+            type="line",
+            x0=x0, x1=x1,
+            y0=value, y1=value,
+            line=dict(color="black", width=1.5, dash="dash"),
+        )
+        fig.add_annotation(
+            x=x1,
+            y=value,
+            text=f"  {label}",
+            showarrow=False,
+            xanchor="left",
+            font=dict(color="black", size=12),
+        )
+
+    fig.update_layout(
+        height=420,
+        margin=dict(l=60, r=100, t=30, b=60),   # extra right margin for labels
+        plot_bgcolor="#ffffff",
+        paper_bgcolor="#ffffff",
+        font=dict(color="#e0e0e0"),
+        xaxis=dict(
+            title="Time",
+            gridcolor="#2a2a2a",
+            zerolinecolor="#2a2a2a",
+            tickmode="array",
+            tickvals=timesteps,
+        ),
+        yaxis=dict(title="Value", gridcolor="#2a2a2a", zerolinecolor="#2a2a2a"),
+        legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#444", borderwidth=1)
+    )
+    return fig
+
+
 st.plotly_chart(build_figure(), use_container_width=True)
 
+# ── reference lines editor ────────────────────────────────────────────────────
+st.subheader("Reference lines")
+st.caption("Add horizontal dashed lines annotated directly in the chart.")
+
+st.data_editor(
+    st.session_state.ref_lines,
+    column_config={
+        "Label": st.column_config.TextColumn("Label", help="Annotation text shown in the chart", width="medium"),
+        "Value": st.column_config.NumberColumn("Value", help="Y-axis value for the horizontal line", format="%.2f", width="small"),
+    },
+    num_rows="dynamic",
+    use_container_width=False,
+    key="ref_lines_table",
+    hide_index=True,
+    on_change=apply_refline_edits,
+)
