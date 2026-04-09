@@ -105,87 +105,6 @@ def duplicate_timesteps():
         (dupes if t in seen else seen).add(t)
     return sorted(dupes)
 
-
-# def build_figure():
-#     """Build the Plotly figure from current df and timesteps."""
-#     df         = st.session_state.df
-#     timesteps  = st.session_state.timesteps
-#     tcols      = timestep_cols()
-
-#     # fine-grained x for smooth interpolated lines
-#     if len(timesteps) >= 2:
-#         x_fine = np.linspace(timesteps[0], timesteps[-1], 300)
-#     else:
-#         x_fine = np.array(timesteps)
-
-#     fig = go.Figure()
-
-#     for row_idx, row in df.iterrows():
-#         color      = ACTOR_COLORS[row_idx % len(ACTOR_COLORS)]
-#         actor_name = row[COL_ACTOR] or f"Actor {row_idx + 1}"
-
-#         # collect defined (x, y) pairs for this actor
-#         xs, ys = [], []
-#         for col, t in zip(tcols, timesteps):
-#             val = row[col]
-#             if pd.notna(val):
-#                 xs.append(t)
-#                 ys.append(float(val))
-
-#         if len(xs) == 0:
-#             continue
-
-#         if len(xs) == 1:
-#             # single point — just draw a dot
-#             fig.add_trace(go.Scatter(
-#                 x=xs, y=ys,
-#                 mode="markers",
-#                 marker=dict(color=color, size=10),
-#                 name=actor_name,
-#             ))
-#             continue
-
-#         # interpolate across all timesteps for smooth line
-#         y_interp = np.interp(x_fine, xs, ys)
-
-#         fig.add_trace(go.Scatter(
-#             x=x_fine,
-#             y=y_interp,
-#             mode="lines",
-#             line=dict(color=color, width=2.5),
-#             name=actor_name,
-#             hovertemplate=f"<b>{actor_name}</b><br>t=%{{x:.1f}}<br>value=%{{y:.2f}}<extra></extra>",
-#         ))
-
-#         # start and end markers
-#         fig.add_trace(go.Scatter(
-#             x=[xs[0], xs[-1]],
-#             y=[ys[0], ys[-1]],
-#             mode="markers",
-#             marker=dict(color=color, size=9, line=dict(color="white", width=1.5)),
-#             showlegend=False,
-#             hoverinfo="skip",
-#         ))
-
-#     fig.update_layout(
-#         height=420,
-#         margin=dict(l=60, r=40, t=30, b=60),
-#         plot_bgcolor="#ffffff",
-#         paper_bgcolor="#ffffff",
-#         font=dict(color="#e0e0e0"),
-#         xaxis=dict(
-#             title="Time",
-#             gridcolor="#2a2a2a",
-#             zeroline=False,
-#             tickmode="array",
-#             tickvals=timesteps,
-#         ),
-#         yaxis=dict(title="Value", gridcolor="#2a2a2a", zeroline=False),
-#         legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#444", borderwidth=1)
-#     )
-#     return fig
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # UI
 # ══════════════════════════════════════════════════════════════════════════════
@@ -344,13 +263,6 @@ edited_df = st.data_editor(
 #  are managed via the Add/Remove buttons above — headers are display-only)
 st.session_state.df = edited_df
 
-# keep actor count in sync (data_editor handles row add/delete natively)
-# ensure new rows get NaN for all timestep cols (data_editor does this)
-
-# ── update timesteps from column headers (in case of future extension) ────────
-# currently timesteps are authoritative; df columns follow them.
-
-
 # ── chart ─────────────────────────────────────────────────────────────────────
 st.divider()
 
@@ -465,21 +377,24 @@ def build_figure():
         margin=dict(l=60, r=100, t=30, b=60),   # extra right margin for labels
         plot_bgcolor="#ffffff",
         paper_bgcolor="#ffffff",
-        font=dict(color="#e0e0e0"),
+        font=dict(color="#333333"),
         xaxis=dict(
             title="Time",
             gridcolor="#2a2a2a",
             zerolinecolor="#2a2a2a",
+            zerolinewidth=1, 
             tickmode="array",
             tickvals=timesteps,
+            zeroline = False,
         ),
-        yaxis=dict(title="Value", gridcolor="#2a2a2a", zerolinecolor="#2a2a2a"),
+        yaxis=dict(title="Value", gridcolor="#2a2a2a", zerolinecolor="#2a2a2a",zerolinewidth=1, zeroline = False,),
         legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#444", borderwidth=1)
     )
     return fig
 
 
-st.plotly_chart(build_figure(), use_container_width=True)
+st.plotly_chart(build_figure(), use_container_width=True, 
+                config={"staticPlot": True, "responsive": True})
 
 # ── reference lines editor ────────────────────────────────────────────────────
 st.subheader("Reference lines")
