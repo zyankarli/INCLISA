@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--surface-0,#f1f0e8);color:var(--text-primary,#0b0b0b);font-size:14px;min-height:100vh}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{background:var(--surface-2,#fff);border-right:.5px solid var(--border,rgba(11,11,11,.1));display:flex;flex-direction:column}
+.sidebar-header{padding:20px 20px 16px;border-bottom:.5px solid var(--border,rgba(11,11,11,.1))}
+.sidebar-title{font-size:15px;font-weight:500;letter-spacing:-.01em}
+.sidebar-sub{font-size:12px;color:var(--text-muted,#898781);margin-top:2px}
+.section{padding:16px 20px;border-bottom:.5px solid var(--border,rgba(11,11,11,.1))}
+.section-label{font-size:11px;font-weight:500;color:var(--text-muted,#898781);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.field-row{display:flex;gap:8px;margin-bottom:8px}
+.field{display:flex;flex-direction:column;gap:4px;flex:1}
+.field label{font-size:12px;color:var(--text-secondary,#52514e)}
+.field input[type=number],.field input[type=text]{width:100%;border:.5px solid rgba(11,11,11,.2);border-radius:6px;padding:6px 8px;font-size:13px;background:var(--surface-1,#fcfcfb);color:var(--text-primary,#0b0b0b);outline:none}
+.field input:focus{border-color:#2a78d6;box-shadow:0 0 0 2px rgba(42,120,214,.12)}
+.add-row{display:flex;gap:6px;align-items:flex-end;margin-bottom:4px}
+.btn{border:.5px solid rgba(11,11,11,.2);border-radius:6px;padding:6px 10px;font-size:12px;font-weight:500;background:var(--surface-1,#fcfcfb);color:var(--text-primary,#0b0b0b);cursor:pointer;white-space:nowrap;transition:background .12s}
+.btn:hover{background:var(--surface-0,#f1f0e8)}
+.btn:active{transform:scale(.98)}
+.btn-sm{padding:4px 8px;font-size:12px;border-radius:5px}
+.ts-chips{display:flex;flex-wrap:wrap;gap:6px}
+.ts-chip{display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:500;border:.5px solid rgba(11,11,11,.2);background:var(--surface-1,#fcfcfb);color:var(--text-secondary,#52514e)}
+.ts-chip.fixed{background:#e6f1fb;border-color:rgba(42,120,214,.3);color:#185fa5}
+.ts-chip button{border:none;background:none;cursor:pointer;color:var(--text-muted,#898781);font-size:13px;padding:0;line-height:1}
+.ts-chip button:hover{color:#a32d2d}
+
+/* preset radio buttons */
+.preset-group{display:flex;flex-direction:column;gap:6px}
+.preset-option{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;border:.5px solid transparent;cursor:pointer;transition:background .1s}
+.preset-option:hover{background:var(--surface-0,#f1f0e8)}
+.preset-option.active{background:#e6f1fb;border-color:rgba(42,120,214,.3)}
+.preset-option input[type=radio]{accent-color:#2a78d6;width:14px;height:14px;cursor:pointer;flex-shrink:0}
+.preset-option span{font-size:13px;color:var(--text-primary,#0b0b0b);cursor:pointer}
+
+/* ref lines compact table */
+.ref-inline{display:flex;flex-direction:column;gap:6px}
+.ref-row{display:flex;align-items:center;gap:6px}
+.ref-label-input{flex:1;min-width:0;border:.5px solid transparent;border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text-primary,#0b0b0b);background:transparent;outline:none}
+.ref-label-input:hover,.ref-val-input:hover{border-color:rgba(11,11,11,.15);background:var(--surface-1,#fcfcfb)}
+.ref-label-input:focus,.ref-val-input:focus{border-color:#2a78d6;background:var(--surface-1,#fcfcfb)}
+.ref-val-input{width:60px;border:.5px solid transparent;border-radius:4px;padding:3px 6px;font-size:12px;color:var(--text-primary,#0b0b0b);background:transparent;text-align:right;outline:none;font-variant-numeric:tabular-nums;flex-shrink:0}
+.del-btn{border:none;background:none;cursor:pointer;color:var(--text-muted,#898781);font-size:14px;padding:2px 3px;border-radius:3px;line-height:1;flex-shrink:0}
+.del-btn:hover{color:#a32d2d;background:#fcebeb}
+.ref-col-headers{display:flex;gap:6px;padding:0 2px;margin-bottom:2px}
+.ref-col-label{font-size:11px;color:var(--text-muted,#898781)}
+
+.main{display:flex;flex-direction:column;overflow:hidden}
+.chart-area{padding:24px 28px 0;flex:0 0 auto}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.chart-title-block{}
+.chart-title{font-size:13px;font-weight:500;color:var(--text-secondary,#52514e)}
+.drag-hint{font-size:11px;color:var(--text-muted,#898781);margin-top:3px}
+.legend{display:flex;flex-wrap:wrap;gap:10px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary,#52514e)}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.chart-wrap{position:relative;width:100%;height:300px;cursor:default}
+canvas{position:absolute;inset:0}
+.divider{height:.5px;background:var(--border,rgba(11,11,11,.1));margin:0 28px}
+.table-area{padding:16px 28px;flex:1}
+.table-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.table-section-label{font-size:11px;font-weight:500;color:var(--text-muted,#898781);text-transform:uppercase;letter-spacing:.06em}
+.data-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.data-table th{font-size:11px;font-weight:500;color:var(--text-muted,#898781);text-align:left;padding:5px 7px;border-bottom:.5px solid rgba(11,11,11,.2);white-space:nowrap}
+.data-table th.num{text-align:right}
+.data-table td{padding:4px 7px;border-bottom:.5px solid var(--border,rgba(11,11,11,.1));vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--surface-1,#fcfcfb)}
+.actor-cell{display:flex;align-items:center;gap:7px}
+.actor-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.actor-input{border:none;background:transparent;font-size:13px;color:var(--text-primary,#0b0b0b);outline:none;width:100%;min-width:60px}
+.actor-input:focus{color:#185fa5}
+.val-input{border:.5px solid transparent;border-radius:4px;padding:3px 5px;font-size:12px;color:var(--text-primary,#0b0b0b);background:transparent;text-align:right;width:68px;outline:none;font-variant-numeric:tabular-nums}
+.val-input:hover{border-color:rgba(11,11,11,.1);background:var(--surface-1,#fcfcfb)}
+.val-input:focus{border-color:#2a78d6;background:var(--surface-1,#fcfcfb);box-shadow:0 0 0 2px rgba(42,120,214,.1)}
+.val-input::placeholder{color:var(--text-muted,#898781);font-size:11px}
+.row-del-btn{border:none;background:none;cursor:pointer;color:var(--text-muted,#898781);font-size:14px;padding:2px 3px;border-radius:3px;line-height:1}
+.row-del-btn:hover{color:#a32d2d;background:#fcebeb}
+.empty-row td{text-align:center;color:var(--text-muted,#898781);font-size:12px;padding:14px}
+.tooltip{position:fixed;background:#0b0b0b;color:#fff;font-size:12px;padding:4px 8px;border-radius:5px;pointer-events:none;display:none;z-index:100;white-space:nowrap}
+</style>
+</head>
+<body>
+<h2 class="sr-only">Patterns Builder — drag dots on the chart to adjust actor values, or edit the table directly.</h2>
+<div class="tooltip" id="tooltip"></div>
+
+<div class="app">
+  <aside class="sidebar" aria-label="Controls">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Patterns Builder</div>
+      <div class="sidebar-sub">Trace actor trajectories over time</div>
+    </div>
+
+    <!-- PRESET -->
+    <div class="section">
+      <div class="section-label">Preset</div>
+      <div class="preset-group">
+        <label class="preset-option" id="preset-housing">
+          <input type="radio" name="preset" value="housing"> <span>Housing</span>
+        </label>
+        <label class="preset-option" id="preset-meat">
+          <input type="radio" name="preset" value="meat"> <span>Meat consumption</span>
+        </label>
+        <label class="preset-option active" id="preset-other">
+          <input type="radio" name="preset" value="other" checked> <span>Other</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- TIME HORIZON -->
+    <div class="section">
+      <div class="section-label">Time horizon</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Start year</label>
+          <input type="number" id="t-start" value="2025" step="1">
+        </div>
+        <div class="field">
+          <label>End year</label>
+          <input type="number" id="t-end" value="2050" step="1">
+        </div>
+      </div>
+      <div id="horizon-err" style="font-size:11px;color:#a32d2d;margin-top:4px;display:none"></div>
+    </div>
+
+    <!-- TIMESTEPS -->
+    <div class="section">
+      <div class="section-label">Timesteps</div>
+      <div class="add-row">
+        <div class="field">
+          <label>Add intermediate</label>
+          <input type="number" id="ts-add-val" value="2037" step="1">
+        </div>
+        <button class="btn" id="ts-add-btn">+ Add</button>
+      </div>
+      <div id="ts-err" style="font-size:11px;color:#a32d2d;margin-top:4px;margin-bottom:8px;display:none"></div>
+      <div class="ts-chips" id="ts-chips"></div>
+    </div>
+
+    <!-- Y-AXIS LABEL -->
+    <div class="section">
+      <div class="section-label">Y-axis label</div>
+      <div class="field">
+        <input type="text" id="y-label" placeholder="e.g. Value (units)">
+      </div>
+    </div>
+
+    <!-- REFERENCE LINES -->
+    <div class="section" style="flex:1">
+      <div class="section-label">Reference lines</div>
+      <div class="ref-col-headers">
+        <span class="ref-col-label" style="flex:1">Label</span>
+        <span class="ref-col-label" style="width:60px;text-align:right">Value</span>
+        <span style="width:20px"></span>
+      </div>
+      <div class="ref-inline" id="ref-list"></div>
+      <button class="btn btn-sm" id="ref-add-btn" style="margin-top:8px">+ Add line</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="chart-area">
+      <div class="chart-header">
+        <div class="chart-title-block">
+          <div class="chart-title" id="chart-title-text">Actor trajectories</div>
+          <div class="drag-hint">↕ drag dots to adjust values</div>
+        </div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="chart-wrap" id="chart-wrap">
+        <canvas id="main-chart" role="img" aria-label="Draggable line chart. Drag colored dots vertically to adjust values."></canvas>
+      </div>
+    </div>
+
+    <div class="divider" style="margin-top:20px"></div>
+
+    <div class="table-area">
+      <div class="table-header">
+        <div class="table-section-label">Actor data</div>
+        <button class="btn btn-sm" id="actor-add-btn">+ Add actor</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead id="actor-thead"></thead>
+          <tbody id="actor-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const COLORS=["#2a78d6","#1baf7a","#eda100","#4a3aa7","#e34948","#e87ba4","#eb6834","#008300","#185fa5","#0f6e56"];
+
+// ── presets ──────────────────────────────────────────────────────────────────
+const PRESETS = {
+  other: {
+    tStart:2025, tEnd:2050, timesteps:[2025,2050], yLabel:'',
+    title:'Actor trajectories',
+    actors:[
+      {name:'Actor A', values:{2025:0,  2050:8}},
+      {name:'Actor B', values:{2025:5,  2050:2}},
+      {name:'Actor C', values:{2025:3,  2050:6}},
+    ],
+    refLines:[{label:'Threshold', value:4}]
+  },
+  housing: {
+    tStart:2025, tEnd:2050, timesteps:[2025,2050], yLabel:'Floor area per capita (m²)',
+    title:'Housing — floor area per capita',
+    actors:[
+      {name:'Africa',              values:{2025:15.96, 2050:15.96}},
+      {name:'China+',              values:{2025:56.46, 2050:56.46}},
+      {name:'Europe',              values:{2025:54.91, 2050:54.91}},
+      {name:'India+',              values:{2025:14.95, 2050:14.95}},
+      {name:'Latin America',       values:{2025:36.32, 2050:36.32}},
+      {name:'Middle East',         values:{2025:24.55, 2050:24.55}},
+      {name:'North America',       values:{2025:98.73, 2050:98.73}},
+      {name:'Pacific OECD',        values:{2025:58.53, 2050:58.53}},
+      {name:'Reformed Economies',  values:{2025:33.76, 2050:33.76}},
+    ],
+    refLines:[
+        {label:'Humane life', value:15},
+        {label:'Jap. Gvt Recom.', value:25}
+    ]
+  },
+  meat: {
+    tStart:2025, tEnd:2050, timesteps:[2025,2050], yLabel:'Meat consumption (Kcal/cap/day)',
+    title:'Meat consumption per capita',
+    actors:[
+      {name:'Africa',             values:{2025:71.54,  2050:71.54}},
+      {name:'China+',             values:{2025:480.78, 2050:480.78}},
+      {name:'Europe',             values:{2025:339.87, 2050:339.87}},
+      {name:'India+',             values:{2025:24.12,  2050:24.12}},
+      {name:'Latin America',      values:{2025:354.55, 2050:354.55}},
+      {name:'Middle East',        values:{2025:130.57, 2050:130.57}},
+      {name:'North America',      values:{2025:444.14, 2050:444.14}},
+      {name:'Pacific OECD',       values:{2025:247.17, 2050:247.17}},
+      {name:'Reformed Economies', values:{2025:270.95, 2050:270.95}},
+    ],
+    refLines:[
+        {label:'Healthy diet', value:90},
+        {label:'NHS max', value:210}
+    ]
+  }
+};
+
+function clonePreset(key){
+  const p=PRESETS[key];
+  return {
+    tStart:p.tStart, tEnd:p.tEnd,
+    timesteps:[...p.timesteps],
+    yLabel:p.yLabel,
+    title:p.title,
+    actors:p.actors.map(a=>({name:a.name,values:{...a.values}})),
+    refLines:p.refLines.map(r=>({...r}))
+  };
+}
+
+let state = clonePreset('other');
+let chart = null;
+let drag = null;
+const HIT = 14;
+
+// ── preset radio ─────────────────────────────────────────────────────────────
+document.querySelectorAll('input[name=preset]').forEach(radio=>{
+  radio.addEventListener('change',e=>{
+    document.querySelectorAll('.preset-option').forEach(el=>el.classList.remove('active'));
+    e.target.closest('.preset-option').classList.add('active');
+    state=clonePreset(e.target.value);
+    document.getElementById('t-start').value=state.tStart;
+    document.getElementById('t-end').value=state.tEnd;
+    document.getElementById('y-label').value=state.yLabel;
+    fullRender();
+  });
+});
+
+// ── y-label ──────────────────────────────────────────────────────────────────
+document.getElementById('y-label').addEventListener('input',e=>{
+  state.yLabel=e.target.value;
+  renderChart();
+});
+
+// ── chips ─────────────────────────────────────────────────────────────────────
+function renderChips(){
+  const el=document.getElementById('ts-chips');
+  el.innerHTML='';
+  state.timesteps.forEach(t=>{
+    const isFixed=t===state.tStart||t===state.tEnd;
+    const chip=document.createElement('div');
+    chip.className='ts-chip'+(isFixed?' fixed':'');
+    if(isFixed){chip.textContent=t+(t===state.tStart?' 🚩':' 🏁')}
+    else{
+      chip.innerHTML=`<span>${t}</span>`;
+      const btn=document.createElement('button');btn.innerHTML='×';btn.title='Remove';
+      btn.onclick=()=>{state.timesteps=state.timesteps.filter(x=>x!==t);state.actors.forEach(a=>{delete a.values[t]});fullRender()};
+      chip.appendChild(btn);
+    }
+    el.appendChild(chip);
+  });
+  const ai=document.getElementById('ts-add-val');
+  ai.min=state.tStart+1;ai.max=state.tEnd-1;
+  if(+ai.value<=state.tStart||+ai.value>=state.tEnd)ai.value=Math.round((state.tStart+state.tEnd)/2);
+}
+
+// ── ref lines ─────────────────────────────────────────────────────────────────
+function renderRefLines(){
+  const list=document.getElementById('ref-list');
+  list.innerHTML='';
+  state.refLines.forEach((ref,ri)=>{
+    const row=document.createElement('div');row.className='ref-row';
+    row.innerHTML=`
+      <input class="ref-label-input" value="${ref.label}" data-ri="${ri}" placeholder="Label">
+      <input class="ref-val-input" type="number" step="0.1" value="${ref.value!=null?ref.value:''}" data-ri="${ri}" placeholder="—">
+      <button class="del-btn" data-ri="${ri}" title="Remove">×</button>`;
+    list.appendChild(row);
+  });
+  list.querySelectorAll('.ref-label-input').forEach(inp=>{
+    inp.addEventListener('change',e=>{state.refLines[+e.target.dataset.ri].label=e.target.value;renderChart()});
+  });
+  list.querySelectorAll('.ref-val-input').forEach(inp=>{
+    inp.addEventListener('change',e=>{
+      const v=e.target.value.trim();
+      state.refLines[+e.target.dataset.ri].value=v===''?null:parseFloat(v);
+      renderChart();
+    });
+  });
+  list.querySelectorAll('.del-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{state.refLines.splice(+e.target.dataset.ri,1);renderRefLines();renderChart()});
+  });
+}
+document.getElementById('ref-add-btn').addEventListener('click',()=>{
+  state.refLines.push({label:'Reference',value:null});renderRefLines();renderChart();
+});
+
+// ── legend ────────────────────────────────────────────────────────────────────
+function renderLegend(){
+  document.getElementById('legend').innerHTML=state.actors.map((a,i)=>
+    `<span class="legend-item"><span class="legend-dot" style="background:${COLORS[i%COLORS.length]}"></span>${a.name||'Actor '+(i+1)}</span>`
+  ).join('');
+}
+
+// ── table ─────────────────────────────────────────────────────────────────────
+function renderTable(){
+  const thead=document.getElementById('actor-thead');
+  const tbody=document.getElementById('actor-tbody');
+  const ts=state.timesteps;
+  thead.innerHTML='<tr><th style="width:140px">Actor</th>'+
+    ts.map(t=>{const flag=t===state.tStart?' 🚩':t===state.tEnd?' 🏁':'';return`<th class="num" style="width:75px">t=${t}${flag}</th>`}).join('')+
+    '<th style="width:28px"></th></tr>';
+  tbody.innerHTML='';
+  if(!state.actors.length){
+    const tr=document.createElement('tr');tr.className='empty-row';
+    tr.innerHTML=`<td colspan="${ts.length+2}">No actors yet.</td>`;tbody.appendChild(tr);return;
+  }
+  state.actors.forEach((actor,ai)=>{
+    const tr=document.createElement('tr');
+    const color=COLORS[ai%COLORS.length];
+    let cells=`<td><div class="actor-cell"><div class="actor-dot" style="background:${color}"></div><input class="actor-input" value="${actor.name}" data-ai="${ai}" placeholder="Actor name"></div></td>`;
+    ts.forEach(t=>{
+      const v=actor.values[t];
+      cells+=`<td><input class="val-input" type="number" step="0.1" value="${v!=null&&v!==''?Number(v).toFixed(2):''}" placeholder="—" data-ai="${ai}" data-t="${t}"></td>`;
+    });
+    cells+=`<td><button class="row-del-btn" data-ai="${ai}">×</button></td>`;
+    tr.innerHTML=cells;tbody.appendChild(tr);
+  });
+  tbody.querySelectorAll('.actor-input').forEach(inp=>{
+    inp.addEventListener('change',e=>{state.actors[+e.target.dataset.ai].name=e.target.value;renderLegend();renderChart()});
+  });
+  tbody.querySelectorAll('.val-input').forEach(inp=>{
+    inp.addEventListener('change',e=>{
+      const ai=+e.target.dataset.ai,t=+e.target.dataset.t,v=e.target.value.trim();
+      state.actors[ai].values[t]=v===''?null:parseFloat(v);renderChart();
+    });
+  });
+  tbody.querySelectorAll('.row-del-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{state.actors.splice(+e.target.dataset.ai,1);fullRender()});
+  });
+}
+
+function syncTableCell(ai,t,val){
+  const inp=document.querySelector(`.val-input[data-ai="${ai}"][data-t="${t}"]`);
+  if(inp)inp.value=val!=null?Number(val).toFixed(2):'';
+}
+
+// ── chart ─────────────────────────────────────────────────────────────────────
+function yBounds(){
+  const v=[];
+  state.actors.forEach(a=>state.timesteps.forEach(t=>{const x=a.values[t];if(x!=null&&x!=='')v.push(parseFloat(x))}));
+  state.refLines.forEach(r=>{if(r.value!=null)v.push(parseFloat(r.value))});
+  if(!v.length)return{min:0,max:10,stepSize:2};
+  let mx=Math.max(...v);
+  const pad=mx*0.12||1.5;
+  const niceMax=Math.ceil((mx+pad)/25)*25;
+  return{min:0, max:niceMax, stepSize:25};
+}
+
+function interp(xs,ys,xFine){
+  if(!xs.length)return xFine.map(()=>null);
+  if(xs.length===1)return xFine.map(x=>x===xs[0]?ys[0]:null);
+  return xFine.map(x=>{
+    if(x<=xs[0])return ys[0];
+    if(x>=xs[xs.length-1])return ys[ys.length-1];
+    for(let i=1;i<xs.length;i++){if(x<=xs[i]){const t=(x-xs[i-1])/(xs[i]-xs[i-1]);return ys[i-1]+t*(ys[i]-ys[i-1])}}
+    return null;
+  });
+}
+
+const refLabelsPlugin={
+  id:'refLabels',
+  afterDraw(c){
+    const ctx=c.ctx,xS=c.scales.x,yS=c.scales.y;
+    ctx.save();ctx.font='11px system-ui,sans-serif';ctx.fillStyle='#5f5e5a';ctx.textAlign='left';
+    state.refLines.forEach(r=>{
+      if(r.value==null)return;
+      ctx.fillText(r.label,xS.getPixelForValue(state.tEnd)+6,yS.getPixelForValue(r.value)+4);
+    });
+    ctx.restore();
+  }
+};
+
+function buildDatasets(){
+  const STEPS=200;
+  const xFine=Array.from({length:STEPS+1},(_,i)=>state.tStart+(state.tEnd-state.tStart)*i/STEPS);
+  const ds=[];
+  state.actors.forEach((actor,ai)=>{
+    const color=COLORS[ai%COLORS.length];
+    const xs=[],ys=[];
+    state.timesteps.forEach(t=>{const v=actor.values[t];if(v!=null&&v!==''){xs.push(t);ys.push(parseFloat(v))}});
+    if(!xs.length)return;
+    const yI=interp(xs,ys,xFine);
+    ds.push({label:actor.name||'Actor '+(ai+1),data:xFine.map((x,i)=>({x,y:yI[i]})),borderColor:color,borderWidth:2,pointRadius:0,tension:0,fill:false,parsing:false});
+    ds.push({label:'_pts_'+ai,data:xs.map((x,i)=>({x,y:ys[i]})),borderColor:color,backgroundColor:'#fff',borderWidth:2.5,pointRadius:7,pointHoverRadius:9,showLine:false,parsing:false,_ai:ai});
+  });
+  state.refLines.forEach((ref,ri)=>{
+    if(ref.value==null)return;
+    ds.push({label:'_ref_'+ri,data:[{x:state.tStart,y:ref.value},{x:state.tEnd,y:ref.value}],borderColor:'#888780',borderWidth:1.5,borderDash:[6,4],pointRadius:0,showLine:true,parsing:false,fill:false});
+  });
+  return ds;
+}
+
+function renderChart(){
+  const{min,max, stepSize}=yBounds();
+  const ticks=state.timesteps;
+  const gc='#e1e0d9',ac='#c3c2b7',mc='#898781';
+  const datasets=buildDatasets();
+  const yLabel=state.yLabel||'';
+
+  if(chart){
+    chart.data.datasets=datasets;
+    chart.options.scales.x.min=state.tStart;
+    chart.options.scales.x.max=state.tEnd;
+    chart.options.scales.x.ticks.callback=v=>ticks.includes(Math.round(v))?Math.round(v):'';
+    chart.options.scales.y.min=min;
+    chart.options.scales.y.max=max;
+    chart.options.scales.y.title.text=yLabel;
+    chart.options.scales.y.title.display=!!yLabel;
+    chart.update('none');
+    return;
+  }
+
+  Chart.register(refLabelsPlugin);
+  const ctx=document.getElementById('main-chart').getContext('2d');
+  chart=new Chart(ctx,{
+    type:'line',data:{datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,animation:false,parsing:false,
+      layout:{padding:{right:90,left:4}},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          mode:'nearest',intersect:true,
+          filter:item=>!item.dataset.label.startsWith('_'),
+          callbacks:{label:item=>`${item.dataset.label}: ${(+item.parsed.y).toFixed(2)}`}
+        }
+      },
+      scales:{
+        x:{type:'linear',min:state.tStart,max:state.tEnd,grid:{color:gc},border:{color:ac},
+          ticks:{color:mc,font:{size:11},callback:v=>ticks.includes(Math.round(v))?Math.round(v):'',maxTicksLimit:20}},
+        y:{min,max,grid:{color:gc},border:{color:ac},
+          ticks:{color:mc,font:{size:11},stepSize:stepSize},
+          title:{display:!!yLabel,text:yLabel,color:mc,font:{size:11}}}
+      }
+    }
+  });
+  setupDrag();
+}
+
+// ── drag ──────────────────────────────────────────────────────────────────────
+function canvasPos(e){
+  const r=document.getElementById('main-chart').getBoundingClientRect();
+  const cx=e.touches?e.touches[0].clientX:e.clientX;
+  const cy=e.touches?e.touches[0].clientY:e.clientY;
+  return{x:cx-r.left,y:cy-r.top,cx,cy};
+}
+
+function findDot(cx,cy){
+  if(!chart)return null;
+  let best=null,bestD=Infinity;
+  state.actors.forEach((actor,ai)=>{
+    state.timesteps.forEach(t=>{
+      const v=actor.values[t];if(v==null||v==='')return;
+      const px=chart.scales.x.getPixelForValue(t);
+      const py=chart.scales.y.getPixelForValue(parseFloat(v));
+      const d=Math.hypot(cx-px,cy-py);
+      if(d<HIT&&d<bestD){bestD=d;best={ai,t}}
+    });
+  });
+  return best;
+}
+
+function setupDrag(){
+  const canvas=document.getElementById('main-chart');
+  const wrap=document.getElementById('chart-wrap');
+  const tt=document.getElementById('tooltip');
+
+  canvas.addEventListener('mousedown',e=>{
+    const{x,y}=canvasPos(e);
+    const hit=findDot(x,y);if(hit){drag=hit;wrap.style.cursor='ns-resize'}
+  });
+  canvas.addEventListener('touchstart',e=>{
+    if(e.cancelable)e.preventDefault();
+    const{x,y}=canvasPos(e);
+    const hit=findDot(x,y);if(hit){drag=hit;wrap.style.cursor='ns-resize'}
+  },{passive:false});
+
+  window.addEventListener('mousemove',e=>{
+    const{x,y,cx,cy}=canvasPos(e);
+    if(drag){
+      const raw=chart.scales.y.getValueForPixel(y);
+      const v=Math.round(raw*10)/10;
+      state.actors[drag.ai].values[drag.t]=v;
+      syncTableCell(drag.ai,drag.t,v);
+      renderChart();
+      tt.style.display='block';tt.style.left=(cx+12)+'px';tt.style.top=(cy-24)+'px';
+      tt.textContent=`${state.actors[drag.ai].name} @ ${drag.t}: ${v.toFixed(2)}`;
+    } else {
+      wrap.style.cursor=findDot(x,y)?'ns-resize':'default';
+    }
+  });
+  window.addEventListener('touchmove',e=>{
+    if(e.cancelable)e.preventDefault();
+    const{x,y,cx,cy}=canvasPos(e);
+    if(drag){
+      const raw=chart.scales.y.getValueForPixel(y);
+      const v=Math.round(raw*10)/10;
+      state.actors[drag.ai].values[drag.t]=v;
+      syncTableCell(drag.ai,drag.t,v);
+      renderChart();
+      tt.style.display='block';tt.style.left=(cx+12)+'px';tt.style.top=(cy-24)+'px';
+      tt.textContent=`${state.actors[drag.ai].name} @ ${drag.t}: ${v.toFixed(2)}`;
+    }
+  },{passive:false});
+
+  window.addEventListener('mouseup',()=>{drag=null;document.getElementById('chart-wrap').style.cursor='default';document.getElementById('tooltip').style.display='none'});
+  window.addEventListener('touchend',()=>{drag=null;document.getElementById('tooltip').style.display='none'});
+}
+
+// ── timeline controls ─────────────────────────────────────────────────────────
+document.getElementById('t-start').addEventListener('change',e=>{
+  const v=parseInt(e.target.value),err=document.getElementById('horizon-err');
+  if(v>=state.tEnd){err.textContent='Start year must be less than end year.';err.style.display='';e.target.value=state.tStart;return}
+  err.style.display='none';state.tStart=v;state.timesteps[0]=v;
+  state.timesteps=[v,...state.timesteps.slice(1,-1).filter(t=>t>v),state.tEnd];fullRender();
+});
+document.getElementById('t-end').addEventListener('change',e=>{
+  const v=parseInt(e.target.value),err=document.getElementById('horizon-err');
+  if(v<=state.tStart){err.textContent='End year must be greater than start year.';err.style.display='';e.target.value=state.tEnd;return}
+  err.style.display='none';state.tEnd=v;state.timesteps[state.timesteps.length-1]=v;
+  state.timesteps=[state.tStart,...state.timesteps.slice(1,-1).filter(t=>t<v),v];fullRender();
+});
+document.getElementById('ts-add-btn').addEventListener('click',()=>{
+  const v=parseInt(document.getElementById('ts-add-val').value),err=document.getElementById('ts-err');
+  if(v<=state.tStart||v>=state.tEnd){err.textContent=`Must be between ${state.tStart+1} and ${state.tEnd-1}.`;err.style.display='';return}
+  if(state.timesteps.includes(v)){err.textContent=`Timestep ${v} already exists.`;err.style.display='';return}
+  err.style.display='none';
+  const idx=state.timesteps.findIndex(t=>t>v);state.timesteps.splice(idx,0,v);fullRender();
+});
+document.getElementById('actor-add-btn').addEventListener('click',()=>{
+  const names=['Actor A','Actor B','Actor C','Actor D','Actor E','Actor F'];
+  const name=names[state.actors.length]||'Actor '+(state.actors.length+1);
+  const vals={};state.timesteps.forEach(t=>{vals[t]=null});
+  state.actors.push({name,values:vals});fullRender();
+});
+
+function fullRender(){
+  renderChips();renderLegend();renderTable();renderRefLines();
+  if(chart){chart.destroy();chart=null}
+  renderChart();
+}
+
+fullRender();
+</script>
+</body>
+</html>
